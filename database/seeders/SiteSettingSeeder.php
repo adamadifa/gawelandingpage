@@ -18,10 +18,17 @@ class SiteSettingSeeder extends Seeder
             ['key' => 'whatsapp_number', 'value' => '628123456789', 'type' => 'text'],
             ['key' => 'email_contact', 'value' => 'hello@presensigps.com', 'type' => 'text'],
             ['key' => 'address', 'value' => 'Jakarta, Indonesia', 'type' => 'textarea'],
+            ['key' => 'payment_bank_name', 'value' => 'Bank Central Asia (BCA)', 'type' => 'text'],
+            ['key' => 'payment_bank_number', 'value' => '829 012 3456', 'type' => 'text'],
+            ['key' => 'payment_bank_holder', 'value' => 'Adam Adifa', 'type' => 'text'],
+            ['key' => 'payment_bank_logo', 'value' => null, 'type' => 'image'],
         ];
 
         foreach ($settings as $setting) {
-            \App\Models\SiteSetting::create($setting);
+            \App\Models\SiteSetting::updateOrCreate(
+                ['key' => $setting['key']],
+                $setting
+            );
         }
     }
 }

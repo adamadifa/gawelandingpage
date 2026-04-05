@@ -133,30 +133,52 @@
                             {{-- Plan Type Selection --}}
                             <div class="space-y-6">
                                 <label class="block text-sm font-bold text-gray-900 tracking-wide uppercase">{{ auth()->guest() ? '2' : '1' }}. Pilih Durasi Langganan</label>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                    {{-- Monthly Option --}}
                                     <label class="relative cursor-pointer group">
                                         <input type="radio" name="plan_type" value="monthly" checked class="peer sr-only">
-                                        <div class="p-6 rounded-2xl border-2 border-gray-100 peer-checked:border-brand-600 peer-checked:bg-brand-50/50 transition-all group-hover:border-gray-200 h-full">
-                                            <div class="flex justify-between items-center mb-3">
-                                                <span class="text-sm font-bold text-gray-400 peer-checked:text-brand-600 transition-colors uppercase tracking-widest">Bulanan</span>
-                                                <div class="w-5 h-5 rounded-full border-2 border-gray-200 flex items-center justify-center peer-checked:border-brand-600">
-                                                    <div class="w-2 h-2 rounded-full bg-brand-600 opacity-0 peer-checked:opacity-100"></div>
+                                        <div class="p-6 rounded-2xl border-2 border-gray-100 bg-white peer-checked:border-brand-600 peer-checked:bg-white peer-checked:shadow-xl peer-checked:shadow-brand-600/5 transition-all group-hover:border-brand-200 h-full relative overflow-hidden">
+                                            <div class="relative z-10">
+                                                <div class="flex justify-between items-center mb-4">
+                                                    <span class="text-[10px] font-bold text-gray-400 peer-checked:text-brand-600 transition-colors uppercase tracking-widest pl-1 leading-none">Bayar Per Bulan</span>
+                                                    <div class="w-6 h-6 rounded-full border-2 border-gray-100 flex items-center justify-center peer-checked:border-brand-600 peer-checked:bg-brand-600 transition-all">
+                                                        <i class="ti ti-check text-white text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                                                    </div>
+                                                </div>
+                                                <h4 class="text-xs font-bold text-gray-800 uppercase tracking-tight mb-1">Bulanan</h4>
+                                                <div class="font-display text-2xl font-bold text-gray-900 leading-none">
+                                                    Rp {{ number_format($pricingPlan->monthly_price) }}
+                                                    <span class="text-[10px] font-medium text-gray-400 block mt-1 lowercase">Harga standar / bulan</span>
                                                 </div>
                                             </div>
-                                            <div class="font-display text-lg font-bold text-gray-900 leading-tight">Rp {{ number_format($pricingPlan->monthly_price) }}<span class="text-[12px] font-medium text-gray-400 block sm:inline">/bulan</span></div>
                                         </div>
                                     </label>
 
+                                    {{-- Yearly Option --}}
                                     <label class="relative cursor-pointer group">
                                         <input type="radio" name="plan_type" value="yearly" class="peer sr-only">
-                                        <div class="p-6 rounded-2xl border-2 border-gray-100 peer-checked:border-brand-600 peer-checked:bg-brand-50/50 transition-all group-hover:border-gray-200 h-full">
-                                            <div class="flex justify-between items-center mb-3">
-                                                <span class="text-sm font-bold text-gray-400 peer-checked:text-brand-600 transition-colors uppercase tracking-widest">Tahunan</span>
-                                                <div class="w-5 h-5 rounded-full border-2 border-gray-200 flex items-center justify-center peer-checked:border-brand-600">
-                                                    <div class="w-2 h-2 rounded-full bg-brand-600 opacity-0 peer-checked:opacity-100"></div>
+                                        <div class="p-6 rounded-2xl border-2 border-gray-100 bg-white peer-checked:border-brand-600 peer-checked:bg-white peer-checked:shadow-xl peer-checked:shadow-brand-600/5 transition-all group-hover:border-brand-200 h-full relative overflow-hidden">
+                                            {{-- Recommendation Badge --}}
+                                            <div class="absolute -right-12 top-4 rotate-45 bg-emerald-500 text-white text-[8px] font-bold px-12 py-1 shadow-sm z-20 uppercase tracking-widest">HEMAT</div>
+                                            
+                                            <div class="relative z-10">
+                                                <div class="flex justify-between items-center mb-4">
+                                                    <div class="flex flex-col">
+                                                        <span class="text-[10px] font-bold text-emerald-600 transition-colors uppercase tracking-widest pl-1 leading-none">Bayar Per Tahun</span>
+                                                        @if($pricingPlan->monthly_price > 0)
+                                                            <span class="text-[9px] font-bold text-emerald-500 mt-1 pl-1">SAVE {{ round(100 - ($pricingPlan->yearly_price / ($pricingPlan->monthly_price * 12)) * 100) }}%</span>
+                                                        @endif
+                                                    </div>
+                                                    <div class="w-6 h-6 rounded-full border-2 border-gray-100 flex items-center justify-center peer-checked:border-brand-600 peer-checked:bg-brand-600 transition-all">
+                                                        <i class="ti ti-check text-white text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                                                    </div>
+                                                </div>
+                                                <h4 class="text-xs font-bold text-gray-800 uppercase tracking-tight mb-1">Tahunan (Best Value)</h4>
+                                                <div class="font-display text-2xl font-bold text-gray-900 leading-none">
+                                                    Rp {{ number_format($pricingPlan->yearly_price) }}
+                                                    <span class="text-[10px] font-medium text-gray-400 block mt-1 lowercase">Masa aktif 12 bulan</span>
                                                 </div>
                                             </div>
-                                            <div class="font-display text-lg font-bold text-gray-900 leading-tight">Rp {{ number_format($pricingPlan->yearly_price) }}<span class="text-[12px] font-medium text-gray-400 block sm:inline">/tahun</span></div>
                                         </div>
                                     </label>
                                 </div>
@@ -168,16 +190,23 @@
                                 <div class="bg-gray-50/50 rounded-2xl p-6 border border-gray-100">
                                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
                                         <div class="flex items-center gap-4">
-                                            <div class="w-14 h-14 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center px-2 shrink-0">
-                                                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg" alt="BCA" class="w-full">
+                                            <div class="w-14 h-14 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center px-2 shrink-0 overflow-hidden">
+                                                @if(isset($settings['payment_bank_logo']) && $settings['payment_bank_logo'])
+                                                    <img src="{{ asset('storage/' . $settings['payment_bank_logo']) }}" alt="{{ $settings['payment_bank_name'] }}" class="w-full h-full object-contain p-1">
+                                                @else
+                                                    <div class="flex flex-col items-center justify-center text-brand-600">
+                                                        <i class="ti ti-building-bank text-xl"></i>
+                                                        <span class="text-[7px] font-bold uppercase">{{ $settings['payment_bank_name'] ?? 'BANK' }}</span>
+                                                    </div>
+                                                @endif
                                             </div>
                                             <div>
-                                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-1.5">Nomor Rekening</p>
-                                                <p class="text-lg lg:text-xl font-bold text-gray-900 font-display leading-none">829 012 3456</p>
-                                                <p class="text-[11px] font-medium text-gray-500 mt-1">a.n Adam Adifa (Admin Gawe)</p>
+                                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-1.5">{{ $settings['payment_bank_name'] ?? 'Nomor Rekening' }}</p>
+                                                <p class="text-lg lg:text-xl font-bold text-gray-900 font-display leading-none">{{ $settings['payment_bank_number'] ?? '829 012 3456' }}</p>
+                                                <p class="text-[11px] font-medium text-gray-500 mt-1">a.n {{ $settings['payment_bank_holder'] ?? 'Adam Adifa' }}</p>
                                             </div>
                                         </div>
-                                        <button type="button" onclick="copyAccountNumber('8290123456')" class="flex items-center justify-center gap-2 bg-white border border-gray-200 text-gray-600 text-xs font-bold px-4 py-2.5 rounded-xl hover:border-brand-600 hover:text-brand-600 transition-all shrink-0 active:scale-95">
+                                        <button type="button" onclick="copyAccountNumber('{{ str_replace(' ', '', $settings['payment_bank_number'] ?? '8290123456') }}')" class="flex items-center justify-center gap-2 bg-white border border-gray-200 text-gray-600 text-xs font-bold px-4 py-2.5 rounded-xl hover:border-brand-600 hover:text-brand-600 transition-all shrink-0 active:scale-95">
                                             <i class="ti ti-copy text-sm"></i>
                                             <span class="whitespace-nowrap">Salin No. Rek</span>
                                         </button>

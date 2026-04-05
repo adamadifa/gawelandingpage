@@ -34,11 +34,11 @@ class FaqSectionController extends Controller
         $data = $request->all();
 
         if ($request->hasFile('primary_image')) {
-            $data['primary_image'] = $request->file('primary_image')->store('faq', 'public');
+            $data['primary_image'] = $request->file('primary_image')->store('faqs', 'public');
         }
 
         if ($request->hasFile('secondary_image')) {
-            $data['secondary_image'] = $request->file('secondary_image')->store('faq', 'public');
+            $data['secondary_image'] = $request->file('secondary_image')->store('faqs', 'public');
         }
 
         $section = FaqSection::create($data);
@@ -72,14 +72,14 @@ class FaqSectionController extends Controller
             if ($faq_section->primary_image && !str_starts_with($faq_section->primary_image, 'images/')) {
                 Storage::disk('public')->delete($faq_section->primary_image);
             }
-            $data['primary_image'] = $request->file('primary_image')->store('faq', 'public');
+            $data['primary_image'] = $request->file('primary_image')->store('faqs', 'public');
         }
 
         if ($request->hasFile('secondary_image')) {
             if ($faq_section->secondary_image && !str_starts_with($faq_section->secondary_image, 'images/')) {
                 Storage::disk('public')->delete($faq_section->secondary_image);
             }
-            $data['secondary_image'] = $request->file('secondary_image')->store('faq', 'public');
+            $data['secondary_image'] = $request->file('secondary_image')->store('faqs', 'public');
         }
 
         $faq_section->update($data);

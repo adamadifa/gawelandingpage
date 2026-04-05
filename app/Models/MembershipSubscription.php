@@ -14,6 +14,8 @@ class MembershipSubscription extends Model
         'starts_at',
         'ends_at',
         'status',
+        'app_url',
+        'app_status',
     ];
 
     protected $casts = [

@@ -23,6 +23,13 @@ class DashboardController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('member.dashboard', compact('subscriptions', 'transactions'));
+        // Stats Summary
+        $totalSpent = MembershipTransaction::where('user_id', $user->id)
+            ->where('status', 'approved')
+            ->sum('amount');
+            
+        $activeCount = $subscriptions->count();
+
+        return view('member.dashboard', compact('subscriptions', 'transactions', 'totalSpent', 'activeCount'));
     }
 }

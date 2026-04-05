@@ -15,10 +15,13 @@ use App\Models\FeatureSection;
 use App\Models\FaqSection;
 use Illuminate\Http\Request;
 
+use Jenssegers\Agent\Agent;
+
 class LandingPageController extends Controller
 {
     public function index()
     {
+        $agent = new Agent();
         $settings = SiteSetting::pluck('value', 'key');
         $hero = HeroSection::where('is_active', true)->first();
         $features = Feature::where('is_active', true)->orderBy('sort_order')->get();
@@ -31,8 +34,14 @@ class LandingPageController extends Controller
         $feature_section = FeatureSection::where('is_active', true)->first();
         $faq_section = FaqSection::where('is_active', true)->first();
 
-        return view('landing.index', compact(
+        $data = compact(
             'settings', 'hero', 'features', 'pricing', 'faqs', 'companies', 'testimonials', 'hero_stats', 'about', 'feature_section', 'faq_section'
-        ));
+        );
+
+        if ($agent->isMobile() || $agent->isTablet()) {
+            return view('landing.mobile', $data);
+        }
+
+        return view('landing.index', $data);
     }
 }

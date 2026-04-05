@@ -2,40 +2,38 @@
 
 @section('title', 'FAQ — Daftar Pertanyaan')
 
+@section('breadcrumbs')
+<nav class="flex items-center gap-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2 font-poppins">
+    <a href="{{ route('admin.hero-sections.index') }}" class="hover:text-brand-600 transition-colors">Landing Page</a>
+    <i class="ti ti-chevron-right text-[8px]"></i>
+    <a href="{{ route('admin.faq-sections.index') }}" class="hover:text-brand-600 transition-colors">FAQ Section</a>
+    <i class="ti ti-chevron-right text-[8px]"></i>
+    <span class="text-brand-600 font-semibold">Daftar Pertanyaan</span>
+</nav>
+@endsection
+
+@section('actions')
+<div class="flex items-center gap-3 font-poppins">
+     <a href="{{ route('admin.faqs.create') }}" class="inline-flex items-center gap-2 px-7 py-3.5 bg-brand-600 text-white rounded-xl font-bold text-sm shadow-xl shadow-brand-600/20 hover:bg-brand-700 active:scale-95 transition-all">
+        <i class="ti ti-plus text-lg"></i>
+        <span>Tambah Pertanyaan</span>
+    </a>
+</div>
+@endsection
+
 @section('content')
-<div class="w-full space-y-8 pb-20 text-inter font-poppins">
-    
-    {{-- Page Header --}}
-    <div class="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
-        <div>
-            <nav class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">
-                <a href="{{ route('admin.hero-sections.index') }}" class="hover:text-indigo-600 transition-colors">Landing Page</a>
-                <i class="ti ti-chevron-right text-[8px]"></i>
-                <a href="{{ route('admin.faq-sections.index') }}" class="hover:text-indigo-600 transition-colors uppercase tracking-widest">FAQ Section</a>
-                <i class="ti ti-chevron-right text-[8px]"></i>
-                <span class="text-indigo-600">Daftar Pertanyaan</span>
-            </nav>
-            <h1 class="text-3xl font-display font-black text-gray-900 leading-tight">Kelola FAQ</h1>
-            <p class="text-sm text-gray-500 font-medium">Susun daftar pertanyaan dan jawaban yang akan membantu pengguna memahami aplikasi Anda.</p>
-        </div>
-        <div class="flex items-center gap-3">
-             <a href="{{ route('admin.faqs.create') }}" class="inline-flex items-center gap-2 px-7 py-3.5 bg-indigo-600 text-white rounded-2xl font-bold text-sm shadow-xl shadow-indigo-600/20 hover:bg-indigo-700 active:scale-95 transition-all">
-                <i class="ti ti-plus text-lg"></i>
-                Tambah Pertanyaan
-            </a>
-        </div>
-    </div>
+<div class="w-full -mt-6 space-y-6 pb-20 font-poppins text-inter">
 
     {{-- Data Card Table --}}
-    <div class="bg-white rounded-[2rem] border border-gray-100 shadow-xl shadow-black/[0.02] overflow-hidden">
+    <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-gray-50/50 border-b border-gray-100">
-                        <th class="py-6 px-8 font-black text-gray-400 text-[10px] uppercase tracking-widest">Pertanyaan & Jawaban</th>
-                        <th class="py-6 px-8 font-black text-gray-400 text-[10px] uppercase tracking-widest text-center w-32">Urutan</th>
-                        <th class="py-6 px-8 font-black text-gray-400 text-[10px] uppercase tracking-widest text-center">Status</th>
-                        <th class="py-6 px-8 font-black text-gray-400 text-[10px] uppercase tracking-widest text-right">Manajemen</th>
+                        <th class="py-6 px-8 font-bold text-gray-400 text-[10px] uppercase tracking-widest">Pertanyaan & Jawaban</th>
+                        <th class="py-6 px-8 font-bold text-gray-400 text-[10px] uppercase tracking-widest text-center w-32">Urutan</th>
+                        <th class="py-6 px-8 font-bold text-gray-400 text-[10px] uppercase tracking-widest text-center">Status</th>
+                        <th class="py-6 px-8 font-bold text-gray-400 text-[10px] uppercase tracking-widest text-right">Manajemen</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
@@ -44,13 +42,13 @@
                         <td class="py-6 px-8">
                             <div class="space-y-3">
                                 <div class="flex items-start gap-4">
-                                    <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">Q</div>
-                                    <h4 class="text-sm font-black text-gray-900 leading-tight group-hover:text-indigo-600 transition-colors">
+                                    <div class="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 border border-brand-100/50">Q</div>
+                                    <h4 class="text-sm font-bold text-gray-900 leading-tight group-hover:text-brand-600 transition-colors">
                                         {{ $faq->question }}
                                     </h4>
                                 </div>
                                 <div class="flex items-start gap-4">
-                                    <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">A</div>
+                                    <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 border border-emerald-100/50">A</div>
                                     <p class="text-sm text-gray-500 font-medium leading-relaxed max-w-2xl line-clamp-2">
                                         {{ $faq->answer }}
                                     </p>
@@ -58,19 +56,19 @@
                             </div>
                         </td>
                         <td class="py-6 px-8 text-center">
-                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-gray-50 text-gray-900 font-black text-sm border border-gray-100 shadow-inner group-hover:bg-white group-hover:border-indigo-100 transition-all">
+                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-gray-50 text-gray-900 font-bold text-sm border border-gray-100 shadow-inner group-hover:bg-white group-hover:border-brand-100 transition-all">
                                 {{ $faq->sort_order }}
                             </span>
                         </td>
                         <td class="py-6 px-8 text-center">
                             <div class="flex justify-center">
                                 @if($faq->is_active)
-                                    <span class="inline-flex items-center gap-2 py-2 px-4 rounded-xl text-[10px] font-black tracking-widest bg-emerald-50 text-emerald-600 border border-emerald-100 shadow-sm shadow-emerald-600/5">
+                                    <span class="inline-flex items-center gap-2 py-2 px-4 rounded-xl text-[10px] font-bold tracking-widest bg-emerald-50 text-emerald-600 border border-emerald-100 shadow-sm shadow-emerald-600/5">
                                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                                         AKTIF
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-2 py-2 px-4 rounded-xl text-[10px] font-black tracking-widest bg-gray-50 text-gray-400 border border-gray-100">
+                                    <span class="inline-flex items-center gap-2 py-2 px-4 rounded-xl text-[10px] font-bold tracking-widest bg-gray-50 text-gray-400 border border-gray-100">
                                         <span class="w-2 h-2 rounded-full bg-gray-300"></span>
                                         DRAFT
                                     </span>
@@ -79,7 +77,7 @@
                         </td>
                         <td class="py-6 px-8 text-right">
                             <div class="flex items-center justify-end gap-3">
-                                <a href="{{ route('admin.faqs.edit', $faq->id) }}" class="w-10 h-10 flex items-center justify-center bg-gray-50 text-gray-400 hover:bg-indigo-600 hover:text-white rounded-xl transition-all shadow-sm hover:shadow-lg hover:shadow-indigo-600/20 active:scale-95" title="Edit">
+                                <a href="{{ route('admin.faqs.edit', $faq->id) }}" class="w-10 h-10 flex items-center justify-center bg-gray-50 text-gray-400 hover:bg-brand-600 hover:text-white rounded-xl transition-all shadow-sm hover:shadow-lg hover:shadow-brand-600/20 active:scale-95" title="Edit">
                                     <i class="ti ti-edit text-xl"></i>
                                 </a>
                                 <form action="{{ route('admin.faqs.destroy', $faq->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin?')" class="inline">

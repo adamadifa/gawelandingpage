@@ -21,8 +21,13 @@ class MembershipController extends Controller
 
     public function show(MembershipTransaction $membershipTransaction)
     {
-        $membershipTransaction->load(['user', 'pricingPlan']);
-        return view('admin.memberships.show', compact('membershipTransaction'));
+        $membershipTransaction->load(['user', 'pricingPlan', 'subscription']);
+        
+        // If not directly linked via subscription_id, try finding it via transaction_id
+        $subscription = $membershipTransaction->subscription ?? 
+                       MembershipSubscription::where('transaction_id', $membershipTransaction->id)->first();
+                       
+        return view('admin.memberships.show', compact('membershipTransaction', 'subscription'));
     }
 
     public function approve(Request $request, MembershipTransaction $membershipTransaction)
@@ -33,6 +38,9 @@ class MembershipController extends Controller
 
         // Calculate days to add based on plan type
         $daysToAdd = $membershipTransaction->plan_type === 'yearly' ? 365 : 30;
+        
+        $appUrl = $request->app_url;
+        $appStatus = $appUrl ? 'running' : 'pending';
 
         // Determine which subscription to update or create
         if ($membershipTransaction->subscription_id) {
@@ -44,6 +52,8 @@ class MembershipController extends Controller
                     'pricing_plan_id' => $membershipTransaction->pricing_plan_id,
                     'transaction_id' => $membershipTransaction->id,
                     'ends_at' => $newEndsAt,
+                    'app_url' => $appUrl ?? $existingSubscription->app_url,
+                    'app_status' => $appUrl ? 'running' : $existingSubscription->app_status,
                 ]);
                 $msg = 'Langganan berhasil diperpanjang.';
             } else {
@@ -60,6 +70,8 @@ class MembershipController extends Controller
                 'starts_at' => now(),
                 'ends_at' => now()->addDays($daysToAdd),
                 'status' => 'active',
+                'app_url' => $appUrl,
+                'app_status' => $appStatus,
             ]);
             $msg = 'Lisensi baru telah diaktifkan.';
         }
@@ -86,5 +98,20 @@ class MembershipController extends Controller
         ]);
 
         return redirect()->route('admin.memberships.index')->with('success', 'Pembayaran telah ditolak.');
+    }
+
+    public function updateSubscription(Request $request, MembershipSubscription $subscription)
+    {
+        $request->validate([
+            'app_url' => 'nullable|url',
+            'app_status' => 'required|in:pending,running,maintenance',
+        ]);
+
+        $subscription->update([
+            'app_url' => $request->app_url,
+            'app_status' => $request->app_status,
+        ]);
+
+        return back()->with('success', 'Status aplikasi berhasil diperbarui.');
     }
 }

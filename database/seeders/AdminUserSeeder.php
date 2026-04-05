@@ -12,10 +12,20 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
+        // Admin
         \App\Models\User::create([
             'name' => 'Admin PresensiGPS',
             'email' => 'admin@presensigps.com',
             'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'role' => 'admin',
+        ]);
+
+        // Sample Member
+        \App\Models\User::create([
+            'name' => 'John Doe Member',
+            'email' => 'member@presensigps.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'role' => 'member',
         ]);
     }
 }

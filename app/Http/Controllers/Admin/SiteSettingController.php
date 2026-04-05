@@ -11,8 +11,8 @@ class SiteSettingController extends Controller
 {
     public function index()
     {
-        $settings = SiteSetting::all();
-        return view('admin.site-settings.index', compact('settings'));
+        $site_configs = SiteSetting::all();
+        return view('admin.site-settings.index', compact('site_configs'));
     }
 
     public function update(Request $request, SiteSetting $site_setting)

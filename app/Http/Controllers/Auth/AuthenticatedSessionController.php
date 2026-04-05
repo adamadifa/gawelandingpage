@@ -16,7 +16,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.login');
+        $settings = \App\Models\SiteSetting::pluck('value', 'key');
+        return view('auth.login', compact('settings'));
     }
 
     /**

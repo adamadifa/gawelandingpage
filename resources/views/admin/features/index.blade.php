@@ -4,22 +4,22 @@
 @section('description', 'Kelola setiap kartu fitur yang akan mengelilingi visual mockup utama.')
 
 @section('breadcrumbs')
-<nav class="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+<nav class="flex items-center gap-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest font-poppins">
     <a href="{{ route('admin.hero-sections.index') }}" class="hover:text-brand-600 transition-colors">Landing page</a>
     <i class="ti ti-chevron-right text-[8px]"></i>
-    <span class="text-brand-600">Feature section</span>
+    <span class="text-brand-600 font-semibold">Feature item</span>
 </nav>
 @endsection
 
 @section('actions')
-<a href="{{ route('admin.features.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 text-white rounded-xl font-bold text-[13px] shadow-lg shadow-brand-600/20 hover:bg-brand-700 active:scale-95 transition-all">
+<a href="{{ route('admin.features.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 text-white rounded-xl font-bold text-[13px] shadow-lg shadow-brand-600/20 hover:bg-brand-700 active:scale-95 transition-all font-poppins">
     <i class="ti ti-plus text-lg"></i>
     <span>Tambah Baru</span>
 </a>
 @endsection
 
 @section('content')
-<div class="w-full space-y-8 pb-20">
+<div class="w-full -mt-6 space-y-6 pb-20 font-poppins">
     
     {{-- Grid of Feature Cards --}}
 
@@ -29,18 +29,27 @@
         @forelse($features as $feature)
         <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 flex flex-col justify-between group h-full hover:border-brand-600 hover:shadow-brand-600/[0.05] transition-all duration-500 relative overflow-hidden">
             {{-- Decoration --}}
-            <div class="absolute -top-10 -right-10 w-24 h-24 bg-indigo-50/30 rounded-full blur-2xl group-hover:bg-indigo-100/50 transition-colors"></div>
+            <div class="absolute -top-10 -right-10 w-24 h-24 bg-brand-50/30 rounded-full blur-2xl group-hover:bg-brand-100/50 transition-colors"></div>
 
             <div>
                 <div class="flex items-start justify-between mb-8">
-                    <div class="w-16 h-16 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shadow-inner group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500">
+                    <div class="w-16 h-16 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shadow-inner group-hover:scale-110 group-hover:bg-brand-600 group-hover:text-white transition-all duration-500 border border-brand-100">
                         <i class="ti {{ $feature->icon ?: 'ti-star' }} text-3xl"></i>
                     </div>
                     <div class="flex gap-2">
-                        <a href="{{ route('admin.features.edit', $feature) }}" class="w-9 h-9 flex items-center justify-center bg-gray-50 text-gray-400 hover:bg-indigo-600 hover:text-white rounded-xl transition-all shadow-sm active:scale-90" title="Edit Fitur">
+                        <a href="{{ route('admin.features.edit', $feature) }}" class="w-9 h-9 flex items-center justify-center bg-gray-50 text-gray-400 hover:bg-brand-600 hover:text-white rounded-xl transition-all shadow-sm active:scale-95" title="Edit Fitur">
                             <i class="ti ti-edit text-lg"></i>
                         </a>
-                        <form action="{{ route('admin.features.destroy', $feature) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus fitur ini?')" class="inline">
+                        <button @click="$dispatch('confirm', {
+                                    title: 'Hapus Fitur',
+                                    message: 'Yakin ingin menghapus fitur ini?',
+                                    type: 'danger',
+                                    icon: 'ti ti-trash',
+                                    callback: () => { document.getElementById('delete-form-{{ $feature->id }}').submit(); }
+                                })" class="w-9 h-9 flex items-center justify-center bg-gray-50 text-gray-400 hover:bg-rose-600 hover:text-white rounded-xl transition-all shadow-sm active:scale-95" title="Hapus Fitur">
+                            <i class="ti ti-trash text-lg"></i>
+                        </button>
+                        <form id="delete-form-{{ $feature->id }}" action="{{ route('admin.features.destroy', $feature) }}" method="POST" class="hidden">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="w-9 h-9 flex items-center justify-center bg-gray-50 text-gray-400 hover:bg-rose-600 hover:text-white rounded-xl transition-all shadow-sm active:scale-90" title="Hapus Fitur">
@@ -96,18 +105,18 @@
     </div>
 
     {{-- Strategy Card --}}
-    <div class="p-10 bg-indigo-950 rounded-xl text-white shadow-2xl shadow-indigo-950/20 relative overflow-hidden flex flex-col md:flex-row items-center gap-10 group mt-12">
-        <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-brand-600/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+    <div class="p-10 bg-brand-900 rounded-xl text-white shadow-2xl shadow-brand-900/20 relative overflow-hidden flex flex-col md:flex-row items-center gap-10 group mt-12">
+        <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
         <div class="w-24 h-24 bg-white/10 rounded-2xl flex items-center justify-center text-5xl shrink-0 backdrop-blur-md border border-white/10 shadow-xl group-hover:rotate-12 transition-transform">
             <i class="ti ti-bulb-filled text-yellow-400"></i>
         </div>
         <div class="space-y-2 relative z-10 text-center md:text-left flex-1">
-            <h4 class="text-xl font-display font-bold">Tips Optimalisasi Fitur</h4>
-            <p class="text-gray-300 text-sm leading-relaxed max-w-2xl">Pastikan judul fitur ringkas dan padat. Gunakan deskripsi yang fokus pada **Solusi** yang diberikan aplikasi Anda kepada pengguna, bukan sekadar daftar teknis.</p>
+            <h4 class="text-xl font-display font-bold tracking-tight">Tips Optimalisasi Fitur</h4>
+            <p class="text-brand-100/80 text-sm leading-relaxed max-w-2xl font-medium">Pastikan judul fitur ringkas dan padat. Gunakan deskripsi yang fokus pada **Solusi** yang diberikan aplikasi Anda kepada pengguna, bukan sekadar daftar teknis.</p>
         </div>
-        <div class="md:ml-auto shrink-0 relative z-10 px-8 py-5 bg-gradient-to-br from-white/10 to-transparent rounded-2xl border border-white/10 text-center shadow-inner backdrop-blur-sm">
-            <p class="text-[10px] font-bold text-indigo-300 uppercase tracking-widest mb-1">Total Aktif</p>
-            <h5 class="text-3xl font-display font-bold leading-none">{{ $features->where('is_active', true)->count() }} <span class="text-sm font-bold text-gray-500 tracking-normal ml-1">Items</span></h5>
+        <div class="md:ml-auto shrink-0 relative z-10 px-8 py-5 bg-white/10 rounded-2xl border border-white/10 text-center shadow-inner backdrop-blur-sm">
+            <p class="text-[10px] font-bold text-brand-200 uppercase tracking-widest mb-1">Total Aktif</p>
+            <h5 class="text-3xl font-display font-bold leading-none tracking-tighter">{{ $features->where('is_active', true)->count() }} <span class="text-xs font-bold text-brand-300 tracking-widest uppercase ml-1">Items</span></h5>
         </div>
     </div>
 </div>

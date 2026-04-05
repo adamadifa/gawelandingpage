@@ -749,20 +749,21 @@
         });
 
         // FAQ Accordion
-        document.querySelectorAll('.faq-toggle').forEach(button => {
+        document.querySelectorAll('.faq-trigger').forEach(button => {
             button.addEventListener('click', () => {
                 const item = button.closest('.faq-item');
                 const content = item.querySelector('.faq-content');
-                const icon = item.querySelector('.faq-icon i');
+                const icon = item.querySelector('.faq-icon');
 
                 // Close all others
                 document.querySelectorAll('.faq-item').forEach(other => {
                     if (other !== item) {
-                        other.querySelector('.faq-content').style.maxHeight = '0';
-                        if (other.querySelector('.faq-icon i')) {
-                            other.querySelector('.faq-icon i').style.transform = 'rotate(0deg)';
-                        }
-                        other.classList.remove('active');
+                        const otherContent = other.querySelector('.faq-content');
+                        const otherIcon = other.querySelector('.faq-icon');
+                        if (otherContent) otherContent.style.maxHeight = '0';
+                        if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
+                        other.classList.remove('active', 'border-brand-500', 'bg-white', 'shadow-xl', 'shadow-brand-500/5');
+                        other.classList.add('border-gray-100', 'bg-gray-50/50');
                     }
                 });
 
@@ -770,11 +771,13 @@
                 if (item.classList.contains('active')) {
                     content.style.maxHeight = '0';
                     if (icon) icon.style.transform = 'rotate(0deg)';
-                    item.classList.remove('active');
+                    item.classList.remove('active', 'border-brand-500', 'bg-white', 'shadow-xl', 'shadow-brand-500/5');
+                    item.classList.add('border-gray-100', 'bg-gray-50/50');
                 } else {
                     content.style.maxHeight = content.scrollHeight + 'px';
-                    if (icon) icon.style.transform = 'rotate(90deg)';
-                    item.classList.add('active');
+                    if (icon) icon.style.transform = 'rotate(180deg)';
+                    item.classList.add('active', 'border-brand-500', 'bg-white', 'shadow-xl', 'shadow-brand-500/5');
+                    item.classList.remove('border-gray-100', 'bg-gray-50/50');
                 }
             });
         });

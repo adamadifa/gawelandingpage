@@ -39,6 +39,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/memberships/{membershipTransaction}', [AdminMembershipController::class, 'show'])->name('memberships.show');
     Route::post('/memberships/{membershipTransaction}/approve', [AdminMembershipController::class, 'approve'])->name('memberships.approve');
     Route::post('/memberships/{membershipTransaction}/reject', [AdminMembershipController::class, 'reject'])->name('memberships.reject');
+    Route::post('/memberships/{subscription}/update-subscription', [AdminMembershipController::class, 'updateSubscription'])->name('memberships.update-subscription');
 });
 
 Route::middleware('auth')->group(function () {

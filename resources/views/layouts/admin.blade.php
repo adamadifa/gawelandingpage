@@ -30,7 +30,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #F8F9FA;
+            background-color: #F0F7F4; /* Soft Emerald Stronger */
             color: #1F2937;
         }
 
@@ -38,42 +38,69 @@
 
         .sidebar {
             width: var(--sidebar-width);
-            background: white;
-            border-right: 1px solid #F1F5F9;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #06221C; /* Soft Dark Green */
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
+            pointer-events: none;
         }
 
         .nav-link {
             display: flex;
             align-items: center;
-            padding: 10px 14px;
-            margin: 2px 12px;
-            border-radius: 10px;
-            color: #64748B;
-            font-weight: 500;
-            font-size: 14px;
+            padding: 12px 16px;
+            margin: 4px 16px;
+            border-radius: 12px;
+            color: #94A3B8; /* Slate 400 */
+            font-weight: 600;
+            font-size: 13px;
             white-space: nowrap;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
 
         .nav-link:hover {
-            background-color: #F8FAFC;
-            color: var(--primary);
+            background-color: rgba(255, 255, 255, 0.03);
+            color: white;
+            padding-left: 20px;
         }
 
         .nav-link i {
-            font-size: 1.2rem;
-            margin-right: 12px;
+            font-size: 1.3rem;
+            margin-right: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             width: 20px;
+            transition: transform 0.3s;
+        }
+
+        .nav-link:hover i {
+            transform: scale(1.1);
+            color: #10B981; /* Brand Green */
         }
 
         .nav-link.active {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
             color: white;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.25);
+        }
+
+        .nav-link.active i {
+            color: white !important;
         }
 
         .main-content {
@@ -101,10 +128,10 @@
         }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #D1D5DB; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
         /* Dropdown Styles */
         .nav-dropdown {
@@ -115,12 +142,22 @@
 
         .nav-dropdown.open {
             max-height: 1000px;
+            background: rgba(0, 0, 0, 0.2);
+            margin: 4px 16px;
+            border-radius: 16px;
+            padding: 8px 0;
         }
 
         .nav-link-sub {
-            padding: 8px 14px 8px 48px;
-            margin: 1px 12px;
-            font-size: 13px;
+            padding: 8px 16px 8px 48px;
+            margin: 1px 0;
+            font-size: 12px;
+            border-radius: 0;
+        }
+        
+        .nav-link-sub:hover {
+            background: transparent;
+            padding-left: 52px;
         }
 
         .chevron-icon {
@@ -151,35 +188,32 @@
 </head>
 <body class="flex">
     <!-- Sidebar -->
-    <aside id="sidebar" class="sidebar shrink-0 h-screen sticky top-0 overflow-y-auto hidden lg:block">
+    <aside id="sidebar" class="sidebar shrink-0 sticky top-0 overflow-y-auto hidden lg:flex flex-col">
         <div class="px-3 pt-12 pb-8">
-            <a href="/" class="flex items-center gap-3 mb-12 px-4 group">
-                <div class="w-10 h-10 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:scale-105">
+            <a href="/" class="flex items-center gap-3 mb-16 px-4 group">
+                <div class="w-12 h-12 flex items-center justify-center overflow-hidden transition-all duration-500 group-hover:scale-110 group-hover:rotate-6">
                     @if(isset($settings['brand_logo']) && $settings['brand_logo'])
                         <img src="{{ asset('storage/' . $settings['brand_logo']) }}" alt="Logo" class="w-full h-full object-contain">
                     @else
-                        <div class="w-full h-full bg-brand-600 rounded-lg flex items-center justify-center shadow-inner">
-                            <span class="text-white font-display font-bold text-lg leading-none uppercase">{{ substr($settings['brand_name'] ?? 'W', 0, 1) }}</span>
+                        <div class="w-full h-full bg-brand-600 rounded-2xl flex items-center justify-center shadow-lg shadow-brand-600/20 border-2 border-white/20">
+                            <span class="text-white font-display font-bold text-xl leading-none uppercase">{{ substr($settings['brand_name'] ?? 'W', 0, 1) }}</span>
                         </div>
                     @endif
                 </div>
                 <div class="flex flex-col leading-tight">
-                    <span class="font-display text-lg font-bold text-gray-900 group-hover:text-brand-600 transition-colors tracking-tight uppercase">
+                    <span class="font-display text-lg font-bold text-white group-hover:text-brand-400 transition-colors tracking-tight uppercase">
                         {{ $settings['brand_name'] ?? 'WowDash' }}
                     </span>
-                    @if(isset($settings['tagline']))
-                        <span class="text-[8px] font-bold text-gray-400 uppercase tracking-[0.2em] -mt-0.5">{{ Str::limit($settings['tagline'], 20) }}</span>
-                    @endif
                 </div>
             </a>
 
             <div class="space-y-6">
                 {{-- Main Menu --}}
                 <div class="space-y-1">
-                    <div class="px-4 mb-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest">Dashboard</div>
+                    <div class="px-7 mb-3 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Pusat Kendali</div>
                     <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                        <i class="ti ti-smart-home text-xl mr-3"></i>
-                        <span>Overview</span>
+                        <i class="ti ti-brand-airtable text-xl mr-3"></i>
+                        <span>Dashboard</span>
                     </a>
                 </div>
 
@@ -197,65 +231,65 @@
                                      request()->routeIs('admin.trusted-companies.*');
                 @endphp
                 <div class="space-y-1">
-                    <button type="button" id="trigger-landing" class="w-[calc(100%-24px)] nav-link cursor-pointer justify-between {{ $isLandingActive ? 'active-parent' : '' }}">
+                    <button type="button" id="trigger-landing" class="nav-link w-[calc(100%-32px)] cursor-pointer justify-between transition-all duration-300 {{ $isLandingActive ? 'active-parent bg-white/5 text-white' : '' }}">
                         <div class="flex items-center">
-                            <i class="ti ti-world text-xl mr-3"></i>
+                            <i class="ti ti-components text-xl mr-3 {{ $isLandingActive ? 'text-brand-400' : '' }}"></i>
                             <span>Landing Page</span>
                         </div>
-                        <i class="ti ti-chevron-right text-xs chevron-icon"></i>
+                        <i class="ti ti-chevron-right text-xs chevron-icon {{ $isLandingActive ? 'rotate-90' : '' }}"></i>
                     </button>
                     <div id="dropdown-landing" class="nav-dropdown {{ $isLandingActive ? 'open' : '' }}">
-                        <a href="{{ route('admin.hero-sections.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.hero-sections.*') ? 'text-brand-600 font-bold bg-brand-50' : '' }}">
-                            <span>Hero Section</span>
+                        <a href="{{ route('admin.hero-sections.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.hero-sections.*') ? 'text-brand-400 font-bold' : '' }}">
+                            <span>Hero Layout</span>
                         </a>
-                        <a href="{{ route('admin.hero-stats-cards.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.hero-stats-cards.*') ? 'text-brand-600 font-bold bg-brand-50' : '' }}">
-                            <span>Hero Stats</span>
+                        <a href="{{ route('admin.hero-stats-cards.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.hero-stats-cards.*') ? 'text-brand-400 font-bold' : '' }}">
+                            <span>Counter Cards</span>
                         </a>
-                        <a href="{{ route('admin.about-sections.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.about-sections.*') ? 'text-brand-600 font-bold bg-brand-50' : '' }}">
-                            <span>Tentang Aplikasi</span>
+                        <a href="{{ route('admin.about-sections.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.about-sections.*') ? 'text-brand-400 font-bold' : '' }}">
+                            <span>About Content</span>
                         </a>
-                        <a href="{{ route('admin.feature-sections.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.feature-sections.*') ? 'text-brand-600 font-bold bg-brand-50' : '' }}">
-                            <span>Pengaturan Fitur</span>
+                        <a href="{{ route('admin.feature-sections.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.feature-sections.*') ? 'text-brand-400 font-bold' : '' }}">
+                            <span>Features Setup</span>
                         </a>
-                        <a href="{{ route('admin.faq-sections.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.faq-sections.*') ? 'text-brand-600 font-bold bg-brand-50' : '' }}">
-                            <span>Pengaturan FAQ</span>
+                        <a href="{{ route('admin.faq-sections.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.faq-sections.*') ? 'text-brand-400 font-bold' : '' }}">
+                            <span>FAQ Settings</span>
                         </a>
-                        <a href="{{ route('admin.features.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.features.*') ? 'text-brand-600 font-bold bg-brand-50' : '' }}">
-                            <span>Fitur Unggulan</span>
+                        <a href="{{ route('admin.features.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.features.*') ? 'text-brand-400 font-bold' : '' }}">
+                            <span>Core Features</span>
                         </a>
-                        <a href="{{ route('admin.pricing-plans.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.pricing-plans.*') ? 'text-brand-600 font-bold bg-brand-50' : '' }}">
-                            <span>Paket Harga</span>
+                        <a href="{{ route('admin.pricing-plans.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.pricing-plans.*') ? 'text-brand-400 font-bold' : '' }}">
+                            <span>Pricing Tables</span>
                         </a>
-                        <a href="{{ route('admin.faqs.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.faqs.*') ? 'text-brand-600 font-bold bg-brand-50' : '' }}">
-                            <span>Pertanyaan (FAQ)</span>
+                        <a href="{{ route('admin.faqs.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.faqs.*') ? 'text-brand-400 font-bold' : '' }}">
+                            <span>Questions List</span>
                         </a>
-                        <a href="{{ route('admin.trusted-companies.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.trusted-companies.*') ? 'text-brand-600 font-bold bg-brand-50' : '' }}">
-                            <span>Partner Bisnis</span>
+                        <a href="{{ route('admin.trusted-companies.index') }}" class="nav-link nav-link-sub {{ request()->routeIs('admin.trusted-companies.*') ? 'text-brand-400 font-bold' : '' }}">
+                            <span>Partnership Logos</span>
                         </a>
                     </div>
                 </div>
 
                 {{-- Membership Management --}}
                 <div class="space-y-1">
-                    <div class="px-4 mb-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest">Membership</div>
+                    <div class="px-7 mb-3 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Premium Access</div>
                     <a href="{{ route('admin.memberships.index') }}" class="nav-link {{ request()->routeIs('admin.memberships.*') ? 'active' : '' }}">
                         <i class="ti ti-id-badge-2 text-xl mr-3"></i>
-                        <span>Kelola Membership</span>
+                        <span>Membership</span>
                     </a>
                 </div>
 
                 {{-- Website Settings --}}
                 <div class="space-y-1 pb-10">
-                    <div class="px-4 mb-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest">Settings</div>
+                    <div class="px-7 mb-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.3em]">System Config</div>
                     <a href="{{ route('admin.site-settings.index') }}" class="nav-link {{ request()->routeIs('admin.site-settings.*') ? 'active' : '' }}">
-                        <i class="ti ti-settings text-xl mr-3"></i>
-                        <span>Konfigurasi Situs</span>
+                        <i class="ti ti-tool text-xl mr-3"></i>
+                        <span>Site Settings</span>
                     </a>
                     <form method="POST" action="{{ route('logout') }}" id="logout-form">
                         @csrf
-                        <button type="submit" class="w-[calc(100%-16px)] mx-2 text-left nav-link text-rose-500 hover:bg-rose-50 border-none cursor-pointer">
-                            <i class="ti ti-logout text-xl mr-3"></i>
-                            <span>Sign Out</span>
+                        <button type="submit" class="nav-link w-[calc(100%-32px)] text-left text-rose-500 hover:bg-rose-500/10 border-none cursor-pointer mt-4 group/logout transition-all duration-300">
+                            <i class="ti ti-power text-xl mr-3 group-hover/logout:rotate-90 transition-transform"></i>
+                            <span class="group-hover/logout:translate-x-1">Sign Out</span>
                         </button>
                     </form>
                 </div>
@@ -305,7 +339,7 @@
         </header>
 
         {{-- Main Page Content --}}
-        <div class="p-6 lg:p-10">
+        <div class="p-6 lg:p-8">
             {{-- Breadcrumbs / Page Title --}}
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-6 border-b border-gray-100/50">
                 <div class="flex-1">

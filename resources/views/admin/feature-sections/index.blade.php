@@ -4,22 +4,22 @@
 @section('description', 'Kelola headline dan visual utama yang membungkus daftar fitur unggulan.')
 
 @section('breadcrumbs')
-<nav class="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+<nav class="flex items-center gap-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest font-poppins">
     <a href="{{ route('admin.hero-sections.index') }}" class="hover:text-brand-600 transition-colors">Landing page</a>
     <i class="ti ti-chevron-right text-[8px]"></i>
-    <span class="text-brand-600">Feature Section</span>
+    <span class="text-brand-600 font-semibold">Feature Section</span>
 </nav>
 @endsection
 
 @section('actions')
-<a href="{{ route('admin.feature-sections.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 text-white rounded-xl font-bold text-[13px] shadow-lg shadow-brand-600/20 hover:bg-brand-700 active:scale-95 transition-all">
+<a href="{{ route('admin.feature-sections.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 text-white rounded-xl font-bold text-[13px] shadow-lg shadow-brand-600/20 hover:bg-brand-700 active:scale-95 transition-all font-poppins">
     <i class="ti ti-plus text-lg"></i>
     <span>Tambah Baru</span>
 </a>
 @endsection
 
 @section('content')
-<div class="w-full space-y-8 pb-20">
+<div class="w-full -mt-6 space-y-6 pb-20 font-poppins">
     
     {{-- Data Card --}}
 
@@ -52,11 +52,11 @@
                         </td>
                         <td class="py-6 px-8">
                             <div class="max-w-md space-y-2">
-                                <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-[10px] font-bold uppercase tracking-widest">
+                                <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-50 text-brand-600 rounded-lg text-[10px] font-bold uppercase tracking-widest">
                                     <span>{{ $section->title_badge_icon }}</span>
                                     <span>{{ $section->title_badge }}</span>
                                 </div>
-                                <h4 class="text-sm font-bold text-gray-900 leading-tight group-hover:text-indigo-600 transition-colors">{{ $section->headline }}</h4>
+                                <h4 class="text-[14px] font-bold text-gray-900 leading-tight group-hover:text-brand-600 transition-colors">{{ $section->headline }}</h4>
                             </div>
                         </td>
                         <td class="py-6 px-8">
@@ -75,16 +75,22 @@
                             </div>
                         </td>
                         <td class="py-6 px-8">
-                            <div class="flex items-center justify-end gap-3">
-                                <a href="{{ route('admin.feature-sections.edit', $section->id) }}" class="w-10 h-10 flex items-center justify-center bg-gray-50 text-gray-400 hover:bg-indigo-600 hover:text-white rounded-xl transition-all shadow-sm hover:shadow-lg hover:shadow-indigo-600/20 active:scale-95" title="Edit Section">
-                                    <i class="ti ti-edit text-xl"></i>
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="{{ route('admin.feature-sections.edit', $section->id) }}" class="w-9 h-9 flex items-center justify-center bg-gray-50 text-gray-400 hover:bg-brand-600 hover:text-white rounded-xl transition-all shadow-sm hover:shadow-lg hover:shadow-brand-600/20 active:scale-95" title="Edit Section">
+                                    <i class="ti ti-edit text-lg"></i>
                                 </a>
-                                <form action="{{ route('admin.feature-sections.destroy', $section->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus content ini?')" class="inline">
+                                <button @click="$dispatch('confirm', {
+                                    title: 'Hapus Feature Section',
+                                    message: 'Apakah Anda yakin ingin menghapus content ini?',
+                                    type: 'danger',
+                                    icon: 'ti ti-trash',
+                                    callback: () => { document.getElementById('delete-form-{{ $section->id }}').submit(); }
+                                })" class="w-9 h-9 flex items-center justify-center bg-gray-50 text-gray-400 hover:bg-rose-600 hover:text-white rounded-xl transition-all shadow-sm hover:shadow-lg hover:shadow-rose-600/20 active:scale-95" title="Hapus Section">
+                                    <i class="ti ti-trash text-lg"></i>
+                                </button>
+                                <form id="delete-form-{{ $section->id }}" action="{{ route('admin.feature-sections.destroy', $section->id) }}" method="POST" class="hidden">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="w-10 h-10 flex items-center justify-center bg-gray-50 text-gray-400 hover:bg-rose-600 hover:text-white rounded-xl transition-all shadow-sm hover:shadow-lg hover:shadow-rose-600/20 active:scale-95" title="Hapus Section">
-                                        <i class="ti ti-trash text-xl"></i>
-                                    </button>
                                 </form>
                             </div>
                         </td>
@@ -111,23 +117,23 @@
     </div>
 
     {{-- Contextual Info Card --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
-        <div class="p-8 bg-indigo-950 rounded-xl text-white shadow-2xl shadow-indigo-950/20 relative overflow-hidden h-full flex flex-col justify-center group">
-             <div class="absolute -top-10 -right-10 w-64 h-64 bg-brand-600/20 rounded-full blur-3xl opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-8 bg-brand-900 rounded-xl text-white shadow-2xl shadow-brand-900/20 relative overflow-hidden h-full flex flex-col justify-center group">
+             <div class="absolute -top-10 -right-10 w-64 h-64 bg-white/10 rounded-full blur-3xl opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
              <div class="relative z-10 space-y-3">
-                 <h4 class="text-xl font-display font-bold leading-tight italic opacity-90">"Fitur memberitahu, keuntungan menjual."</h4>
-                 <p class="text-sm text-indigo-300 font-medium leading-relaxed">Section ini membungkus daftar fitur Anda dengan visual yang menarik dan headline yang kuat.</p>
+                 <h4 class="text-xl font-display font-bold leading-tight italic opacity-90 tracking-tight">"Fitur memberitahu, keuntungan menjual."</h4>
+                 <p class="text-sm text-brand-100/80 font-medium leading-relaxed">Section ini membungkus daftar fitur Anda dengan visual yang menarik dan headline yang kuat.</p>
              </div>
         </div>
 
-        <div class="p-8 bg-gradient-to-br from-white to-gray-50/50 rounded-xl border border-gray-100 shadow-sm flex items-center gap-8 group hover:shadow-lg transition-all duration-500">
-            <div class="w-20 h-20 bg-indigo-600 text-white rounded-xl flex items-center justify-center text-4xl shadow-lg shadow-indigo-600/20 group-hover:scale-110 group-hover:rotate-6 transition-all">
+        <div class="p-8 bg-white rounded-xl border border-gray-100 shadow-sm flex items-center gap-8 group hover:shadow-lg hover:shadow-black/[0.02] transition-all duration-500">
+            <div class="w-20 h-20 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-4xl shadow-inner border border-brand-100 group-hover:scale-110 group-hover:rotate-6 transition-all">
                 <i class="ti ti-stack-2"></i>
             </div>
             <div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Total Versi</p>
-                <h5 class="text-3xl font-display font-bold text-gray-900 leading-none">{{ $feature_sections->count() }} Section</h5>
-                <p class="text-xs text-brand-600 font-bold mt-2 uppercase tracking-wider">Hanya 1 yang aktif di landing page</p>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 pl-0.5">Total Versi</p>
+                <h5 class="text-3xl font-display font-bold text-gray-900 leading-none tracking-tighter">{{ $feature_sections->count() }} Section</h5>
+                <p class="text-[11px] text-brand-600 font-bold mt-2 uppercase tracking-widest">Hanya 1 yang aktif di landing page</p>
             </div>
         </div>
     </div>

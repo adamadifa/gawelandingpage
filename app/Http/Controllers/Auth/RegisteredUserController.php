@@ -20,7 +20,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $settings = \App\Models\SiteSetting::pluck('value', 'key');
+        return view('auth.register', compact('settings'));
     }
 
     /**

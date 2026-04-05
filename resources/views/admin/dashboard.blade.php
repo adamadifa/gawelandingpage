@@ -15,10 +15,10 @@
             <div id="chart-users" class="w-20 h-10"></div>
         </div>
         <div>
-            <p class="text-[13px] font-bold text-gray-400 uppercase tracking-wider mb-1">New Users</p>
+            <p class="text-[13px] font-bold text-gray-400 uppercase tracking-wider mb-1">Total Members</p>
             <div class="flex items-end gap-3">
-                <h3 class="text-2xl font-bold text-gray-900 leading-none">15,000</h3>
-                <span class="text-[13px] font-bold text-emerald-500 mb-0.5">+200 <i class="ti ti-trending-up"></i></span>
+                <h3 class="text-2xl font-bold text-gray-900 leading-none">{{ number_format($business_stats['total_members']) }}</h3>
+                <span class="text-[11px] font-bold text-gray-400 mb-0.5 uppercase tracking-tighter">Registered</span>
             </div>
         </div>
     </div>
@@ -32,10 +32,10 @@
             <div id="chart-active" class="w-20 h-10"></div>
         </div>
         <div>
-            <p class="text-[13px] font-bold text-gray-400 uppercase tracking-wider mb-1">Active Users</p>
+            <p class="text-[13px] font-bold text-gray-400 uppercase tracking-wider mb-1">Active Licenses</p>
             <div class="flex items-end gap-3">
-                <h3 class="text-2xl font-bold text-gray-900 leading-none">8,000</h3>
-                <span class="text-[13px] font-bold text-emerald-500 mb-0.5">+200 <i class="ti ti-trending-up"></i></span>
+                <h3 class="text-2xl font-bold text-gray-900 leading-none">{{ number_format($business_stats['active_licenses']) }}</h3>
+                <span class="text-[11px] font-bold text-emerald-500 mb-0.5 uppercase tracking-tighter">Healthy</span>
             </div>
         </div>
     </div>
@@ -49,10 +49,10 @@
             <div id="chart-sales" class="w-20 h-10"></div>
         </div>
         <div>
-            <p class="text-[13px] font-bold text-gray-400 uppercase tracking-wider mb-1">Total Sales</p>
+            <p class="text-[13px] font-bold text-gray-400 uppercase tracking-wider mb-1">Total Revenue</p>
             <div class="flex items-end gap-3">
-                <h3 class="text-2xl font-bold text-gray-900 leading-none">$5,00,000</h3>
-                <span class="text-[13px] font-bold text-rose-500 mb-0.5">-$10k <i class="ti ti-trending-down"></i></span>
+                <h3 class="text-xl font-bold text-gray-900 leading-none">Rp {{ number_format($business_stats['total_revenue']) }}</h3>
+                <span class="text-[11px] font-bold text-brand-600 mb-0.5 uppercase tracking-tighter">Approved</span>
             </div>
         </div>
     </div>
@@ -66,10 +66,10 @@
             <div id="chart-profit" class="w-20 h-10"></div>
         </div>
         <div>
-            <p class="text-[13px] font-bold text-gray-400 uppercase tracking-wider mb-1">Total Profit</p>
+            <p class="text-[13px] font-bold text-gray-400 uppercase tracking-wider mb-1">Pending Orders</p>
             <div class="flex items-end gap-3">
-                <h3 class="text-2xl font-bold text-gray-900 leading-none">$3,00,700</h3>
-                <span class="text-[13px] font-bold text-emerald-500 mb-0.5">+$15k <i class="ti ti-trending-up"></i></span>
+                <h3 class="text-2xl font-bold text-gray-900 leading-none">{{ number_format($business_stats['pending_orders']) }}</h3>
+                <span class="text-[11px] font-bold text-amber-500 mb-0.5 uppercase tracking-tighter">Waiting</span>
             </div>
         </div>
     </div>
@@ -92,119 +92,72 @@
         <div id="revenue-chart" class="h-[350px]"></div>
     </div>
 
-    {{-- Campaigns --}}
+    {{-- Recent Transactions --}}
     <div class="card-wow lg:col-span-4 p-8">
-        <div class="flex justify-between items-center mb-10">
-            <h3 class="text-xl font-bold text-gray-900">Campaigns</h3>
-            <div class="bg-gray-50 border border-gray-100 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-500 flex items-center gap-2 cursor-pointer hover:bg-gray-100">
-                <span>Yearly</span>
-                <i class="ti ti-chevron-down"></i>
-            </div>
+        <div class="flex justify-between items-center mb-8">
+            <h3 class="text-lg font-bold text-gray-900">Recent Activity</h3>
+            <a href="{{ route('admin.memberships.index') }}" class="text-[10px] font-bold text-brand-600 uppercase tracking-widest hover:text-brand-700">View All</a>
         </div>
 
-        <div class="space-y-8">
-            <div class="space-y-3">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center"><i class="ti ti-mail"></i></div>
-                        <span class="text-sm font-bold text-gray-700 uppercase tracking-wide">Email</span>
-                    </div>
-                    <span class="text-sm font-bold text-gray-900">80%</span>
+        <div class="space-y-6">
+            @forelse($recent_transactions as $trx)
+            <div class="flex items-start gap-4 group cursor-pointer">
+                <div class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-brand-50 group-hover:text-brand-600 transition-all border border-gray-100 flex-shrink-0">
+                    <i class="ti ti-receipt text-xl"></i>
                 </div>
-                <div class="h-2 w-full bg-gray-50 rounded-full overflow-hidden">
-                    <div class="h-full bg-orange-500 rounded-full" style="width: 80%"></div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex justify-between items-baseline gap-2">
+                        <h4 class="text-[13px] font-bold text-gray-900 truncate leading-none mb-1.5 uppercase tracking-tight">{{ $trx->user->name }}</h4>
+                        <span class="text-[9px] font-bold text-gray-400 whitespace-nowrap">{{ $trx->created_at->diffForHumans() }}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-semibold text-gray-500">{{ $trx->pricingPlan->name }}</span>
+                        <span class="w-1 h-1 bg-gray-200 rounded-full"></span>
+                        <span class="text-[10px] font-bold {{ $trx->status == 'approved' ? 'text-emerald-500' : ($trx->status == 'pending' ? 'text-amber-500' : 'text-rose-500') }} uppercase tracking-widest">{{ $trx->status }}</span>
+                    </div>
                 </div>
             </div>
-
-            <div class="space-y-3">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-500 flex items-center justify-center"><i class="ti ti-world"></i></div>
-                        <span class="text-sm font-bold text-gray-700 uppercase tracking-wide">Website</span>
-                    </div>
-                    <span class="text-sm font-bold text-gray-900">80%</span>
-                </div>
-                <div class="h-2 w-full bg-gray-50 rounded-full overflow-hidden">
-                    <div class="h-full bg-emerald-500 rounded-full" style="width: 80%"></div>
-                </div>
+            @empty
+            <div class="py-10 text-center">
+                <i class="ti ti-inbox text-4xl text-gray-200 mb-3 block"></i>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">No activity</p>
             </div>
-
-            <div class="space-y-3">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-500 flex items-center justify-center"><i class="ti ti-brand-facebook"></i></div>
-                        <span class="text-sm font-bold text-gray-700 uppercase tracking-wide">Facebook</span>
-                    </div>
-                    <span class="text-sm font-bold text-gray-900">80%</span>
-                </div>
-                <div class="h-2 w-full bg-gray-50 rounded-full overflow-hidden">
-                    <div class="h-full bg-indigo-600 rounded-full" style="width: 80%"></div>
-                </div>
-            </div>
-
-            <div class="space-y-3">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-purple-50 text-purple-500 flex items-center justify-center"><i class="ti ti-mail-opened"></i></div>
-                        <span class="text-sm font-bold text-gray-700 uppercase tracking-wide">Direct Mail</span>
-                    </div>
-                    <span class="text-sm font-bold text-gray-900">80%</span>
-                </div>
-                <div class="h-2 w-full bg-gray-50 rounded-full overflow-hidden">
-                    <div class="h-full bg-purple-600 rounded-full" style="width: 80%"></div>
-                </div>
-            </div>
+            @endforelse
         </div>
     </div>
 </div>
 
 {{-- Second Row --}}
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8">
-    {{-- Earning Statistics --}}
+    {{-- CMS Content Statistics --}}
     <div class="card-wow lg:col-span-12 p-8">
         <div class="flex justify-between items-center mb-10">
             <div>
-                <h3 class="text-xl font-bold text-gray-900 leading-tight">Earning Statistic</h3>
-                <p class="text-sm text-gray-400 mt-1 font-medium">Yearly earning overview</p>
-            </div>
-            <div class="bg-gray-50 border border-gray-100 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-500 flex items-center gap-2 cursor-pointer hover:bg-gray-100">
-                <span>Yearly</span>
-                <i class="ti ti-chevron-down"></i>
+                <h3 class="text-xl font-bold text-gray-900 leading-tight">Content Overview</h3>
+                <p class="text-sm text-gray-400 mt-1 font-medium">Statistics for landing page components</p>
             </div>
         </div>
 
-        <div class="grid lg:grid-cols-3 gap-10">
-            <div class="lg:col-span-2">
-                <div id="earning-chart" class="h-[300px]"></div>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+            <div class="text-center p-6 bg-gray-50/50 rounded-2xl border border-gray-100/50">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2 leading-none">Features</p>
+                <h4 class="text-2xl font-bold text-gray-900 leading-none">{{ $cms_stats['features'] }}</h4>
             </div>
-            <div class="flex flex-col justify-center gap-10">
-                <div class="flex items-center gap-5">
-                    <div class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group hover:bg-indigo-50 hover:text-indigo-600 transition-all cursor-pointer">
-                        <i class="ti ti-shopping-cart text-2xl"></i>
-                    </div>
-                    <div>
-                        <p class="text-gray-400 text-[11px] font-bold uppercase tracking-widest mb-1">Sales</p>
-                        <h4 class="text-2xl font-bold text-gray-900 leading-none">$200k</h4>
-                    </div>
-                </div>
-                <div class="flex items-center gap-5">
-                    <div class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group hover:bg-emerald-50 hover:text-emerald-600 transition-all cursor-pointer">
-                        <i class="ti ti-chart-bar text-2xl"></i>
-                    </div>
-                    <div>
-                        <p class="text-gray-400 text-[11px] font-bold uppercase tracking-widest mb-1">Income</p>
-                        <h4 class="text-2xl font-bold text-gray-900 leading-none">$200k</h4>
-                    </div>
-                </div>
-                <div class="flex items-center gap-5">
-                    <div class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group hover:bg-amber-50 hover:text-amber-600 transition-all cursor-pointer">
-                        <i class="ti ti-trending-up text-2xl"></i>
-                    </div>
-                    <div>
-                        <p class="text-gray-400 text-[11px] font-bold uppercase tracking-widest mb-1">Profit</p>
-                        <h4 class="text-2xl font-bold text-gray-900 leading-none">$200k</h4>
-                    </div>
-                </div>
+            <div class="text-center p-6 bg-gray-50/50 rounded-2xl border border-gray-100/50">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2 leading-none">Plans</p>
+                <h4 class="text-2xl font-bold text-gray-900 leading-none">{{ $cms_stats['plans'] }}</h4>
+            </div>
+            <div class="text-center p-6 bg-gray-50/50 rounded-2xl border border-gray-100/50">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2 leading-none">FAQs</p>
+                <h4 class="text-2xl font-bold text-gray-900 leading-none">{{ $cms_stats['faqs'] }}</h4>
+            </div>
+            <div class="text-center p-6 bg-gray-50/50 rounded-2xl border border-gray-100/50">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2 leading-none">Clients</p>
+                <h4 class="text-2xl font-bold text-gray-900 leading-none">{{ $cms_stats['companies'] }}</h4>
+            </div>
+            <div class="text-center p-6 bg-gray-50/50 rounded-2xl border border-gray-100/50">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2 leading-none">Reviews</p>
+                <h4 class="text-2xl font-bold text-gray-900 leading-none">{{ $cms_stats['testimonials'] }}</h4>
             </div>
         </div>
     </div>
@@ -252,19 +205,17 @@
         chart: { height: 350, type: 'area', toolbar: { show: false }, zoom: { enabled: false } },
         dataLabels: { enabled: false },
         stroke: { curve: 'smooth', width: 3 },
-        series: [{ name: 'Revenue', data: [31, 40, 28, 51, 42, 109, 100] }],
-        xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'] },
+        series: [{ name: 'Revenue', data: @json($revenue_data) }],
+        xaxis: { categories: @json($months) },
         colors: ['#6366f1'],
         fill: { gradient: { enabled: true, opacityFrom: 0.55, opacityTo: 0 } },
-    }).render();
-
-    // Earning Stat Chart
-    new ApexCharts(document.querySelector("#earning-chart"), {
-        chart: { height: 300, type: 'line', toolbar: { show: false } },
-        series: [{ name: 'Sales', type: 'column', data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30] }],
-        stroke: { width: [0, 4] },
-        labels: ['01 Jan', '02 Jan', '03 Jan', '04 Jan', '05 Jan', '06 Jan', '07 Jan', '08 Jan', '09 Jan', '10 Jan', '11 Jan'],
-        colors: ['#6366f1'],
+        yaxis: {
+            labels: {
+                formatter: function (val) {
+                    return "Rp " + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            }
+        }
     }).render();
 </script>
 @endpush

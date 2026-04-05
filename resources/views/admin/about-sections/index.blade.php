@@ -4,22 +4,22 @@
 @section('description', 'Kelola narasi dan poin unggulan yang menjelaskan nilai utama aplikasi Anda.')
 
 @section('breadcrumbs')
-<nav class="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+<nav class="flex items-center gap-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest font-poppins">
     <a href="{{ route('admin.hero-sections.index') }}" class="hover:text-brand-600 transition-colors">Landing page</a>
     <i class="ti ti-chevron-right text-[8px]"></i>
-    <span class="text-brand-600">About section</span>
+    <span class="text-brand-600 font-semibold">About section</span>
 </nav>
 @endsection
 
 @section('actions')
-<a href="{{ route('admin.about-sections.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 text-white rounded-xl font-bold text-[13px] shadow-lg shadow-brand-600/20 hover:bg-brand-700 active:scale-95 transition-all">
+<a href="{{ route('admin.about-sections.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 text-white rounded-xl font-bold text-[13px] shadow-lg shadow-brand-600/20 hover:bg-brand-700 active:scale-95 transition-all font-poppins">
     <i class="ti ti-plus text-lg"></i>
     <span>Tambah Baru</span>
 </a>
 @endsection
 
 @section('content')
-<div class="w-full space-y-8 pb-20">
+<div class="w-full -mt-6 space-y-6 pb-20 font-poppins">
     
     {{-- Data Card --}}
 
@@ -50,19 +50,19 @@
                                         </div>
                                     @endif
                                 </div>
-                                <div>
-                                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-[10px] font-bold uppercase tracking-widest mb-2">
+                                <div class="space-y-1">
+                                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brand-50 text-brand-600 rounded-lg text-[10px] font-bold uppercase tracking-widest">
                                         <span>{{ $about->title_badge_icon }}</span>
                                         <span>{{ $about->title_badge }}</span>
                                     </div>
-                                    <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Modul ID: #{{ $about->id }}</p>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest pl-0.5">ID #{{ $about->id }}</p>
                                 </div>
                             </div>
                         </td>
                         <td class="py-6 px-8">
                             <div class="max-w-md space-y-1.5">
-                                <h4 class="text-sm font-bold text-gray-900 leading-tight group-hover:text-indigo-600 transition-colors">{{ $about->headline }}</h4>
-                                <p class="text-xs text-gray-500 font-medium line-clamp-1 italic">"{{ Str::limit($about->description, 80) }}"</p>
+                                <h4 class="text-[14px] font-bold text-gray-900 leading-tight group-hover:text-brand-600 transition-colors">{{ $about->headline }}</h4>
+                                <p class="text-[11px] text-gray-400 font-medium line-clamp-1 italic">"{{ Str::limit($about->description, 80) }}"</p>
                             </div>
                         </td>
                         <td class="py-6 px-8">
@@ -81,16 +81,22 @@
                             </div>
                         </td>
                         <td class="py-6 px-8">
-                            <div class="flex items-center justify-end gap-3">
-                                <a href="{{ route('admin.about-sections.edit', $about->id) }}" class="w-10 h-10 flex items-center justify-center bg-gray-50 text-gray-400 hover:bg-indigo-600 hover:text-white rounded-xl transition-all shadow-sm hover:shadow-lg hover:shadow-indigo-600/20 active:scale-95" title="Edit Section">
-                                    <i class="ti ti-edit text-xl"></i>
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="{{ route('admin.about-sections.edit', $about->id) }}" class="w-9 h-9 flex items-center justify-center bg-gray-50 text-gray-400 hover:bg-brand-600 hover:text-white rounded-xl transition-all shadow-sm hover:shadow-lg hover:shadow-brand-600/20 active:scale-95" title="Edit Section">
+                                    <i class="ti ti-edit text-lg"></i>
                                 </a>
-                                <form action="{{ route('admin.about-sections.destroy', $about->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus section ini?')" class="inline">
+                                <button @click="$dispatch('confirm', {
+                                    title: 'Hapus About Section',
+                                    message: 'Apakah Anda yakin ingin menghapus section ini?',
+                                    type: 'danger',
+                                    icon: 'ti ti-trash',
+                                    callback: () => { document.getElementById('delete-form-{{ $about->id }}').submit(); }
+                                })" class="w-9 h-9 flex items-center justify-center bg-gray-50 text-gray-400 hover:bg-rose-600 hover:text-white rounded-xl transition-all shadow-sm hover:shadow-lg hover:shadow-rose-600/20 active:scale-95" title="Hapus Section">
+                                    <i class="ti ti-trash text-lg"></i>
+                                </button>
+                                <form id="delete-form-{{ $about->id }}" action="{{ route('admin.about-sections.destroy', $about->id) }}" method="POST" class="hidden">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="w-10 h-10 flex items-center justify-center bg-gray-50 text-gray-400 hover:bg-rose-600 hover:text-white rounded-xl transition-all shadow-sm hover:shadow-lg hover:shadow-rose-600/20 active:scale-95" title="Hapus Section">
-                                        <i class="ti ti-trash text-xl"></i>
-                                    </button>
                                 </form>
                             </div>
                         </td>
@@ -117,32 +123,32 @@
     </div>
 
     {{-- Summary Info Card --}}
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-        <div class="p-6 bg-gradient-to-br from-white to-indigo-50/30 rounded-xl border border-indigo-100/50 shadow-sm flex items-center gap-5 group hover:shadow-lg transition-all duration-500">
-            <div class="w-14 h-14 bg-indigo-600 text-white rounded-xl flex items-center justify-center text-2xl shadow-lg shadow-indigo-600/20 group-hover:scale-110 transition-transform">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-6 bg-white rounded-xl border border-gray-100 shadow-sm flex items-center gap-5 group hover:shadow-lg hover:shadow-black/[0.02] transition-all duration-500">
+            <div class="w-14 h-14 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-brand-100/50 group-hover:scale-110 transition-transform">
                 <i class="ti ti-layout-sidebar-right"></i>
             </div>
             <div>
-                <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-1">Total Modul</p>
-                <h5 class="text-xl font-display font-bold text-gray-900 leading-none">{{ $about_sections->count() }} Section</h5>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 pl-0.5">Total Modul</p>
+                <h5 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">{{ $about_sections->count() }} Section</h5>
             </div>
         </div>
         
-        <div class="p-6 bg-gradient-to-br from-white to-emerald-50/30 rounded-xl border border-emerald-100/50 shadow-sm flex items-center gap-5 group hover:shadow-lg transition-all duration-500">
-            <div class="w-14 h-14 bg-emerald-600 text-white rounded-xl flex items-center justify-center text-2xl shadow-lg shadow-emerald-600/20 group-hover:scale-110 transition-transform">
+        <div class="p-6 bg-white rounded-xl border border-gray-100 shadow-sm flex items-center gap-5 group hover:shadow-lg hover:shadow-black/[0.02] transition-all duration-500">
+            <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-emerald-100/50 group-hover:scale-110 transition-transform">
                 <i class="ti ti-cloud-check"></i>
             </div>
             <div>
-                <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mb-1">Status Publikasi</p>
-                <h5 class="text-xl font-display font-bold text-gray-900 leading-none">{{ $about_sections->where('is_active', true)->count() }} Aktif</h5>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 pl-0.5">Status Publikasi</p>
+                <h5 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">{{ $about_sections->where('is_active', true)->count() }} Aktif</h5>
             </div>
         </div>
 
-        <div class="p-8 bg-indigo-900 rounded-xl text-white shadow-2xl shadow-indigo-900/20 relative overflow-hidden h-full flex items-center group">
+        <div class="p-8 bg-brand-900 rounded-xl text-white shadow-2xl shadow-brand-900/20 relative overflow-hidden h-full flex items-center group">
              <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
              <div class="relative z-10 space-y-2">
-                 <h4 class="text-md font-display font-bold leading-tight italic opacity-90">"Desain adalah duta bisu dari merek Anda."</h4>
-                 <p class="text-[10px] text-indigo-200/70 font-bold uppercase tracking-widest">— Paul Rand</p>
+                 <h4 class="text-md font-display font-bold leading-tight italic opacity-90 tracking-tight">"Desain adalah duta bisu dari merek Anda."</h4>
+                 <p class="text-[10px] text-brand-200/70 font-bold uppercase tracking-widest pl-0.5">— Paul Rand</p>
              </div>
         </div>
     </div>

@@ -1,25 +1,26 @@
 @extends('layouts.admin')
 
-@section('title', 'Hero Section Management')
-
-@section('content')
-<nav class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6">
+@section('breadcrumbs')
+<nav class="flex items-center gap-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">
     <span class="text-gray-400">Landing Page</span>
     <i class="ti ti-chevron-right text-[8px]"></i>
-    <span class="text-indigo-600">Hero Section</span>
+    <span class="text-brand-600">Hero Section</span>
 </nav>
+@endsection
 
-<div class="mb-8 flex justify-between items-center">
-    <p class="text-sm text-gray-500 font-medium">Kelola pesan utama yang muncul di bagian paling atas website Anda.</p>
-    <div class="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 rounded-xl text-xs font-bold uppercase tracking-wider">
-        <i class="ti ti-info-circle text-lg"></i>
-        <span>Maksimal 1 Hero Aktif</span>
-    </div>
+@section('actions')
+<div class="flex items-center gap-2 px-4 py-2 bg-brand-50 text-brand-700 rounded-xl text-[10px] font-bold uppercase tracking-wider border border-brand-100 shadow-sm">
+    <i class="ti ti-info-circle text-lg"></i>
+    <span>Maksimal 1 Hero Aktif</span>
 </div>
+@endsection
+
+@section('content')
+<div class="w-full -mt-6">
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
     @foreach($heroes as $hero)
-    <div class="card-wow overflow-hidden group hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300 border-2 {{ $hero->is_active ? 'border-indigo-500' : 'border-transparent' }}">
+    <div class="rounded-xl border-2 border-brand-500 shadow-xl shadow-brand-500/5 transition-all duration-300">
         {{-- Preview Area --}}
         <div class="relative h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
@@ -29,9 +30,9 @@
                 <h4 class="text-white font-bold text-lg line-clamp-1 mb-1">{{ $hero->headline }}</h4>
                 <div class="flex gap-2">
                     @if($hero->is_active)
-                    <span class="px-2 py-0.5 bg-indigo-500 text-white text-[10px] font-black uppercase rounded shadow-sm">ACTIVE</span>
+                    <span class="px-2 py-0.5 bg-brand-600 text-white text-[10px] font-bold uppercase rounded shadow-sm">ACTIVE</span>
                     @else
-                    <span class="px-2 py-0.5 bg-gray-900/50 text-white text-[10px] font-black uppercase rounded backdrop-blur-sm">DRAFT</span>
+                    <span class="px-2 py-0.5 bg-gray-900/50 text-white text-[10px] font-bold uppercase rounded backdrop-blur-sm">DRAFT</span>
                     @endif
                 </div>
             </div>
@@ -58,8 +59,8 @@
 
             {{-- Actions --}}
             <div class="flex items-center justify-between gap-3 pt-6 border-t border-gray-50">
-                <a href="{{ route('admin.hero-sections.edit', $hero) }}" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white text-gray-700 border border-gray-200 rounded-xl text-sm font-bold hover:bg-gray-50 hover:border-indigo-600 hover:text-indigo-600 transition-all">
-                    <i class="ti ti-edit-circle text-lg"></i>
+                <a href="{{ route('admin.hero-sections.edit', $hero) }}" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white text-gray-700 border border-gray-200 rounded-xl text-sm font-semibold hover:bg-gray-50 hover:border-brand-600 hover:text-brand-600 transition-all">
+                    <i class="ti ti-edit-circle text-lg blur-[0.3px]"></i>
                     Edit
                 </a>
                 
@@ -70,7 +71,7 @@
                     <input type="hidden" name="is_active" value="1">
                     <input type="hidden" name="headline" value="{{ $hero->headline }}">
                     <input type="hidden" name="sub_headline" value="{{ $hero->sub_headline }}">
-                    <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 active:scale-95 transition-all">
+                    <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-brand-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-brand-600/20 hover:bg-brand-700 active:scale-95 transition-all">
                         <i class="ti ti-circle-check text-lg"></i>
                         Activate
                     </button>
@@ -82,12 +83,13 @@
     @endforeach
 
     {{-- Add New Card (Placeholder functionality if route exists) --}}
-    <div class="card-wow border-2 border-dashed border-gray-200 bg-gray-50/50 flex flex-col items-center justify-center p-10 group hover:border-indigo-300 hover:bg-indigo-50/30 transition-all cursor-pointer">
-        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-gray-400 group-hover:text-indigo-600 group-hover:scale-110 transition-all shadow-sm mb-4">
+    <div class="card-wow border-2 border-dashed border-gray-200 bg-white flex flex-col items-center justify-center p-10 group hover:border-brand-300 hover:bg-brand-50/30 transition-all cursor-pointer rounded-xl">
+        <div class="w-16 h-16 bg-gray-50 text-gray-400 rounded-2xl flex items-center justify-center group-hover:text-brand-600 group-hover:scale-110 transition-all shadow-inner mb-4">
             <i class="ti ti-plus text-3xl"></i>
         </div>
-        <h4 class="font-bold text-gray-400 group-hover:text-indigo-600 transition-colors">Add New Concept</h4>
-        <p class="text-[11px] font-bold text-gray-300 uppercase tracking-widest mt-1">Coming Soon</p>
+        <h4 class="font-semibold text-gray-400 group-hover:text-brand-600 transition-colors">Add New Concept</h4>
+        <p class="text-[11px] font-semibold text-gray-300 uppercase tracking-widest mt-1">Coming Soon</p>
     </div>
+</div>
 </div>
 @endsection

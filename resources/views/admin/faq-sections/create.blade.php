@@ -2,127 +2,157 @@
 
 @section('title', 'FAQ — Tambah Section')
 
-@section('content')
-<div class="w-full space-y-8 pb-20 text-inter font-poppins">
-    
-    {{-- Page Header --}}
-    <div class="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
-        <div>
-            <nav class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">
-                <a href="{{ route('admin.hero-sections.index') }}" class="hover:text-indigo-600 transition-colors">Landing Page</a>
-                <i class="ti ti-chevron-right text-[8px]"></i>
-                <a href="{{ route('admin.faq-sections.index') }}" class="hover:text-indigo-600 transition-colors">FAQ Section</a>
-                <i class="ti ti-chevron-right text-[8px]"></i>
-                <span class="text-indigo-600 font-bold">New Section</span>
-            </nav>
-            <h1 class="text-3xl font-display font-black text-gray-900 leading-tight">Buat Section FAQ Baru</h1>
-            <p class="text-sm text-gray-500 font-medium">Buat pesan headline dan visual mockup yang memukau untuk Tanya Jawab.</p>
-        </div>
-        <div class="flex items-center gap-3">
-             <a href="{{ route('admin.faq-sections.index') }}" class="px-5 py-2.5 text-sm font-bold text-gray-400 hover:text-gray-600 transition-colors">Batal</a>
-             <button type="submit" form="faq-section-create-form" class="inline-flex items-center gap-2 px-7 py-3.5 bg-indigo-600 text-white rounded-2xl font-bold text-sm shadow-xl shadow-indigo-600/20 hover:bg-indigo-700 active:scale-95 transition-all">
-                <i class="ti ti-device-floppy text-lg"></i>
-                Simpan Section
-            </button>
-        </div>
-    </div>
+@section('breadcrumbs')
+<nav class="flex items-center gap-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2 font-poppins">
+    <a href="{{ route('admin.hero-sections.index') }}" class="hover:text-brand-600 transition-colors">Landing Page</a>
+    <i class="ti ti-chevron-right text-[8px]"></i>
+    <a href="{{ route('admin.faq-sections.index') }}" class="hover:text-brand-600 transition-colors">FAQ Section</a>
+    <i class="ti ti-chevron-right text-[8px]"></i>
+    <span class="text-brand-600 font-semibold">Tambah Versi</span>
+</nav>
+@endsection
 
+@section('actions')
+<div class="flex items-center gap-3 font-poppins">
+     <a href="{{ route('admin.faq-sections.index') }}" class="px-5 py-2.5 text-sm font-semibold text-gray-400 hover:text-gray-600 transition-colors">Batal</a>
+     <button type="submit" form="faq-section-create-form" class="inline-flex items-center gap-2 px-7 py-3.5 bg-brand-600 text-white rounded-xl font-bold text-sm shadow-xl shadow-brand-600/20 hover:bg-brand-700 active:scale-95 transition-all">
+        <i class="ti ti-device-floppy text-lg"></i>
+        <span>Simpan Versi Baru</span>
+    </button>
+</div>
+@endsection
+
+@section('content')
+<div class="w-full -mt-6 space-y-6 pb-20 font-poppins">
+    
     <form id="faq-section-create-form" action="{{ route('admin.faq-sections.store') }}" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         @csrf
 
+        <div class="lg:col-span-12">
+            @if ($errors->any())
+                <div class="mb-8 p-4 bg-rose-50 border border-rose-100 rounded-2xl flex items-start gap-3">
+                    <i class="ti ti-alert-triangle text-xl text-rose-500 mt-0.5"></i>
+                    <ul class="text-sm text-rose-600 font-bold space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>• {{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+        </div>
+
         {{-- Left: Messaging & Branding --}}
-        <div class="lg:col-span-7 space-y-8">
-            <div class="bg-white rounded-[2rem] border border-gray-100 shadow-xl shadow-black/[0.02] p-8 lg:p-10 space-y-8">
+        <div class="lg:col-span-7 space-y-6">
+            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 lg:p-10 space-y-6 font-poppins">
                 <div class="flex items-center gap-4 border-b border-gray-50 pb-6 mb-8">
-                    <div class="w-12 h-12 bg-gray-50 text-indigo-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-indigo-50">
+                    <div class="w-12 h-12 bg-gray-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-brand-50">
                         <i class="ti ti-message-2"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none">Pesan & Branding</h3>
-                        <p class="text-[12px] text-gray-400 font-bold mt-1.5 uppercase tracking-wider">Headline & Badge</p>
+                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">Branding & Headline</h3>
+                        <p class="text-[12px] text-gray-400 font-semibold mt-1.5 uppercase tracking-wider">Identitas & Pesan Utama</p>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div class="space-y-3">
-                        <label class="block text-sm font-bold text-gray-700 px-1">Teks Badge</label>
-                        <input type="text" name="title_badge" value="{{ old('title_badge', 'FAQs') }}" required placeholder="Contoh: FAQs"
-                            class="w-full bg-gray-50/50 border-gray-200 rounded-[1.25rem] py-4 px-6 text-gray-900 font-bold focus:bg-white focus:ring-4 focus:ring-indigo-100 focus:border-indigo-600 transition-all placeholder:text-gray-300">
+                        <label class="block text-sm font-semibold text-gray-700 px-1">Judul Lencana (Title Badge)</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 p-0.5"><i class="ti ti-tag"></i></span>
+                            <input type="text" name="title_badge" value="{{ old('title_badge', 'FAQs') }}" required
+                                class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 pl-12 pr-6 text-gray-900 font-semibold focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all placeholder:text-gray-300 shadow-sm">
+                        </div>
                     </div>
+                    
                     <div class="space-y-3">
-                        <label class="block text-sm font-bold text-gray-700 px-1">Icon Badge</label>
-                        <input type="text" name="title_badge_icon" value="{{ old('title_badge_icon', '🔥') }}" required placeholder="Emoji atau Icon"
-                            class="w-full bg-gray-50/50 border-gray-200 rounded-[1.25rem] py-4 px-6 text-gray-900 font-bold focus:bg-white focus:ring-4 focus:ring-indigo-100 focus:border-indigo-600 transition-all text-center">
+                        <label class="block text-sm font-semibold text-gray-700 px-1">Ikon Lencana (Emoji/Char)</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 p-0.5"><i class="ti ti-sparkles"></i></span>
+                            <input type="text" name="title_badge_icon" value="{{ old('title_badge_icon', '🔥') }}" required
+                                class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 pl-12 pr-6 text-gray-900 font-semibold focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all placeholder:text-gray-300 shadow-sm">
+                        </div>
                     </div>
                 </div>
 
                 <div class="space-y-3">
-                    <label class="block text-sm font-bold text-gray-700 px-1">Judul Headline</label>
+                    <label class="block text-sm font-semibold text-gray-700 px-1">Headline Utama</label>
                     <input type="text" name="headline" value="{{ old('headline') }}" required placeholder="Frequently Asked Questions"
-                        class="w-full bg-gray-50/50 border-gray-200 rounded-[1.25rem] py-4 px-6 text-gray-900 font-bold focus:bg-white focus:ring-4 focus:ring-indigo-100 focus:border-indigo-600 transition-all placeholder:text-gray-300">
+                        class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-5 px-8 text-gray-900 font-bold text-lg focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all placeholder:text-gray-300 shadow-sm">
                 </div>
 
                 <div class="space-y-3">
-                    <label class="block text-sm font-bold text-gray-700 px-1">Deskripsi FAQ</label>
+                    <label class="block text-sm font-semibold text-gray-700 px-1">Deskripsi FAQ</label>
                     <textarea name="description" rows="5" required placeholder="Tuliskan paragraf pengantar untuk daftar pertanyaan..."
-                        class="w-full bg-gray-50/50 border-gray-200 rounded-[1.25rem] py-4 px-6 text-gray-900 font-medium focus:bg-white focus:ring-4 focus:ring-indigo-100 focus:border-indigo-600 transition-all placeholder:text-gray-300 leading-relaxed">{{ old('description') }}</textarea>
+                        class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 px-6 text-gray-900 font-medium focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all placeholder:text-gray-300 leading-relaxed shadow-sm">{{ old('description') }}</textarea>
                 </div>
             </div>
         </div>
 
         {{-- Right: Visual Mockups --}}
-        <div class="lg:col-span-5 space-y-8">
-            <div class="bg-white rounded-[2rem] border border-gray-100 shadow-xl shadow-black/[0.02] p-8 lg:p-10 space-y-8">
+        <div class="lg:col-span-5 space-y-6 sticky top-8 font-poppins">
+            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 lg:p-10 space-y-6">
                 <div class="flex items-center gap-4 border-b border-gray-50 pb-6 mb-8">
-                    <div class="w-12 h-12 bg-gray-50 text-indigo-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-indigo-50">
+                    <div class="w-12 h-12 bg-gray-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-brand-50">
                         <i class="ti ti-device-laptop"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none">Visual Assets</h3>
-                        <p class="text-[12px] text-gray-400 font-bold mt-1.5 uppercase tracking-wider">Dual Mockup Display</p>
+                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">Visual Assets</h3>
+                        <p class="text-[12px] text-gray-400 font-semibold mt-1.5 uppercase tracking-wider">Dual Mockup Display</p>
                     </div>
                 </div>
 
                 <div class="space-y-8">
                     {{-- Primary Mockup --}}
                     <div class="space-y-4">
-                        <label class="block text-sm font-bold text-gray-700 px-1">Main Mockup (Landscape)</label>
-                        <div class="w-full aspect-video bg-gray-50 rounded-[2rem] border-2 border-dashed border-gray-200 flex flex-col items-center justify-center p-4 relative group overflow-hidden hover:border-indigo-400 transition-all">
-                            <i class="ti ti-photo-plus text-4xl text-gray-300 group-hover:scale-110 transition-transform" id="icon-primary"></i>
-                            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-2" id="text-primary">Click to Upload</p>
-                            <input type="file" name="primary_image" required class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="previewImage(this, 'preview-primary', 'icon-primary', 'text-primary')">
-                            <img id="preview-primary" class="absolute inset-0 w-full h-full object-cover hidden group-hover:scale-105 transition-transform duration-500">
+                        <label class="block text-sm font-semibold text-gray-700 px-1">Main Mockup (Landscape)</label>
+                        <div class="w-full aspect-video bg-white border-2 border-dashed border-gray-200 rounded-xl overflow-hidden hover:border-brand-600 hover:bg-white transition-all cursor-pointer shadow-inner relative group">
+                            <div class="w-full h-full flex flex-col items-center justify-center p-6 text-center">
+                                <i class="ti ti-photo-plus text-5xl text-brand-200 mb-3 group-hover:scale-110 transition-transform" id="icon-primary"></i>
+                                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest" id="text-primary">Unggah Mockup Utama</p>
+                                <input type="file" name="primary_image" required class="absolute inset-0 opacity-0 cursor-pointer z-20" onchange="previewImage(this, 'preview-primary', 'icon-primary', 'text-primary')">
+                                <img id="preview-primary" class="absolute inset-0 w-full h-full object-contain hidden z-10 p-4 transition-all duration-500">
+                                
+                                <div class="absolute inset-0 bg-brand-900/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center z-30 pointer-events-none">
+                                    <div class="bg-white text-brand-600 text-[10px] font-bold uppercase tracking-widest px-6 py-3 rounded-full shadow-2xl scale-90 group-hover:scale-100 transition-transform">Pilih File Baru</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     {{-- Secondary Mockup --}}
                     <div class="space-y-4">
-                        <label class="block text-sm font-bold text-gray-700 px-1">Support Mockup (Portrait)</label>
-                        <div class="w-full aspect-square bg-gray-50 rounded-[2rem] border-2 border-dashed border-gray-200 flex flex-col items-center justify-center p-4 relative group overflow-hidden hover:border-indigo-400 transition-all">
-                            <i class="ti ti-photo-plus text-4xl text-gray-300 group-hover:scale-110 transition-transform" id="icon-secondary"></i>
-                            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-2" id="text-secondary">Click to Upload</p>
-                            <input type="file" name="secondary_image" required class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="previewImage(this, 'preview-secondary', 'icon-secondary', 'text-secondary')">
-                            <img id="preview-secondary" class="absolute inset-0 w-full h-full object-cover hidden group-hover:scale-105 transition-transform duration-500">
+                        <label class="block text-sm font-semibold text-gray-700 px-1">Support Mockup (Portrait)</label>
+                        <div class="w-full aspect-square bg-white border-2 border-dashed border-gray-200 rounded-xl overflow-hidden hover:border-brand-600 hover:bg-white transition-all cursor-pointer shadow-inner relative group">
+                            <div class="w-full h-full flex flex-col items-center justify-center p-6 text-center">
+                                <i class="ti ti-photo-plus text-5xl text-brand-200 mb-3 group-hover:scale-110 transition-transform" id="icon-secondary"></i>
+                                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest" id="text-secondary">Unggah Mockup Pendukung</p>
+                                <input type="file" name="secondary_image" required class="absolute inset-0 opacity-0 cursor-pointer z-20" onchange="previewImage(this, 'preview-secondary', 'icon-secondary', 'text-secondary')">
+                                <img id="preview-secondary" class="absolute inset-0 w-full h-full object-contain hidden z-10 p-4 transition-all duration-500">
+                                
+                                <div class="absolute inset-0 bg-brand-900/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center z-30 pointer-events-none">
+                                    <div class="bg-white text-brand-600 text-[10px] font-bold uppercase tracking-widest px-6 py-3 rounded-full shadow-2xl scale-90 group-hover:scale-100 transition-transform">Pilih File Baru</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             {{-- Visibility Status --}}
-            <div class="bg-white rounded-[2rem] border border-gray-100 shadow-xl shadow-black/[0.02] p-8">
-                <div class="flex items-center justify-between">
+            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8">
+                <div class="flex items-center justify-between font-poppins">
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl shadow-inner">
+                        <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl shadow-inner border border-emerald-50">
                             <i class="ti ti-eye"></i>
                         </div>
                         <div>
-                            <h4 class="text-sm font-black text-gray-900 leading-none">Visibility</h4>
-                            <p class="text-[10px] text-gray-400 font-bold mt-1 uppercase tracking-wider">Status Aktif</p>
+                            <h4 class="text-sm font-bold text-gray-900 leading-none tracking-tight">Visibility</h4>
+                            <p class="text-[10px] text-gray-400 font-semibold mt-1 uppercase tracking-wider">Status Aktif</p>
                         </div>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" name="is_active" value="1" class="sr-only peer" checked>
-                        <div class="w-12 h-6.5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600 transition-all"></div>
+                        <div class="w-12 h-6.5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brand-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600 transition-all"></div>
                     </label>
                 </div>
             </div>
@@ -138,6 +168,7 @@
                 const preview = document.getElementById(previewId);
                 preview.src = e.target.result;
                 preview.classList.remove('hidden');
+                preview.classList.add('animate-fade-in');
                 document.getElementById(iconId).classList.add('hidden');
                 document.getElementById(textId).classList.add('hidden');
             }
@@ -145,4 +176,14 @@
         }
     }
 </script>
+
+<style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    .animate-fade-in {
+        animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+</style>
 @endsection
