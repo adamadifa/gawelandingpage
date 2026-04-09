@@ -13,9 +13,9 @@ class HeroSectionSeeder extends Seeder
     public function run(): void
     {
         \App\Models\HeroSection::create([
-            'headline' => 'Kelola Absensi & Payroll Karyawan Lebih Efisien, Transparan, & Akurat.',
-            'sub_headline' => 'Solusi satu pintu untuk Presensi GPS Geofencing, Penggajian Otomatis, dan Manajemen Pinjaman Karyawan tanpa ribet.',
-            'cta_text' => 'Coba Sekarang Gratis',
+            'headline' => 'Automasi Administrasi HR Anda Hingga 90% dengan PresensiGPS V2',
+            'sub_headline' => 'Platform Manajemen SDM Terpadu: Presensi Geofencing, Face Recognition AI, dan Smart Payroll Automation dalam satu pintu.',
+            'cta_text' => 'Mulai Demo Gratis',
             'cta_url' => '/register',
             'cta_secondary_text' => 'Konsultasi Penawaran',
             'cta_secondary_url' => 'https://wa.me/628123456789',

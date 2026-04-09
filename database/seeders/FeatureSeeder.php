@@ -15,38 +15,38 @@ class FeatureSeeder extends Seeder
         $features = [
             [
                 'icon' => 'map-2',
-                'title' => 'Smart GPS Geofencing',
-                'description' => 'Absensi akurat berbasis titik lokasi GPS dan verifikasi foto wajah (Anti-Fake GPS).',
+                'title' => 'Modul Presensi & Keamanan',
+                'description' => 'Geofencing GPS, Face Recognition AI, dan pengaturan shift fleksibel untuk mencegah kecurangan.',
                 'sort_order' => 1
             ],
             [
                 'icon' => 'receipt-2',
-                'title' => 'Automated Payroll System',
-                'description' => 'Hitung gaji, tunjangan, dan potongan BPJS secara otomatis hanya dalam hitungan detik.',
+                'title' => 'Modul Payroll & Kompensasi',
+                'description' => 'Automasi hitung gaji, BPJS, tunjangan, dan denda secara instan dengan slip gaji digital.',
                 'sort_order' => 2
             ],
             [
                 'icon' => 'credit-card',
-                'title' => 'Loan & Installment Hub',
-                'description' => 'Manajemen pinjaman karyawan yang terintegrasi langsung dengan pemotongan gaji bulanan.',
+                'title' => 'Modul Pinjaman Karyawan',
+                'description' => 'Sistem pengajuan pinjaman online yang terintegrasi otomatis dengan pemotongan cicilan di slip gaji.',
                 'sort_order' => 3
             ],
             [
-                'icon' => 'building-skyscraper',
-                'title' => 'Multi-Branch Management',
-                'description' => 'Pantau banyak cabang sekaligus dalam satu dashboard admin yang simpel.',
+                'icon' => 'calendar-event',
+                'title' => 'Modul Izin, Cuti & Lembur',
+                'description' => 'Pengajuan E-Permission, manajemen kuota cuti real-time, dan perhitungan lembur otomatis.',
                 'sort_order' => 4
             ],
             [
-                'icon' => 'device-mobile',
-                'title' => 'Employee Self-Service',
-                'description' => 'Karyawan bisa cek riwayat absen, saldo pinjaman, dan slip gaji langsung dari smartphone.',
+                'icon' => 'chart-bar',
+                'title' => 'Modul Performa & KPI',
+                'description' => 'Penilaian kinerja berbasis indikator kustom (KPI), monitoring aktivitas, dan manajemen kontrak.',
                 'sort_order' => 5
             ],
             [
-                'icon' => 'chart-bar',
-                'title' => 'Real-time Reporting & Analytics',
-                'description' => 'Akses laporan absensi, keterlambatan, dan jam kerja lembur secara akurat kapan saja.',
+                'icon' => 'messages',
+                'title' => 'Modul Komunikasi & Notifikasi',
+                'description' => 'Integrasi WhatsApp Gateway untuk notifikasi otomatis absen, izin, dan pengiriman slip gaji.',
                 'sort_order' => 6
             ],
         ];

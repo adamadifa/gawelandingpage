@@ -25,10 +25,10 @@
     <div class="max-w-xl w-full">
         <div class="text-center mb-10">
             <a href="{{ route('landing') }}" class="inline-flex items-center gap-2 mb-8 group">
-                <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/20">
-                    <span class="text-white font-display font-bold text-xl">W</span>
+                <div class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center shadow-lg shadow-brand-600/20">
+                    <span class="text-white font-display font-bold text-xl">P</span>
                 </div>
-                <span class="font-display text-2xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">WowDash</span>
+                <span class="font-display text-2xl font-bold text-gray-900 group-hover:text-brand-600 transition-colors">PresensiGPS V2</span>
             </a>
             <h1 class="font-display text-4xl font-bold text-gray-900">Status Membership</h1>
         </div>
@@ -62,7 +62,7 @@
                         </div>
                         <div>
                             <p class="text-xs font-bold text-gray-400 uppercase tracking-widest leading-none mb-2">Sisa Hari</p>
-                            <p class="font-bold text-brand-600">{{ now()->diffInDays($subscription->ends_at) }} Hari Lagi</p>
+                            <p class="font-bold text-brand-600">{{ number_format(now()->diffInDays($subscription->ends_at), 0, ',', '.') }} Hari Lagi</p>
                         </div>
                     </div>
                 </div>

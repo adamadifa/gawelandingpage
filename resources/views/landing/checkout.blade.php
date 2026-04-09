@@ -20,7 +20,7 @@
         .font-display { font-family: 'Outfit', sans-serif; }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased" x-data="{ showTerms: false }">
     
     <!-- Navigation -->
     <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
@@ -77,9 +77,15 @@
                             @endforeach
                         </ul>
 
-                        <div class="pt-6 border-t border-dashed border-gray-100 flex items-center justify-between">
-                            <span class="text-sm font-medium text-gray-500">Max Employees</span>
-                            <span class="text-sm font-bold text-gray-900">{{ $pricingPlan->max_employees ?? 'Unlimited' }} Users</span>
+                        <div class="pt-6 border-t border-dashed border-gray-100 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-medium text-gray-400 uppercase tracking-widest">Max Employees</span>
+                                <span class="text-sm font-bold text-gray-900">{{ $pricingPlan->max_employees ?? 'Unlimited' }} Users</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-medium text-gray-400 uppercase tracking-widest">Server Performance</span>
+                                <span class="text-[13px] font-bold text-brand-600">{{ $pricingPlan->server_spec }}</span>
+                            </div>
                         </div>
                     </div>
 
@@ -242,6 +248,22 @@
                         </div>
 
                         <div class="p-8 lg:p-10 bg-gray-50/50 border-t border-gray-100">
+                            {{-- Terms & Conditions Checkbox --}}
+                            <div class="mb-6 px-1">
+                                <label class="flex items-start gap-3 cursor-pointer group">
+                                    <div class="relative flex items-center mt-1">
+                                        <input type="checkbox" name="terms" id="terms" required class="peer h-5 w-5 cursor-pointer appearance-none rounded border border-gray-300 bg-white checked:border-brand-600 checked:bg-brand-600 transition-all focus:ring-2 focus:ring-brand-100">
+                                        <i class="ti ti-check absolute text-[10px] text-white opacity-0 peer-checked:opacity-100 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-black pointer-events-none"></i>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-500 group-hover:text-gray-900 transition-colors leading-relaxed">
+                                        Saya setuju dengan <button type="button" @click="showTerms = true" class="text-brand-600 font-bold hover:underline">Syarat & Ketentuan</button> yang berlaku untuk berlangganan PresensiGPS V2.
+                                    </span>
+                                </label>
+                                @error('terms')
+                                    <p class="mt-2 text-xs text-rose-500 font-bold pl-8">{{ $message }}</p>
+                                @enderror
+                            </div>
+
                             <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand-600/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3">
                                 <i class="ti ti-lock text-xl"></i>
                                 <span>Kirim & Konfirmasi Pembayaran</span>
@@ -257,6 +279,100 @@
             </div>
         </div>
     </main>
+
+    <!-- Terms & Conditions Modal -->
+    <div x-show="showTerms" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-[100] overflow-y-auto px-4 py-6 sm:px-0 flex items-center justify-center" 
+         style="display: none;">
+        
+        {{-- Backdrop --}}
+        <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" @click="showTerms = false"></div>
+
+        {{-- Modal Content --}}
+        <div x-show="showTerms"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+             class="relative bg-white rounded-3xl overflow-hidden shadow-2xl transform transition-all sm:max-w-2xl sm:w-full border border-white/20">
+            
+            {{-- Modal Header --}}
+            <div class="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-white sticky top-0 z-10">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-brand-50 rounded-xl flex items-center justify-center text-brand-600">
+                        <i class="ti ti-file-certificate text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none">Syarat & Ketentuan</h3>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1.5 leading-none">Terakhir Diperbarui: 09 April 2026</p>
+                    </div>
+                </div>
+                <button @click="showTerms = false" class="text-gray-400 hover:text-gray-900 transition-colors p-2 hover:bg-gray-50 rounded-lg">
+                    <i class="ti ti-x text-2xl"></i>
+                </button>
+            </div>
+
+            {{-- Modal Body --}}
+            <div class="px-8 py-10 max-h-[60vh] overflow-y-auto bg-white features-scroll">
+                <div class="prose prose-sm prose-slate max-w-none space-y-8">
+                    <section class="space-y-3">
+                        <h4 class="text-sm font-black text-gray-900 uppercase tracking-widest flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                            1. Ruang Lingkup Layanan
+                        </h4>
+                        <p class="text-gray-500 leading-relaxed text-[13px] font-medium pl-4">PresensiGPS V2 menyediakan platform manajemen SDM berbasis cloud yang mencakup fitur presensi, payroll, dan manajemen keuangan karyawan. Layanan ini disediakan "sebagaimana adanya" (as-is) tanpa jaminan ketersediaan fitur khusus di luar paket standar.</p>
+                    </section>
+
+                    <section class="space-y-3">
+                        <h4 class="text-sm font-black text-gray-900 uppercase tracking-widest flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                            2. Kebijakan Pembayaran & Refund
+                        </h4>
+                        <p class="text-gray-500 leading-relaxed text-[13px] font-medium pl-4">Seluruh biaya berlangganan yang telah dibayarkan bersifat <span class="text-rose-600 font-bold italic">Final dan Non-Refundable</span> (tidak dapat dikembalikan). Pengguna bertanggung jawab penuh atas pemilihan paket yang sesuai dengan kebutuhan perusahaan sebelum melakukan transfer.</p>
+                    </section>
+
+                    <section class="space-y-3">
+                        <h4 class="text-sm font-black text-gray-900 uppercase tracking-widest flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                            3. Ketersediaan Layanan (SLA)
+                        </h4>
+                        <p class="text-gray-500 leading-relaxed text-[13px] font-medium pl-4">Kami berkomitmen menjaga tingkat ketersediaan layanan (Uptime) sebesar <span class="text-brand-600 font-bold">99.9%</span>. Kami tidak bertanggung jawab atas kerugian finansial atau operasional yang timbul akibat gangguan teknis dari pihak ketiga (ISP, Server Cloud Provider) atau kondisi <span class="italic text-gray-900">Force Majeure</span>.</p>
+                    </section>
+
+                    <section class="space-y-3">
+                        <h4 class="text-sm font-black text-gray-900 uppercase tracking-widest flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                            4. Keamanan Data & Privasi
+                        </h4>
+                        <p class="text-gray-500 leading-relaxed text-[13px] font-medium pl-4">Data karyawan yang Anda unggah akan dijaga kerahasiaannya dengan enkripsi standar industri. Namun, pengguna bertanggung jawab penuh atas keamanan kredensial akun (Email & Password) dan penyalahgunaan akses oleh pihak internal perusahaan.</p>
+                    </section>
+
+                    <section class="space-y-3">
+                        <h4 class="text-sm font-black text-gray-900 uppercase tracking-widest flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                            5. Larangan & Penyalahgunaan
+                        </h4>
+                        <p class="text-gray-500 leading-relaxed text-[13px] font-medium pl-4">Dilarang keras melakukan manipulasi data, menggunakan Fake GPS, atau mencoba menembus celah keamanan sistem. Pelanggaran berat akan mengakibatkan penutupan akun secara permanen tanpa pemberitahuan dan tanpa pengembalian dana.</p>
+                    </section>
+                </div>
+            </div>
+
+            {{-- Modal Footer --}}
+            <div class="px-8 py-6 border-t border-gray-100 bg-gray-50 flex justify-end">
+                <button @click="showTerms = false" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-8 py-3 rounded-xl transition-all shadow-lg shadow-brand-600/20 active:scale-95">
+                    Saya Mengerti
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
         function copyAccountNumber(number) {

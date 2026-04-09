@@ -14,24 +14,29 @@ class FaqSeeder extends Seeder
     {
         $faqs = [
             [
-                'question' => 'Bagaimana cara berlangganan?',
-                'answer' => 'Anda dapat memilih paket yang sesuai dengan kebutuhan Anda di halaman Pricing, lalu klik tombol "Coba Sekarang" atau hubungi tim administrasi kami melalui WhatsApp.',
+                'question' => 'Apakah karyawan bisa melakukan manipulasi lokasi atau menggunakan Fake GPS?',
+                'answer' => 'Tidak bisa. Sistem kami dilengkapi dengan fitur Anti-Fake GPS dan deteksi lokasi yang sangat ketat melalui titik koordinat nyata. Selain itu, setiap absensi wajib divalidasi dengan Face Recognition (Pengenalan Wajah) menggunakan AI, sehingga tidak ada lagi celah untuk "titip absen" atau manipulasi lokasi dari jarak jauh.',
                 'sort_order' => 1
             ],
             [
-                'question' => 'Apakah data saya aman?',
-                'answer' => 'Sangat aman. Kami menggunakan enkripsi standar industri dan melakukan backup data harian untuk memastikan keamanan dan ketersediaan data Anda.',
+                'question' => 'Bagaimana jika perusahaan saya memiliki banyak cabang dan jadwal shift yang berbeda-beda?',
+                'answer' => 'PresensiGPS V2 sangat fleksibel. Anda dapat mendaftarkan banyak lokasi cabang dengan radius geofencing masing-masing. Sistem juga mendukung Multi-Shift (Pagi, Siang, Malam) hingga shift lintas hari, yang dapat diatur per grup atau per departemen dengan sangat mudah melalui panel admin.',
                 'sort_order' => 2
             ],
             [
-                'question' => 'Bisakah saya upgrade paket di tengah jalan?',
-                'answer' => 'Tentu saja. Anda bisa melakukan upgrade paket kapan saja melalui dashboard admin. Biaya akan disesuaikan secara prorata.',
+                'question' => 'Apakah benar perhitungan gaji (Payroll) sudah sepenuhnya otomatis?',
+                'answer' => 'Benar sekali. Di akhir bulan, Anda tidak perlu lagi merekap data kehadiran secara manual. Sistem akan secara otomatis menghitung Gaji Pokok, Tunjangan Tetap/Tidak Tetap, Overtime (Lembur), Iuran BPJS, hingga potongan otomatis cicilan pinjaman. Anda hanya perlu melakukan verifikasi satu kali untuk men-generate semua slip gaji karyawan secara masal.',
                 'sort_order' => 3
             ],
             [
-                'question' => 'Apakah ada biaya tambahan untuk implementasi?',
-                'answer' => 'Untuk paket Business dan Corporate, kami menyediakan bantuan implementasi awal secara gratis.',
+                'question' => 'Bagaimana cara karyawan memantau sisa pinjaman atau jatah cuti mereka?',
+                'answer' => 'Transparansi adalah kunci. Setiap karyawan memiliki akses ke Dashboard Pribadi melalui ponsel mereka. Di sana, mereka bisa memantau sisa kuota cuti tahunan, status pengajuan izin yang disetujui, hingga rincian saldo pinjaman dan riwayat cicilan mereka tanpa perlu bertanya ke bagian admin HR.',
                 'sort_order' => 4
+            ],
+            [
+                'question' => 'Seberapa aman data perusahaan dan data pribadi karyawan di aplikasi ini?',
+                'answer' => 'Keamanan data adalah prioritas utama kami. Aplikasi menggunakan enkripsi data standar industri untuk melindungi informasi sensitif. Selain itu, sistem hak akses (Role & Permission Control) memastikan bahwa hanya admin yang berwenang yang dapat mengakses data finansial seperti gaji, laporan internal, dan data sensitif perusahaan lainnya.',
+                'sort_order' => 5
             ],
         ];
 

@@ -7,11 +7,19 @@ use App\Models\MembershipTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+use Jenssegers\Agent\Agent;
+
 class CheckoutController extends Controller
 {
     public function index(PricingPlan $pricingPlan)
     {
         $subscriptionId = request('subscription_id');
+        $agent = new Agent();
+
+        if ($agent->isMobile() || $agent->isTablet()) {
+            return view('landing.checkout-mobile', compact('pricingPlan', 'subscriptionId'));
+        }
+
         return view('landing.checkout', compact('pricingPlan', 'subscriptionId'));
     }
 
@@ -22,6 +30,7 @@ class CheckoutController extends Controller
         $rules = [
             'plan_type' => 'required|in:monthly,yearly',
             'payment_proof' => 'required|image|max:2048',
+            'terms' => 'accepted',
         ];
 
         if ($isGuest) {

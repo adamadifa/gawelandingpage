@@ -155,7 +155,7 @@
                 </div>
                 <div class="flex flex-col leading-tight">
                     <span class="font-display text-lg font-bold text-white group-hover:text-brand-400 transition-colors tracking-tight uppercase">
-                        {{ $settings['brand_name'] ?? 'WowDash' }}
+                        {{ $settings['brand_name'] ?? 'PresensiGPS V2' }}
                     </span>
                 </div>
             </a>

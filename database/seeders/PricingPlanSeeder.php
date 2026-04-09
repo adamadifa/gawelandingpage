@@ -12,65 +12,84 @@ class PricingPlanSeeder extends Seeder
      */
     public function run(): void
     {
+        $fullFeatures = [
+            'Presensi GPS & Face Recognition AI',
+            'Sistem Geofencing & Multi-Cabang',
+            'Tracking Kunjungan & Visit Lapangan',
+            'Manajemen Shift & Jadwal Kerja',
+            'Automasi Gaji (Bulanan & Harian)',
+            'Integrasi BPJS & Tunjangan Multi-Kategori',
+            'Sistem Denda & Potongan Otomatis',
+            'Slip Gaji Digital (PDF)',
+            'Manajemen Pinjaman & Cicilan Otomatis',
+            'E-Permission (Izin, Sakit, Cuti, Dinas)',
+            'Lembur Otomatis & Approval Berjenjang',
+            'KPI Employee & Penilaian Kinerja',
+            'Monitoring Aktivitas & Log Harian',
+            'Manajemen Kontrak, Mutasi & Resign',
+            'Rekap Presensi & Payroll (Excel/PDF)',
+            'Dashboard Statistik & Analytics',
+            'WhatsApp Gateway (Notifikasi Otomatis)',
+            'User Role Control & Audit Trail'
+        ];
+
         $plans = [
             [
-                'name' => 'Paket STARTER',
-                'badge' => 'UMKM & Startup Kecil',
-                'target_audience' => 'Cocok untuk: UMKM & Startup Kecil',
+                'name' => 'Starter',
+                'badge' => 'UMKM & Startup',
+                'target_audience' => 'Cocok untuk: 1 - 50 User',
                 'max_employees' => 50,
-                'monthly_price' => 400000,
-                'yearly_price' => 4000000,
-                'yearly_savings' => 'Hemat Rp 800rb',
-                'server_spec' => 'NEO Lite XS 1.2 (1 vCPU, 2 GB RAM)',
+                'monthly_price' => 499000,
+                'yearly_price' => 4990000,
+                'yearly_savings' => 'Hemat Rp 998rb (2 Bulan Gratis)',
+                'server_spec' => 'Biznet GIO Neo Lite MS 4.2',
                 'is_featured' => false,
                 'sort_order' => 1,
-                'features' => [
-                    'Jumlah Karyawan: Maksimal 50 Orang',
-                    'Presensi GPS',
-                    'Dashboard Admin Standar',
-                    '1 Cabang',
-                    'Termasuk 1 Domain (.com / .id)'
-                ]
+                'features' => $fullFeatures
             ],
             [
-                'name' => 'Paket BUSINESS',
+                'name' => 'Business',
                 'badge' => 'Populer',
-                'target_audience' => 'Cocok untuk: Perusahaan Menengah & Multi-Cabang',
-                'max_employees' => 300,
-                'monthly_price' => 900000,
-                'yearly_price' => 9000000,
-                'yearly_savings' => 'Hemat Rp 1.8jt',
-                'server_spec' => 'NEO Lite SS 2.2 (Lebih stabil untuk traffic tinggi)',
+                'target_audience' => 'Cocok untuk: 51 - 200 User',
+                'max_employees' => 200,
+                'monthly_price' => 1499000,
+                'yearly_price' => 14990000,
+                'yearly_savings' => 'Hemat Rp 2.9jt (2 Bulan Gratis)',
+                'server_spec' => 'Biznet GIO Neo Lite MM 8.4',
                 'is_featured' => true,
                 'sort_order' => 2,
-                'features' => [
-                    'Jumlah Karyawan: Maksimal 300 Orang',
-                    'Semua fitur Starter',
-                    'Laporan Payroll',
-                    'Multi-Cabang',
-                    'Pinjaman/Kasbon',
-                    'Termasuk 1 Domain (.com / .id)'
-                ]
+                'features' => $fullFeatures
             ],
             [
-                'name' => 'Paket CORPORATE',
-                'badge' => 'Korporasi Besar',
-                'target_audience' => 'Cocok untuk: Pabrik & Korporasi Besar',
-                'max_employees' => 1000,
-                'monthly_price' => 1650000,
-                'yearly_price' => 16500000,
-                'yearly_savings' => 'Hemat Rp 3.3jt',
-                'server_spec' => 'NEO Lite MS 4.4 (High Performance)',
+                'name' => 'Enterprise',
+                'badge' => 'High Growth',
+                'target_audience' => 'Cocok untuk: 201 - 500 User',
+                'max_employees' => 500,
+                'monthly_price' => 3499000,
+                'yearly_price' => 34990000,
+                'yearly_savings' => 'Hemat Rp 6.9jt (2 Bulan Gratis)',
+                'server_spec' => 'Biznet GIO Neo Lite Pro MS 4.2',
                 'is_featured' => false,
                 'sort_order' => 3,
-                'features' => [
-                    'Jumlah Karyawan: Maksimal 1.000 Orang',
-                    'Semua fitur Business',
-                    'Custom Report',
-                    'Support Prioritas 24/7',
-                    'Daily Backup',
-                    'Termasuk 1 Domain (.com / .id)'
-                ]
+                'features' => $fullFeatures
+            ],
+            [
+                'name' => 'Corporate',
+                'badge' => 'Skala Besar',
+                'target_audience' => 'Cocok untuk: 500+ User',
+                'max_employees' => 999999,
+                'monthly_price' => 0,
+                'yearly_price' => 0,
+                'yearly_savings' => 'Hubungi Kami',
+                'server_spec' => 'Biznet GIO Neo Lite Pro ML 16.8',
+                'is_featured' => false,
+                'sort_order' => 4,
+                'features' => array_merge($fullFeatures, [
+                    'SLA Guarantee 99.9%',
+                    'Dedicated Server Resources',
+                    'Custom Fitur Khusus',
+                    'On-Premise Deployment Opsional'
+                ])
             ],
         ];
 

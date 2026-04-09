@@ -84,6 +84,22 @@
         .hero-phone-img {
             mix-blend-mode: multiply;
         }
+
+        /* Custom Scrollbar for Pricing Features */
+        .features-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .features-scroll::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+        .features-scroll::-webkit-scrollbar-thumb {
+            background: rgba(22, 163, 74, 0.2);
+            border-radius: 10px;
+        }
+        .features-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(22, 163, 74, 0.4);
+        }
     </style>
 </head>
 <body class="font-sans text-gray-900 antialiased overflow-x-hidden bg-white">
@@ -278,7 +294,6 @@
                             };
                             $colorClasses = match($stat->color_theme) {
                                 'brand' => ['bg' => 'bg-brand-100', 'text' => 'text-brand-600'],
-                                'brand' => ['bg' => 'bg-brand-100', 'text' => 'text-brand-600'],
                                 'amber' => ['bg' => 'bg-amber-100', 'text' => 'text-amber-600'],
                                 'rose' => ['bg' => 'bg-rose-100', 'text' => 'text-rose-600'],
                                 'sky' => ['bg' => 'bg-sky-100', 'text' => 'text-sky-600'],
@@ -458,6 +473,10 @@
                 <span class="inline-block text-brand-600 font-semibold text-sm tracking-wider uppercase mb-3">Harga Transparan</span>
                 <h2 class="font-display text-3xl lg:text-[42px] font-bold text-gray-900 mb-4 leading-tight">Pilih Paket Langganan</h2>
                 <p class="text-gray-500 text-lg">Harga bersahabat yang disesuaikan dengan skala bisnis Anda.</p>
+                <div class="mt-8 inline-flex items-center gap-3 bg-brand-50 border border-brand-100 px-6 py-3 rounded-2xl animate-bounce-soft">
+                    <span class="text-lg">💡</span>
+                    <p class="text-brand-700 text-sm font-bold">Rekomendasi: Hemat 15% (2 Bulan Gratis) untuk pembayaran tahunan!</p>
+                </div>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
@@ -476,33 +495,44 @@
                         <p class="text-sm text-gray-500 mt-1">{{ $plan->target_audience }}</p>
                     </div>
 
-                    <div class="mb-8">
+                    <div class="mb-8 h-[72px]">
+                        @if($plan->monthly_price > 0)
                         <div class="flex items-baseline gap-1">
                             <span class="font-display text-4xl lg:text-5xl font-extrabold text-gray-900">Rp {{ number_format($plan->monthly_price / 1000, 0) }}rb</span>
                             <span class="text-gray-400 font-medium">/bln</span>
                         </div>
-                        @if($plan->yearly_savings)
+                        @else
+                        <div class="flex items-baseline gap-1">
+                            <span class="font-display text-3xl lg:text-4xl font-extrabold text-gray-900">Custom Pricing</span>
+                        </div>
+                        @endif
+
+                        @if($plan->yearly_savings && $plan->monthly_price > 0)
                         <p class="text-brand-600 text-sm font-semibold mt-2">🎉 Tahunan: Rp {{ number_format($plan->yearly_price, 0, ',', '.') }} ({{ $plan->yearly_savings }})</p>
+                        @elseif($plan->monthly_price == 0)
+                        <p class="text-brand-600 text-sm font-semibold mt-2">SLA Guarantee 99.9% Reliable</p>
                         @endif
                     </div>
 
-                    <ul class="space-y-4 mb-10">
-                        @foreach($plan->features as $pf)
-                        <li class="flex items-start gap-3">
-                            <div class="w-5 h-5 rounded-full bg-brand-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <svg class="w-3 h-3 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                            </div>
-                            <span class="text-gray-600 text-[15px]">{{ $pf->feature_text }}</span>
-                        </li>
-                        @endforeach
-                    </ul>
+                    <div class="features-scroll overflow-y-auto pr-2 mb-10 h-[380px]">
+                        <ul class="space-y-4">
+                            @foreach($plan->features as $pf)
+                            <li class="flex items-start gap-3">
+                                <div class="w-5 h-5 rounded-full bg-brand-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <svg class="w-3 h-3 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                </div>
+                                <span class="text-gray-600 text-[15px]">{{ $pf->feature_text }}</span>
+                            </li>
+                            @endforeach
+                        </ul>
+                    </div>
 
-                    <a href="{{ route('checkout.index', $plan->id) }}"
+                    <a href="{{ $plan->monthly_price > 0 ? route('checkout.index', $plan->id) : 'https://wa.me/' . ($settings['whatsapp_number'] ?? '') }}"
                        class="block text-center w-full py-4 rounded-2xl font-semibold text-[15px] transition-all duration-300
                        {{ $plan->is_featured 
                            ? 'bg-brand-600 hover:bg-brand-700 text-white shadow-lg shadow-brand-600/25 hover:shadow-brand-600/40 hover:-translate-y-0.5' 
                            : 'bg-brand-50 hover:bg-brand-100 text-brand-700 hover:-translate-y-0.5' }}">
-                        Pilih {{ $plan->name }}
+                        {{ $plan->monthly_price > 0 ? 'Pilih ' . $plan->name : 'Hubungi Kami' }}
                     </a>
                 </div>
                 @endforeach
