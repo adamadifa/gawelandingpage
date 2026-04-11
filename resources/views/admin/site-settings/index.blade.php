@@ -14,7 +14,7 @@
 @endsection
 
 @section('content')
-<div class="w-full -mt-6 space-y-6 pb-20 font-poppins text-inter">
+<div class="w-full -mt-6 space-y-6 pb-0 font-poppins text-inter">
 
     {{-- Individual Settings List --}}
     <div class="max-w-4xl space-y-4">

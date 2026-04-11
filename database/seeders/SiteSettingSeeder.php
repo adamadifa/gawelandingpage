@@ -22,6 +22,8 @@ class SiteSettingSeeder extends Seeder
             ['key' => 'payment_bank_number', 'value' => '829 012 3456', 'type' => 'text'],
             ['key' => 'payment_bank_holder', 'value' => 'Adam Adifa', 'type' => 'text'],
             ['key' => 'payment_bank_logo', 'value' => null, 'type' => 'image'],
+            ['key' => 'meta_description', 'value' => 'Kelola Absensi & Payroll Karyawan Lebih Efisien, Transparan, & Akurat dengan PresensiGPS. Aplikasi Absensi GPS Geofencing terbaik.', 'type' => 'textarea'],
+            ['key' => 'meta_keywords', 'value' => 'absensi gps, payroll otomatis, manajemen karyawan, hr software, geofencing, presensi digital', 'type' => 'textarea'],
         ];
 
         foreach ($settings as $setting) {

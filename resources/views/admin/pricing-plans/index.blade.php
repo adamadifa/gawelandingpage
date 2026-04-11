@@ -19,7 +19,7 @@
 @endsection
 
 @section('content')
-<div class="w-full -mt-6 space-y-6 pb-20 font-poppins">
+<div class="w-full -mt-6 space-y-6 pb-0 font-poppins">
 
     {{-- Pricing Grid --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -48,7 +48,7 @@
                 </div>
 
                 {{-- Price Display --}}
-                <div class="mb-10 pb-8 border-b border-gray-50 flex items-baseline gap-2">
+                <div class="mb-10 pb-0 border-b border-gray-50 flex items-baseline gap-2">
                     <span class="text-gray-400 text-lg font-bold">Rp</span>
                     <span class="text-4xl font-bold text-gray-900 tracking-widest">{{ number_format($plan->monthly_price, 0, ',', '.') }}</span>
                     <span class="text-gray-400 text-sm font-bold uppercase tracking-widest">/ bln</span>

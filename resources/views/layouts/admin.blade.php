@@ -186,7 +186,7 @@
         [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="flex">
+<body class="flex" x-data="{}">
     <!-- Sidebar -->
     <aside id="sidebar" class="sidebar shrink-0 sticky top-0 overflow-y-auto hidden lg:flex flex-col">
         <div class="px-3 pt-12 pb-8">
@@ -339,7 +339,7 @@
         </header>
 
         {{-- Main Page Content --}}
-        <div class="p-6 lg:p-8">
+        <div class="p-6 lg:px-8 lg:pt-8 lg:pb-0">
             {{-- Breadcrumbs / Page Title --}}
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-6 border-b border-gray-100/50">
                 <div class="flex-1">
@@ -454,7 +454,7 @@
         </div>
 
         {{-- Footer --}}
-        <footer class="mt-auto px-10 py-6 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-400 text-[13px] font-medium bg-white">
+        <footer class="mt-auto px-8 py-2 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-400 text-[13px] font-medium bg-white">
             <p>&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
             <div class="flex items-center gap-6">
                 <a href="#" class="hover:text-brand-600">Privacy Policy</a>

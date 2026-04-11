@@ -19,7 +19,7 @@
 @endsection
 
 @section('content')
-<div class="w-full -mt-6 space-y-6 pb-20 font-poppins">
+<div class="w-full -mt-6 space-y-6 pb-0 font-poppins">
     
     {{-- Data Card Table --}}
     <div class="bg-gray-50/50 rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] overflow-hidden">

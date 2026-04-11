@@ -19,7 +19,7 @@
 @endsection
 
 @section('content')
-<div class="w-full -mt-6 space-y-6 pb-20 font-poppins">
+<div class="w-full -mt-6 space-y-6 pb-0 font-poppins">
 
     <form id="hero-edit-form" action="{{ route('admin.hero-sections.update', $hero_section) }}" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         @csrf

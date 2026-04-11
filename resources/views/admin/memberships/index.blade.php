@@ -15,7 +15,7 @@
 @endsection
 
 @section('content')
-<div class="w-full -mt-6 space-y-6 pb-20 font-poppins text-inter">
+<div class="w-full -mt-6 space-y-6 pb-0 font-poppins text-inter">
     {{-- Stats Cards --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="group bg-white rounded-xl border border-gray-100 p-7 relative overflow-hidden transition-all hover:shadow-2xl hover:shadow-amber-500/10 shadow-sm shadow-black/[0.02]">

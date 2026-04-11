@@ -19,7 +19,7 @@
 @endsection
 
 @section('content')
-<div class="w-full -mt-6 space-y-6 pb-20 font-poppins">
+<div class="w-full -mt-6 space-y-6 pb-0 font-poppins">
     
     {{-- Grid of Feature Cards --}}
 

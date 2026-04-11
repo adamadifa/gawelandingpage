@@ -22,7 +22,7 @@
 @endsection
 
 @section('content')
-<div class="w-full -mt-6 space-y-6 pb-20 font-poppins text-inter max-w-5xl mx-auto">
+<div class="w-full -mt-6 space-y-6 pb-0 font-poppins text-inter max-w-5xl mx-auto">
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {{-- Left Side: Receipt Preview (Sticky) --}}

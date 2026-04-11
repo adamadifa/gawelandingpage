@@ -23,7 +23,7 @@
 @endsection
 
 @section('content')
-<div class="w-full -mt-6 space-y-6 pb-20 font-poppins text-inter">
+<div class="w-full -mt-6 space-y-6 pb-0 font-poppins text-inter">
 
     <form id="partner-edit-form" action="{{ route('admin.trusted-companies.update', $trusted_company->id) }}" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         @csrf
