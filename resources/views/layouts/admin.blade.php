@@ -276,6 +276,10 @@
                         <i class="ti ti-id-badge-2 text-xl mr-3"></i>
                         <span>Membership</span>
                     </a>
+                    <a href="{{ route('admin.licenses.index') }}" class="nav-link {{ request()->routeIs('admin.licenses.*') ? 'active' : '' }}">
+                        <i class="ti ti-key text-xl mr-3"></i>
+                        <span>Data Lisensi</span>
+                    </a>
                 </div>
 
                 {{-- Website Settings --}}
@@ -459,8 +463,6 @@
             <div class="flex items-center gap-6">
                 <a href="#" class="hover:text-brand-600">Privacy Policy</a>
                 <a href="#" class="hover:text-brand-600">Support</a>
-                <span class="text-gray-200">|</span>
-                <span class="text-gray-500 uppercase">Powered by Biznet GIO</span>
             </div>
         </footer>
     </main>

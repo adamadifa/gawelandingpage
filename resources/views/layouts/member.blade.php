@@ -229,8 +229,6 @@
             <div class="flex items-center gap-6">
                 <a href="#" class="hover:text-brand-600">Privacy Policy</a>
                 <a href="#" class="hover:text-brand-600">Terms of Service</a>
-                <span class="text-gray-200">|</span>
-                <span class="text-gray-500 uppercase">Powered by Biznet GIO</span>
             </div>
         </footer>
     </main>

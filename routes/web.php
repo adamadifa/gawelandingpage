@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\AboutSectionController;
 use App\Http\Controllers\Admin\FeatureSectionController;
 use App\Http\Controllers\Admin\FaqSectionController;
 use App\Http\Controllers\Admin\MembershipController as AdminMembershipController;
+use App\Http\Controllers\Admin\LicenseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
 
@@ -40,6 +41,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/memberships/{membershipTransaction}/approve', [AdminMembershipController::class, 'approve'])->name('memberships.approve');
     Route::post('/memberships/{membershipTransaction}/reject', [AdminMembershipController::class, 'reject'])->name('memberships.reject');
     Route::post('/memberships/{subscription}/update-subscription', [AdminMembershipController::class, 'updateSubscription'])->name('memberships.update-subscription');
+
+    // Licenses
+    Route::get('/licenses', [LicenseController::class, 'index'])->name('licenses.index');
 });
 
 Route::middleware('auth')->group(function () {
