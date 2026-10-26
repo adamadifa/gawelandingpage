@@ -1,181 +1,218 @@
 @extends('layouts.admin')
 
-@section('title', 'Partners — Tambah Partner')
+@section('title', 'Tambah Partner Perusahaan')
 
 @section('breadcrumbs')
-<nav class="flex items-center gap-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2 font-poppins">
-    <a href="{{ route('admin.hero-sections.index') }}" class="hover:text-brand-600 transition-colors">Landing Page</a>
-    <i class="ti ti-chevron-right text-[8px]"></i>
-    <a href="{{ route('admin.trusted-companies.index') }}" class="hover:text-brand-600 transition-colors">Trusted Companies</a>
-    <i class="ti ti-chevron-right text-[8px]"></i>
-    <span class="text-brand-600 font-semibold">Tambah Partner</span>
+<nav class="flex items-center gap-1.5 text-xs text-gray-400 font-medium">
+    <a href="{{ route('admin.dashboard') }}" class="hover:text-[#007A87] transition-colors flex items-center gap-1">
+        <i class="ti ti-home"></i>
+        <span>Dashboard</span>
+    </a>
+    <i class="ti ti-chevron-right text-[10px]"></i>
+    <a href="{{ route('admin.trusted-companies.index') }}" class="hover:text-[#007A87] transition-colors">Partner Logos</a>
+    <i class="ti ti-chevron-right text-[10px]"></i>
+    <span class="text-gray-700 font-bold">Tambah Partner</span>
 </nav>
 @endsection
 
 @section('actions')
-<div class="flex items-center gap-3 font-poppins">
-     <a href="{{ route('admin.trusted-companies.index') }}" class="px-5 py-2.5 text-sm font-semibold text-gray-400 hover:text-gray-600 transition-colors">Batal</a>
-     <button type="submit" form="partner-create-form" class="inline-flex items-center gap-2 px-7 py-3.5 bg-brand-600 text-white rounded-xl font-bold text-sm shadow-xl shadow-brand-600/20 hover:bg-brand-700 active:scale-95 transition-all">
-        <i class="ti ti-device-floppy text-lg"></i>
+<div class="flex items-center gap-2.5">
+    <a href="{{ route('admin.trusted-companies.index') }}" 
+       class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white border border-gray-200 hover:border-gray-300 text-gray-600 text-xs font-bold transition-all shadow-2xs">
+        <i class="ti ti-arrow-left text-sm"></i>
+        <span>Kembali</span>
+    </a>
+
+    <button type="submit" 
+            form="partner-create-form" 
+            class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-[#007A87] hover:bg-[#005B60] text-white text-xs font-bold shadow-sm shadow-[#007A87]/20 transition-all">
+        <i class="ti ti-device-floppy text-sm"></i>
         <span>Simpan Partner</span>
     </button>
 </div>
 @endsection
 
 @section('content')
-<div class="w-full -mt-6 space-y-6 pb-0 font-poppins text-inter">
+<div class="space-y-6" x-data="{
+    name: '{{ old('name', '') }}',
+    sort_order: '{{ old('sort_order', 0) }}',
+    logoPreview: null,
+    previewLogo(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.logoPreview = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+}">
 
-    <form id="partner-create-form" action="{{ route('admin.trusted-companies.store') }}" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    @if ($errors->any())
+        <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs">
+            <div class="flex items-center gap-2 font-bold mb-1">
+                <i class="ti ti-alert-triangle text-base"></i>
+                <span>Terdapat kesalahan pada formulir:</span>
+            </div>
+            <ul class="list-disc pl-5 space-y-0.5 text-rose-700">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form id="partner-create-form" 
+          action="{{ route('admin.trusted-companies.store') }}" 
+          method="POST" 
+          enctype="multipart/form-data" 
+          class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         @csrf
 
-        {{-- Left: Identity & Media --}}
-        <div class="lg:col-span-8 space-y-6">
-            {{-- Identitas Partner --}}
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 lg:p-10 space-y-8 text-inter">
-                <div class="flex items-center gap-4 border-b border-gray-50 pb-6 mb-8">
-                    <div class="w-12 h-12 bg-gray-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-brand-50">
-                        <i class="ti ti-building"></i>
+        <!-- Left Column: Primary Details & Logo (7 Cols) -->
+        <div class="lg:col-span-7 space-y-5">
+            
+            <!-- Card 1: Nama Perusahaan -->
+            <div class="card-clean p-5 lg:p-6 space-y-4">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <div class="w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-building text-base"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">Identitas Partner</h3>
-                        <p class="text-[12px] text-gray-400 font-semibold mt-1.5 uppercase tracking-wider">Informasi Perusahaan</p>
+                        <h3 class="text-xs font-bold text-[#0F172A]">Identitas Partner</h3>
+                        <p class="text-[11px] text-gray-400">Nama resmi perusahaan atau entitas partner</p>
                     </div>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 px-1 uppercase tracking-widest">Nama Perusahaan / Brand</label>
-                        <input type="text" name="name" value="{{ old('name') }}" required placeholder="Contoh: Biznet GIO, Google, Telkom"
-                            class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 px-6 text-gray-900 font-bold focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all placeholder:text-gray-300 shadow-sm">
+                <div>
+                    <label for="name" class="block text-xs font-bold text-gray-700 mb-1">
+                        Nama Perusahaan / Brand <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="text" 
+                           name="name" 
+                           id="name" 
+                           x-model="name"
+                           required 
+                           placeholder="Contoh: Biznet GIO, Google Cloud, Telkom Indonesia"
+                           class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2 px-3 text-xs text-gray-900 font-bold focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all">
+                </div>
+            </div>
+
+            <!-- Card 2: Logo File -->
+            <div class="card-clean p-5 lg:p-6 space-y-4">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <div class="w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-photo text-base"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-[#0F172A]">Aset Logo Brand</h3>
+                        <p class="text-[11px] text-gray-400">Unggah file logo PNG, SVG, atau WebP berlatar transparan</p>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1.5">
+                        File Logo Perusahaan
+                    </label>
+                    <div class="relative w-full h-44 rounded-xl border-2 border-dashed border-gray-200 hover:border-[#007A87] bg-[#F8FAFC] flex flex-col items-center justify-center p-4 text-center transition-all overflow-hidden group">
+                        <template x-if="logoPreview">
+                            <img :src="logoPreview" class="absolute inset-0 w-full h-full object-contain p-4 z-10 bg-white">
+                        </template>
+                        <div x-show="!logoPreview" class="flex flex-col items-center justify-center text-gray-400">
+                            <div class="w-12 h-12 rounded-xl bg-teal-50 text-[#007A87] flex items-center justify-center mb-2">
+                                <i class="ti ti-cloud-upload text-2xl"></i>
+                            </div>
+                            <span class="text-xs font-bold text-gray-700">Pilih atau Seret File Logo</span>
+                            <span class="text-[10px] text-gray-400 mt-0.5">Format SVG, PNG transparan (Maks. 2MB)</span>
+                        </div>
+                        <input type="file" 
+                               name="logo" 
+                               id="logo"
+                               accept="image/*"
+                               @change="previewLogo($event)"
+                               class="absolute inset-0 opacity-0 cursor-pointer z-20">
+                        <div class="absolute inset-0 bg-[#007A87]/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center pointer-events-none">
+                            <span class="px-3 py-1 bg-white text-[#007A87] text-xs font-bold rounded-lg shadow-sm">Pilih File Logo</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {{-- Media Logo --}}
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 lg:p-10 space-y-8 text-inter">
-                <div class="flex items-center gap-4 border-b border-gray-50 pb-6 mb-8">
-                    <div class="w-12 h-12 bg-gray-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-brand-50">
-                        <i class="ti ti-photo"></i>
+        </div>
+
+        <!-- Right Column: Settings & Live Preview (5 Cols) -->
+        <div class="lg:col-span-5 space-y-5 lg:sticky lg:top-24">
+            
+            <!-- Card 3: Pengaturan Urutan & Status -->
+            <div class="card-clean p-5 space-y-4">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <div class="w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-adjustments text-base"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">Logo Partner</h3>
-                        <p class="text-[12px] text-gray-400 font-semibold mt-1.5 uppercase tracking-wider">Aset Visual (SVG/PNG)</p>
+                        <h3 class="text-xs font-bold text-[#0F172A]">Pengaturan Tampilan</h3>
+                        <p class="text-[11px] text-gray-400">Urutan dan status visibilitas partner</p>
                     </div>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="relative group">
-                        <input type="file" name="logo" id="logo-input" accept="image/*" class="hidden" onchange="previewImage(this, 'logo-preview-container')">
-                        <label for="logo-input" id="logo-dropzone" class="relative flex flex-col items-center justify-center w-full min-h-[320px] bg-gray-50/50 border-2 border-dashed border-gray-200 rounded-2xl cursor-pointer hover:bg-white hover:border-brand-400 hover:shadow-2xl hover:shadow-brand-600/5 transition-all duration-500 overflow-hidden group/zone">
-                            <div id="logo-preview-container" class="flex flex-col items-center justify-center py-10 px-6">
-                                <div class="w-20 h-20 bg-white rounded-3xl shadow-lg border border-gray-100 flex items-center justify-center mb-6 group-hover/zone:scale-110 transition-transform duration-500">
-                                    <i class="ti ti-cloud-upload text-3xl text-brand-500"></i>
-                                </div>
-                                <h4 class="text-lg font-bold text-gray-900 mb-2 uppercase tracking-widest">Upload Logo Partner</h4>
-                                <p class="text-xs text-gray-400 font-semibold uppercase tracking-[0.1em] text-center max-w-[280px]">Drag and drop file logo atau klik untuk memilih asset (Max 2MB)</p>
-                            </div>
+                <div class="space-y-4">
+                    <div>
+                        <label for="sort_order" class="block text-xs font-bold text-gray-700 mb-1">
+                            Nomor Urutan Tampilan
+                        </label>
+                        <input type="number" 
+                               name="sort_order" 
+                               id="sort_order" 
+                               x-model="sort_order"
+                               required
+                               class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2 px-3 text-xs text-gray-800 font-semibold focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all">
+                        <p class="text-[10px] text-gray-400 mt-1">Angka lebih kecil tampil lebih dulu pada deretan logo.</p>
+                    </div>
+
+                    <div class="pt-3 border-t border-gray-100 flex items-center justify-between">
+                        <div>
+                            <span class="block text-xs font-bold text-gray-800">Publikasikan Partner</span>
+                            <span class="text-[10px] text-gray-400">Tampilkan logo di landing page</span>
+                        </div>
+                        <input type="hidden" name="is_active" value="0">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="is_active" value="1" class="sr-only peer" checked>
+                            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#007A87]"></div>
                         </label>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {{-- Right: Side Settings --}}
-        <div class="lg:col-span-4 space-y-6">
-            {{-- Order & Display --}}
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 lg:p-10 space-y-8 text-inter">
-                <div class="flex items-center gap-4 border-b border-gray-50 pb-6 mb-8">
-                    <div class="w-12 h-12 bg-gray-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-brand-50">
-                        <i class="ti ti-sort-ascending"></i>
+            <!-- Card 4: Simulasi Card Logo -->
+            <div class="card-clean p-5 space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-gray-100">
+                    <div class="w-6 h-6 rounded-md bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-eye text-xs"></i>
                     </div>
-                    <div>
-                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">Pengaturan</h3>
-                        <p class="text-[12px] text-gray-400 font-semibold mt-1.5 uppercase tracking-wider">Urutan & Prioritas</p>
-                    </div>
+                    <h3 class="text-xs font-bold text-[#0F172A]">Simulasi Kartu Partner</h3>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 px-1 uppercase tracking-widest">Urutan Tampilan</label>
-                        <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}" required 
-                            class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 px-6 text-gray-900 font-bold focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all shadow-sm">
+                <div class="p-4 rounded-xl bg-slate-50 border border-gray-200/80 flex flex-col items-center text-center">
+                    <div class="w-full h-24 bg-white rounded-xl border border-gray-200/80 p-3 flex items-center justify-center shadow-2xs mb-2.5 overflow-hidden">
+                        <template x-if="logoPreview">
+                            <img :src="logoPreview" class="max-w-full max-h-full object-contain">
+                        </template>
+                        <template x-if="!logoPreview">
+                            <div class="text-center text-gray-300">
+                                <i class="ti ti-photo text-2xl text-teal-600/40"></i>
+                                <span class="text-[9px] block text-gray-400 mt-0.5">Logo Perusahaan</span>
+                            </div>
+                        </template>
                     </div>
-                </div>
-            </div>
-
-            {{-- Visibility Status --}}
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 text-inter">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl shadow-inner border border-emerald-50">
-                            <i class="ti ti-eye"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-bold text-gray-900 leading-none uppercase tracking-widest tracking-tight">Visibility</h4>
-                            <p class="text-[10px] text-gray-400 font-semibold mt-1 uppercase tracking-wider">Status Publikasi</p>
-                        </div>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" name="is_active" value="1" class="sr-only peer" checked>
-                        <div class="w-12 h-6.5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brand-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600 transition-all shadow-sm"></div>
-                    </label>
+                    <h4 class="text-xs font-bold text-gray-900 truncate max-w-full" x-text="name || 'Nama Perusahaan Partner'"></h4>
+                    <span class="text-[10px] text-gray-400 font-medium">Partner Terpercaya</span>
                 </div>
             </div>
+
         </div>
+
     </form>
+
 </div>
-
-@push('scripts')
-<script>
-    function previewImage(input, containerId) {
-        const container = document.getElementById(containerId);
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                container.innerHTML = `
-                    <div class="relative w-full max-w-[280px] group/preview">
-                        <img src="${e.target.result}" class="w-full h-auto max-h-[220px] object-contain rounded-xl shadow-xl shadow-brand-600/10 border border-gray-100 bg-white p-2">
-                        <div class="absolute inset-0 bg-brand-900/60 opacity-0 group-hover/preview:opacity-100 flex items-center justify-center rounded-xl backdrop-blur-sm transition-all duration-500">
-                            <span class="text-white font-bold text-xs uppercase tracking-widest">Klik untuk ganti</span>
-                        </div>
-                    </div>
-                `;
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    // Drag and Drop Logic
-    const dropzone = document.getElementById('logo-dropzone');
-    const input = document.getElementById('logo-input');
-
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        dropzone.addEventListener(eventName, preventDefaults, false);
-    });
-
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    ['dragenter', 'dragover'].forEach(eventName => {
-        dropzone.addEventListener(eventName, () => {
-            dropzone.classList.add('border-brand-400', 'bg-white', 'shadow-2xl');
-        });
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-        dropzone.addEventListener(eventName, () => {
-            dropzone.classList.remove('border-brand-400', 'bg-white', 'shadow-2xl');
-        });
-    });
-
-    dropzone.addEventListener('drop', (e) => {
-        const dt = e.dataTransfer;
-        const files = dt.files;
-        input.files = files;
-        previewImage(input, 'logo-preview-container');
-    });
-</script>
-@endpush
 @endsection

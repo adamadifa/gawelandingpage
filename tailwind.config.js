@@ -12,23 +12,37 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inter', ...defaultTheme.fontFamily.sans],
-                display: ['Outfit', ...defaultTheme.fontFamily.sans],
+                sans: ['"Plus Jakarta Sans"', 'Inter', ...defaultTheme.fontFamily.sans],
+                display: ['"Plus Jakarta Sans"', 'Outfit', ...defaultTheme.fontFamily.sans],
             },
             colors: {
-                brand: {
-                    50: '#F0FDF4',
-                    100: '#DCFCE7',
-                    200: '#BBF7D0',
-                    300: '#86EFAC',
-                    400: '#4ADE80',
-                    500: '#22C55E',
-                    600: '#16A34A',
-                    700: '#15803D',
-                    800: '#166534',
-                    900: '#14532D',
-                    950: '#052E16',
+                primary: {
+                    50: '#F0FDFA',
+                    100: '#CCFBF1',
+                    200: '#99F6E4',
+                    300: '#5EEAD4',
+                    400: '#2DD4BF',
+                    500: '#0D9488',
+                    600: '#007A87', // Soft green / teal from card banner
+                    700: '#005B60',
+                    800: '#064E54',
+                    900: '#04383C',
                 },
+                brand: {
+                    50: '#F0FDFA',
+                    100: '#CCFBF1',
+                    200: '#99F6E4',
+                    300: '#5EEAD4',
+                    400: '#2DD4BF',
+                    500: '#0D9488',
+                    600: '#007A87',
+                    700: '#005B60',
+                    800: '#064E54',
+                    900: '#04383C',
+                    950: '#022528',
+                },
+                tealDark: '#005B60',
+                slateDark: '#0F172A',
             },
             animation: {
                 'float': 'float 6s ease-in-out infinite',

@@ -30,6 +30,7 @@ class TrustedCompanyController extends Controller
         ]);
 
         $data = $request->except('logo');
+        $data['is_active'] = $request->boolean('is_active');
 
         if ($request->hasFile('logo')) {
             $data['logo'] = $request->file('logo')->store('partners', 'public');
@@ -55,10 +56,11 @@ class TrustedCompanyController extends Controller
         ]);
 
         $data = $request->except('logo');
+        $data['is_active'] = $request->boolean('is_active');
 
         if ($request->hasFile('logo')) {
             // Delete old logo
-            if ($trusted_company->logo) {
+            if ($trusted_company->logo && !str_starts_with($trusted_company->logo, 'images/')) {
                 Storage::disk('public')->delete($trusted_company->logo);
             }
             $data['logo'] = $request->file('logo')->store('partners', 'public');

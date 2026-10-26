@@ -32,6 +32,7 @@ class FaqSectionController extends Controller
         ]);
 
         $data = $request->all();
+        $data['is_active'] = $request->boolean('is_active');
 
         if ($request->hasFile('primary_image')) {
             $data['primary_image'] = $request->file('primary_image')->store('faqs', 'public');
@@ -47,7 +48,7 @@ class FaqSectionController extends Controller
             FaqSection::where('id', '!=', $section->id)->update(['is_active' => false]);
         }
 
-        return redirect()->route('admin.faq-sections.index')->with('success', 'FAQ Section created successfully');
+        return redirect()->route('admin.faq-sections.index')->with('success', 'FAQ Section berhasil ditambahkan');
     }
 
     public function edit(FaqSection $faq_section)
@@ -67,6 +68,7 @@ class FaqSectionController extends Controller
         ]);
 
         $data = $request->all();
+        $data['is_active'] = $request->boolean('is_active');
 
         if ($request->hasFile('primary_image')) {
             if ($faq_section->primary_image && !str_starts_with($faq_section->primary_image, 'images/')) {
@@ -84,11 +86,11 @@ class FaqSectionController extends Controller
 
         $faq_section->update($data);
 
-        if ($request->has('is_active') && $request->is_active) {
+        if ($faq_section->is_active) {
             FaqSection::where('id', '!=', $faq_section->id)->update(['is_active' => false]);
         }
 
-        return redirect()->route('admin.faq-sections.index')->with('success', 'FAQ Section updated successfully');
+        return redirect()->route('admin.faq-sections.index')->with('success', 'FAQ Section berhasil diperbarui');
     }
 
     public function destroy(FaqSection $faq_section)

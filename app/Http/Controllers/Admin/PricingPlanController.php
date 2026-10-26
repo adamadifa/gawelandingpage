@@ -27,17 +27,25 @@ class PricingPlanController extends Controller
             'yearly_price' => 'required|numeric',
         ]);
 
-        $plan = PricingPlan::create($request->except('features'));
+        $data = $request->except('features');
+        $data['is_featured'] = $request->boolean('is_featured');
+        $data['is_active'] = $request->boolean('is_active');
+
+        $plan = PricingPlan::create($data);
 
         if ($request->has('features')) {
-            foreach ($request->features as $featureText) {
-                if ($featureText) {
-                    $plan->features()->create(['feature_text' => $featureText]);
+            foreach ($request->features as $index => $featureText) {
+                if (trim($featureText)) {
+                    $plan->features()->create([
+                        'feature_text' => trim($featureText),
+                        'sort_order' => $index,
+                        'is_included' => true
+                    ]);
                 }
             }
         }
 
-        return redirect()->route('admin.pricing-plans.index')->with('success', 'Pricing Plan created successfully');
+        return redirect()->route('admin.pricing-plans.index')->with('success', 'Paket langganan berhasil ditambahkan');
     }
 
     public function edit(PricingPlan $pricing_plan)
@@ -54,18 +62,26 @@ class PricingPlanController extends Controller
             'yearly_price' => 'required|numeric',
         ]);
 
-        $pricing_plan->update($request->except('features'));
+        $data = $request->except('features');
+        $data['is_featured'] = $request->boolean('is_featured');
+        $data['is_active'] = $request->boolean('is_active');
+
+        $pricing_plan->update($data);
 
         if ($request->has('features')) {
             $pricing_plan->features()->delete();
-            foreach ($request->features as $featureText) {
-                if ($featureText) {
-                    $pricing_plan->features()->create(['feature_text' => $featureText]);
+            foreach ($request->features as $index => $featureText) {
+                if (trim($featureText)) {
+                    $pricing_plan->features()->create([
+                        'feature_text' => trim($featureText),
+                        'sort_order' => $index,
+                        'is_included' => true
+                    ]);
                 }
             }
         }
 
-        return redirect()->route('admin.pricing-plans.index')->with('success', 'Pricing Plan updated successfully');
+        return redirect()->route('admin.pricing-plans.index')->with('success', 'Paket langganan berhasil diperbarui');
     }
 
     public function destroy(PricingPlan $pricing_plan)

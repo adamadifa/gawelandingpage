@@ -1,194 +1,253 @@
 @extends('layouts.admin')
 
-@section('title', 'Hero — Tambah Statistik')
+@section('title', 'Tambah Kartu Statistik Hero')
+@section('subtitle', 'Buat metrik statistik atau social proof baru untuk disematkan pada banner hero landing page.')
 
 @section('breadcrumbs')
-<nav class="flex items-center gap-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2 font-poppins">
-    <a href="{{ route('admin.hero-sections.index') }}" class="hover:text-brand-600 transition-colors">Landing Page</a>
-    <i class="ti ti-chevron-right text-[8px]"></i>
-    <a href="{{ route('admin.hero-stats-cards.index') }}" class="hover:text-brand-600 transition-colors">Hero Stats</a>
-    <i class="ti ti-chevron-right text-[8px]"></i>
-    <span class="text-brand-600 font-semibold">Tambah Kartu</span>
-</nav>
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#E2E8F0]/70 text-xs text-[#64748B] shadow-2xs font-medium">
+    <a href="{{ route('admin.dashboard') }}" class="hover:text-[#007A87] flex items-center gap-1">
+        <i class="ti ti-home text-sm"></i>
+        <span>Dashboard</span>
+    </a>
+    <i class="ti ti-chevron-right text-[10px] text-gray-300"></i>
+    <a href="{{ route('admin.hero-stats-cards.index') }}" class="hover:text-[#007A87]">
+        <span>Counter Stats</span>
+    </a>
+    <i class="ti ti-chevron-right text-[10px] text-gray-300"></i>
+    <span class="text-[#0F172A] font-semibold">Tambah</span>
+</div>
 @endsection
 
 @section('actions')
-<div class="flex items-center gap-3 font-poppins">
-     <a href="{{ route('admin.hero-stats-cards.index') }}" class="px-5 py-2.5 text-sm font-semibold text-gray-400 hover:text-gray-600 transition-colors">Batal</a>
-     <button type="submit" form="stats-create-form" class="inline-flex items-center gap-2 px-7 py-3.5 bg-brand-600 text-white rounded-xl font-bold text-sm shadow-xl shadow-brand-600/20 hover:bg-brand-700 active:scale-95 transition-all">
-        <i class="ti ti-device-floppy text-lg"></i>
-        Simpan Statistik
+<div class="flex items-center gap-2">
+    <a href="{{ route('admin.hero-stats-cards.index') }}" 
+       class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs font-bold shadow-2xs transition-all">
+        <i class="ti ti-arrow-left text-sm"></i>
+        <span>Batal</span>
+    </a>
+
+    <button type="submit" 
+            form="stats-create-form" 
+            class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-[#007A87] hover:bg-[#005B60] text-white text-xs font-bold shadow-sm shadow-[#007A87]/20 transition-all">
+        <i class="ti ti-device-floppy text-sm"></i>
+        <span>Simpan Statistik</span>
     </button>
 </div>
 @endsection
 
 @section('content')
-<div class="w-full -mt-6 space-y-6 pb-0 font-poppins">
+<div class="space-y-6" x-data="{
+    title: '{{ old('title', 'Pengguna Aktif') }}',
+    value: '{{ old('value', '10K+') }}',
+    icon: '{{ old('icon', 'ti-users') }}',
+    color_theme: '{{ old('color_theme', 'teal') }}',
+    position_slot: '{{ old('position_slot', 'TR') }}'
+}">
 
-    <form id="stats-create-form" action="{{ route('admin.hero-stats-cards.store') }}" method="POST" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        @csrf
-        
-        <div class="lg:col-span-12">
-            @if ($errors->any())
-                <div class="mb-8 p-4 bg-rose-50 border border-rose-100 rounded-2xl flex items-start gap-3">
-                    <i class="ti ti-alert-triangle text-xl text-rose-500 mt-0.5"></i>
-                    <ul class="text-sm text-rose-600 font-bold space-y-1">
-                        @foreach ($errors->all() as $error)
-                            <li>• {{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+    @if ($errors->any())
+        <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs">
+            <div class="flex items-center gap-2 font-bold mb-1">
+                <i class="ti ti-alert-triangle text-base"></i>
+                <span>Terdapat kesalahan pada formulir:</span>
+            </div>
+            <ul class="list-disc pl-5 space-y-0.5 text-rose-700">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
+    @endif
 
-        {{-- Left: Content & Configuration --}}
-        <div class="lg:col-span-8 space-y-6">
-            {{-- Main Data Card --}}
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 lg:p-10 space-y-6">
-                <div class="flex items-center gap-4 border-b border-gray-50 pb-6 mb-8">
-                    <div class="w-12 h-12 bg-gray-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-brand-50">
-                        <i class="ti ti-chart-bar"></i>
+    <form id="stats-create-form" 
+          action="{{ route('admin.hero-stats-cards.store') }}" 
+          method="POST" 
+          class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        @csrf
+
+        <!-- Left Column: Data & Configuration (7 Cols) -->
+        <div class="lg:col-span-7 space-y-5">
+            
+            <!-- Card 1: Data Nilai & Judul -->
+            <div class="card-clean p-5 lg:p-6 space-y-4">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <div class="w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-chart-bar text-base"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">Data Statistik</h3>
-                        <p class="text-[12px] text-gray-400 font-semibold mt-1.5 uppercase tracking-wider">Metrik Utama & Konteks</p>
+                        <h3 class="text-xs font-bold text-[#0F172A]">Data & Teks Metrik</h3>
+                        <p class="text-[11px] text-gray-400">Angka pencapaian dan label penjelasan</p>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 px-1">Nilai Statistik (Value)</label>
-                        <input type="text" name="value" value="{{ old('value') }}" 
-                            class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 px-6 text-gray-900 font-semibold focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all placeholder:text-gray-300" 
-                            placeholder="Contoh: 98.5% atau 10k+" required>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="value" class="block text-xs font-bold text-gray-700 mb-1">
+                            Nilai Statistik (Value) <span class="text-rose-500">*</span>
+                        </label>
+                        <input type="text" 
+                               name="value" 
+                               id="value" 
+                               x-model="value" 
+                               value="{{ old('value') }}" 
+                               placeholder="Contoh: 98.5% atau 10k+" 
+                               class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2 px-3 text-xs text-gray-900 font-bold placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all" 
+                               required>
                     </div>
-                    
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 px-1">Judul / Deskripsi Singkat</label>
-                        <input type="text" name="title" value="{{ old('title') }}" 
-                            class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 px-6 text-gray-900 font-semibold focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all placeholder:text-gray-300" 
-                            placeholder="Contoh: Kepuasan Pengguna" required>
+
+                    <div>
+                        <label for="title" class="block text-xs font-bold text-gray-700 mb-1">
+                            Judul / Label Singkat <span class="text-rose-500">*</span>
+                        </label>
+                        <input type="text" 
+                               name="title" 
+                               id="title" 
+                               x-model="title" 
+                               value="{{ old('title') }}" 
+                               placeholder="Contoh: Kepuasan Pengguna" 
+                               class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2 px-3 text-xs text-gray-900 font-semibold placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all" 
+                               required>
                     </div>
                 </div>
             </div>
 
-            {{-- Advanced Configuration Card --}}
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 lg:p-10 space-y-6">
-                <div class="flex items-center gap-4 border-b border-gray-50 pb-6 mb-8">
-                    <div class="w-12 h-12 bg-gray-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-brand-50">
-                        <i class="ti ti-settings-2"></i>
+            <!-- Card 2: Visual, Ikon & Posisi -->
+            <div class="card-clean p-5 lg:p-6 space-y-4">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <div class="w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-palette text-base"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">Konfigurasi Visual</h3>
-                        <p class="text-[12px] text-gray-400 font-semibold mt-1.5 uppercase tracking-wider">Ikon, Warna & Penempatan</p>
+                        <h3 class="text-xs font-bold text-[#0F172A]">Gaya Visual & Penempatan</h3>
+                        <p class="text-[11px] text-gray-400">Pilih tema warna, ikon tabler, dan koordinat slot floating</p>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 px-1 tracking-tight uppercase text-[11px] font-bold text-gray-400">Tabler Icon Tag</label>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    
+                    <!-- Ikon -->
+                    <div>
+                        <label for="icon" class="block text-xs font-bold text-gray-700 mb-1">
+                            Kode Ikon (Tabler) <span class="text-rose-500">*</span>
+                        </label>
                         <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 flex items-center pointer-events-none">
-                                <i class="ti ti-brand-tabler text-xl"></i>
-                            </span>
-                            <input type="text" name="icon" value="{{ old('icon', 'ti-circle-check') }}" 
-                                class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 pl-12 pr-6 text-gray-900 font-medium focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all shadow-sm" 
-                                placeholder="ti-user" required>
+                            <i class="ti ti-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input type="text" 
+                                   name="icon" 
+                                   id="icon" 
+                                   x-model="icon" 
+                                   value="{{ old('icon', 'ti-users') }}" 
+                                   placeholder="ti-users" 
+                                   class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2 pl-9 pr-3 text-xs text-gray-800 font-mono focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all" 
+                                   required>
                         </div>
                     </div>
 
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 px-1 tracking-tight uppercase text-[11px] font-bold text-gray-400">Tema Warna</label>
-                        <div class="relative">
-                            <select name="color_theme" class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 px-6 text-gray-900 font-semibold focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all appearance-none cursor-pointer">
-                                <option value="indigo">Indigo Blue</option>
-                                <option value="emerald">Emerald Green</option>
-                                <option value="amber">Amber Orange</option>
-                                <option value="rose">Rose Red</option>
-                                <option value="sky">Sky Cyan</option>
-                            </select>
-                            <i class="ti ti-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
-                        </div>
+                    <!-- Warna -->
+                    <div>
+                        <label for="color_theme" class="block text-xs font-bold text-gray-700 mb-1">
+                            Tema Warna <span class="text-rose-500">*</span>
+                        </label>
+                        <select name="color_theme" 
+                                id="color_theme" 
+                                x-model="color_theme" 
+                                class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2 px-3 text-xs font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all cursor-pointer">
+                            <option value="teal">Teal (Primary)</option>
+                            <option value="emerald">Emerald Green</option>
+                            <option value="indigo">Indigo Blue</option>
+                            <option value="amber">Amber Orange</option>
+                            <option value="rose">Rose Red</option>
+                            <option value="sky">Sky Cyan</option>
+                        </select>
                     </div>
 
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 px-1 tracking-tight uppercase text-[11px] font-bold text-gray-400">Slot Posisi</label>
-                        <div class="relative">
-                            <select name="position_slot" class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 px-6 text-gray-900 font-semibold focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all appearance-none cursor-pointer">
-                                <option value="TR">Top Right</option>
-                                <option value="TL">Top Left</option>
-                                <option value="MR">Middle Right</option>
-                                <option value="ML">Middle Left</option>
-                                <option value="BL">Bottom Left</option>
-                                <option value="BR">Bottom Right</option>
-                                <option value="TM">Top Middle</option>
-                                <option value="BM">Bottom Middle</option>
-                            </select>
-                            <i class="ti ti-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
-                        </div>
+                    <!-- Slot Posisi -->
+                    <div>
+                        <label for="position_slot" class="block text-xs font-bold text-gray-700 mb-1">
+                            Slot Posisi <span class="text-rose-500">*</span>
+                        </label>
+                        <select name="position_slot" 
+                                id="position_slot" 
+                                x-model="position_slot" 
+                                class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2 px-3 text-xs font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all cursor-pointer">
+                            <option value="TR">Top Right (Kanan Atas)</option>
+                            <option value="TL">Top Left (Kiri Atas)</option>
+                            <option value="MR">Middle Right (Kanan Tengah)</option>
+                            <option value="ML">Middle Left (Kiri Tengah)</option>
+                            <option value="BL">Bottom Left (Kiri Bawah)</option>
+                            <option value="BR">Bottom Right (Kanan Bawah)</option>
+                            <option value="TM">Top Middle (Tengah Atas)</option>
+                            <option value="BM">Bottom Middle (Tengah Bawah)</option>
+                        </select>
                     </div>
+
                 </div>
 
-                <div class="pt-4 flex items-center gap-3">
+                <!-- Checkbox Aktif -->
+                <div class="pt-2 flex items-center gap-3">
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" name="is_active" value="1" checked class="sr-only peer">
-                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brand-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600"></div>
-                        <span class="ml-3 text-sm font-semibold text-gray-700">Tampilkan Secara Aktif di Hero Section</span>
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#007A87]"></div>
+                        <span class="ml-2.5 text-xs font-bold text-gray-700">Tampilkan Secara Aktif di Landing Page</span>
                     </label>
                 </div>
             </div>
+
         </div>
 
-        {{-- Right: Info & Tips --}}
-        <div class="lg:col-span-4 space-y-6 sticky top-8">
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 space-y-6">
-                <div class="flex items-center gap-4 border-b border-gray-50 pb-6 mb-8">
-                    <div class="w-12 h-12 bg-gray-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-brand-50">
-                        <i class="ti ti-bulb"></i>
+        <!-- Right Column: Live Pratinjau Interaktif & Tips (5 Cols) -->
+        <div class="lg:col-span-5 space-y-5 lg:sticky lg:top-24">
+            
+            <!-- Live Preview Card -->
+            <div class="card-clean p-5 space-y-4">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <div class="w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-eye text-base"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">Tips Desain</h3>
-                        <p class="text-[12px] text-gray-400 font-semibold mt-1.5 uppercase tracking-wider">Praktik Terbaik</p>
+                        <h3 class="text-xs font-bold text-[#0F172A]">Pratinjau Kartu Melayang</h3>
+                        <p class="text-[11px] text-gray-400">Simulasi tampilan kartu saat melayang di hero web</p>
                     </div>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="flex gap-4">
-                        <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-                            <i class="ti ti-icons"></i>
+                <!-- Floating Badge Mockup Background -->
+                <div class="p-8 rounded-xl bg-gradient-to-tr from-slate-100 to-slate-50 border border-gray-200 flex items-center justify-center relative min-h-[170px] overflow-hidden">
+                    <div class="absolute inset-0 bg-[radial-gradient(#CBD5E1_1px,transparent_1px)] [background-size:12px_12px] opacity-40"></div>
+
+                    <!-- The Live Badge Card -->
+                    <div class="relative z-10 bg-white/95 backdrop-blur-md rounded-2xl border border-gray-200/90 shadow-xl p-4 flex items-center gap-3.5 max-w-[260px] transition-all">
+                        <div class="w-11 h-11 rounded-xl bg-teal-50 text-[#007A87] border border-teal-200/60 flex items-center justify-center text-xl shrink-0 shadow-2xs">
+                            <i :class="'ti ' + icon"></i>
                         </div>
-                        <div class="space-y-1">
-                            <h4 class="text-sm font-bold text-gray-900">Gunakan Ikon Tepat</h4>
-                            <p class="text-xs text-gray-500 leading-relaxed font-medium">Pilih ikon yang secara visual mewakili data statistik Anda agar mudah dipahami.</p>
+                        <div class="min-w-0">
+                            <h4 class="text-xl font-black text-gray-900 leading-tight tracking-tight" x-text="value || '10K+'"></h4>
+                            <p class="text-[11.5px] font-semibold text-gray-500 leading-none truncate mt-0.5" x-text="title || 'Pengguna Aktif'"></p>
                         </div>
                     </div>
+                </div>
 
-                    <div class="flex gap-4">
-                        <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                            <i class="ti ti-layout-sidebar-right"></i>
-                        </div>
-                        <div class="space-y-1">
-                            <h4 class="text-sm font-bold text-gray-900">Perhatikan Posisi</h4>
-                            <p class="text-xs text-gray-500 leading-relaxed font-medium">Jangan menumpuk terlalu banyak kartu di satu sisi hero mockup agar tetap seimbang.</p>
-                        </div>
+                <div class="p-3 rounded-xl bg-slate-50 border border-gray-100 text-[11px] text-gray-500 leading-relaxed">
+                    Slot posisi <span class="font-bold text-gray-700" x-text="position_slot"></span> menentukan sudut kartu melayang mengitari mockup dashboard di layar desktop.
+                </div>
+            </div>
+
+            <!-- Tips Card -->
+            <div class="card-clean p-4 bg-gradient-to-br from-teal-50/70 to-emerald-50/40 border-teal-200/60">
+                <div class="flex items-start gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-[#007A87] text-white flex items-center justify-center shrink-0 shadow-2xs">
+                        <i class="ti ti-bulb text-sm"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-teal-950">Gunakan Metrik yang Kuat</h4>
+                        <p class="text-[11px] text-teal-800/80 leading-relaxed mt-1">
+                            Kombinasi nilai seperti persentase kepuasan (99.8%) atau jumlah cabang/transaksi terbukti meningkatkan konversi registrasi pengguna baru.
+                        </p>
                     </div>
                 </div>
             </div>
 
-            <div class="p-8 bg-brand-900 rounded-xl text-white shadow-2xl shadow-brand-900/30 relative overflow-hidden">
-                 <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl opacity-50"></div>
-                 <div class="relative z-10 space-y-4">
-                     <div class="flex items-center gap-3">
-                         <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                            <i class="ti ti-rocket text-amber-300"></i>
-                         </div>
-                         <span class="text-[10px] font-semibold text-brand-200 uppercase tracking-widest">Growth Metric</span>
-                     </div>
-                     <h4 class="text-lg font-display font-bold leading-tight">Data Memberikan Kepercayaan.</h4>
-                     <p class="text-xs text-brand-100/70 leading-relaxed font-medium tracking-wide">Tampilkan angka yang membuktikan kualitas atau kepuasan pengguna layanan Anda.</p>
-                 </div>
-            </div>
         </div>
+
     </form>
+
 </div>
 @endsection

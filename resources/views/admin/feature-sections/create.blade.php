@@ -1,143 +1,211 @@
 @extends('layouts.admin')
 
-@section('title', 'Features — Tambah Versi')
+@section('title', 'Tambah Feature Section')
+@section('subtitle', 'Buat versi header Feature section baru untuk menampilkan visual mockup dan headline fitur di landing page.')
 
 @section('breadcrumbs')
-<nav class="flex items-center gap-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2 font-poppins">
-    <a href="{{ route('admin.hero-sections.index') }}" class="hover:text-brand-600 transition-colors">Landing Page</a>
-    <i class="ti ti-chevron-right text-[8px]"></i>
-    <a href="{{ route('admin.feature-sections.index') }}" class="hover:text-brand-600 transition-colors">Feature Section</a>
-    <i class="ti ti-chevron-right text-[8px]"></i>
-    <span class="text-brand-600 font-semibold">Tambah Versi</span>
-</nav>
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#E2E8F0]/70 text-xs text-[#64748B] shadow-2xs font-medium">
+    <a href="{{ route('admin.dashboard') }}" class="hover:text-[#007A87] flex items-center gap-1">
+        <i class="ti ti-home text-sm"></i>
+        <span>Dashboard</span>
+    </a>
+    <i class="ti ti-chevron-right text-[10px] text-gray-300"></i>
+    <a href="{{ route('admin.feature-sections.index') }}" class="hover:text-[#007A87]">
+        <span>Feature Section</span>
+    </a>
+    <i class="ti ti-chevron-right text-[10px] text-gray-300"></i>
+    <span class="text-[#0F172A] font-semibold">Tambah Versi</span>
+</div>
 @endsection
 
 @section('actions')
-<div class="flex items-center gap-3 font-poppins">
-     <a href="{{ route('admin.feature-sections.index') }}" class="px-5 py-2.5 text-sm font-semibold text-gray-400 hover:text-gray-600 transition-colors">Batal</a>
-     <button type="submit" form="feature-create-form" class="inline-flex items-center gap-2 px-7 py-3.5 bg-brand-600 text-white rounded-xl font-bold text-sm shadow-xl shadow-brand-600/20 hover:bg-brand-700 active:scale-95 transition-all">
-        <i class="ti ti-device-floppy text-lg"></i>
-        Simpan Versi Baru
+<div class="flex items-center gap-2">
+    <a href="{{ route('admin.feature-sections.index') }}" 
+       class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs font-bold shadow-2xs transition-all">
+        <i class="ti ti-arrow-left text-sm"></i>
+        <span>Batal</span>
+    </a>
+    <button type="submit" 
+            form="feature-create-form" 
+            class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-[#007A87] hover:bg-[#005B60] text-white text-xs font-bold shadow-sm shadow-[#007A87]/20 transition-all">
+        <i class="ti ti-device-floppy text-sm"></i>
+        <span>Simpan Versi Baru</span>
     </button>
 </div>
 @endsection
 
 @section('content')
-<div class="w-full -mt-6 space-y-6 pb-0 font-poppins">
+<div class="space-y-6">
 
-    <form id="feature-create-form" action="{{ route('admin.feature-sections.store') }}" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start font-poppins">
-        @csrf
-        
-        <div class="lg:col-span-12">
-            @if ($errors->any())
-                <div class="mb-8 p-4 bg-rose-50 border border-rose-100 rounded-2xl flex items-start gap-3">
-                    <i class="ti ti-alert-triangle text-xl text-rose-500 mt-0.5"></i>
-                    <ul class="text-sm text-rose-600 font-bold space-y-1">
-                        @foreach ($errors->all() as $error)
-                            <li>• {{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+    @if ($errors->any())
+        <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs">
+            <div class="flex items-center gap-2 font-bold mb-1">
+                <i class="ti ti-alert-triangle text-base"></i>
+                <span>Terdapat kesalahan pada formulir:</span>
+            </div>
+            <ul class="list-disc pl-5 space-y-0.5 text-rose-700">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
+    @endif
 
-        {{-- Left: Narrative & Branding --}}
-        <div class="lg:col-span-7 space-y-6">
-            {{-- Primary Content Card --}}
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 lg:p-10 space-y-6">
-                <div class="flex items-center gap-4 border-b border-gray-50 pb-6 mb-8 font-poppins">
-                    <div class="w-12 h-12 bg-gray-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-brand-50">
-                        <i class="ti ti-typography"></i>
+    <form id="feature-create-form" 
+          action="{{ route('admin.feature-sections.store') }}" 
+          method="POST" 
+          enctype="multipart/form-data" 
+          class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        @csrf
+
+        <!-- Left Column: Branding & Headline (7 Cols) -->
+        <div class="lg:col-span-7 space-y-5">
+            
+            <!-- Card 1: Branding & Headline -->
+            <div class="card-clean p-5 lg:p-6 space-y-4">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <div class="w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-typography text-base"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">Branding & Headline</h3>
-                        <p class="text-[12px] text-gray-400 font-semibold mt-1.5 uppercase tracking-wider">Identitas & Pesan Utama</p>
+                        <h3 class="text-xs font-bold text-[#0F172A]">Identitas & Headline Utama</h3>
+                        <p class="text-[11px] text-gray-400">Atur lencana intro dan judul penarik perhatian pengunjung</p>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 font-poppins">
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 px-1">Judul Lencana (Title Badge)</label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="title_badge" class="block text-xs font-bold text-gray-700 mb-1">
+                            Judul Lencana (Title Badge) <span class="text-rose-500">*</span>
+                        </label>
                         <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 p-0.5"><i class="ti ti-tag"></i></span>
-                            <input type="text" name="title_badge" value="{{ old('title_badge', 'Keunggulan Kami') }}" required
-                                class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 pl-12 pr-6 text-gray-900 font-semibold focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all placeholder:text-gray-300 shadow-sm">
+                            <i class="ti ti-tag absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input type="text" 
+                                   name="title_badge" 
+                                   id="title_badge"
+                                   value="{{ old('title_badge', 'Keunggulan Kami') }}" 
+                                   required
+                                   placeholder="Contoh: Keunggulan Kami"
+                                   class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2 pl-9 pr-3 text-xs text-gray-900 font-semibold focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all">
                         </div>
                     </div>
-                    
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 px-1">Ikon Lencana (Emoji/Char)</label>
+
+                    <div>
+                        <label for="title_badge_icon" class="block text-xs font-bold text-gray-700 mb-1">
+                            Ikon Lencana (Emoji/Icon) <span class="text-rose-500">*</span>
+                        </label>
                         <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 p-0.5"><i class="ti ti-sparkles"></i></span>
-                            <input type="text" name="title_badge_icon" value="{{ old('title_badge_icon', '🔥') }}" required
-                                class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 pl-12 pr-6 text-gray-900 font-semibold focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all placeholder:text-gray-300 shadow-sm">
+                            <i class="ti ti-sparkles absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input type="text" 
+                                   name="title_badge_icon" 
+                                   id="title_badge_icon"
+                                   value="{{ old('title_badge_icon', '🔥') }}" 
+                                   required
+                                   placeholder="Contoh: 🔥 atau ⚡"
+                                   class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2 pl-9 pr-3 text-xs text-gray-900 font-semibold focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all">
                         </div>
                     </div>
                 </div>
 
-                <div class="space-y-3 font-poppins">
-                    <label class="block text-sm font-semibold text-gray-700 px-1">Headline Utama</label>
-                    <input type="text" name="headline" value="{{ old('headline') }}" required placeholder="Contoh: Solusi Terpadu untuk Bisnis Anda"
-                        class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-5 px-8 text-gray-900 font-bold text-lg focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all placeholder:text-gray-300 shadow-sm">
-                    <p class="text-[11px] text-gray-400 font-semibold mt-2 px-1 italic">Headline ini akan tampil mencolok di bagian atas daftar fitur.</p>
+                <div>
+                    <label for="headline" class="block text-xs font-bold text-gray-700 mb-1">
+                        Headline Utama Section <span class="text-rose-500">*</span>
+                    </label>
+                    <textarea name="headline" 
+                              id="headline" 
+                              rows="3" 
+                              required
+                              placeholder="Contoh: Solusi Terpadu untuk Mempercepat Alur Kerja dan Pertumbuhan Bisnis Anda"
+                              class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2.5 px-3 text-xs text-gray-900 font-bold leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all">{{ old('headline') }}</textarea>
+                    <p class="text-[11px] text-gray-400 mt-1 italic">Headline ini akan tampil dengan ukuran besar di bagian atas daftar fitur aplikasi.</p>
                 </div>
             </div>
-        </div>
 
-        {{-- Right: Media & Visibility --}}
-        <div class="lg:col-span-5 space-y-6 sticky top-8 font-poppins">
-            {{-- Visual Media Card --}}
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 space-y-6">
-                <div class="flex items-center gap-4 border-b border-gray-50 pb-6 mb-8">
-                    <div class="w-12 h-12 bg-gray-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-brand-50">
-                        <i class="ti ti-device-mobile-message"></i>
+            <!-- Card 2: Panduan Konten -->
+            <div class="card-clean p-4 bg-gradient-to-br from-teal-50/70 to-emerald-50/40 border-teal-200/60">
+                <div class="flex items-start gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-[#007A87] text-white flex items-center justify-center shrink-0 shadow-2xs">
+                        <i class="ti ti-bulb text-sm"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">Media Mockup</h3>
-                        <p class="text-[12px] text-gray-400 font-semibold mt-1.5 uppercase tracking-wider">Central Phone Preview</p>
+                        <h4 class="text-xs font-bold text-teal-950">Headline yang Menjual</h4>
+                        <p class="text-[11px] text-teal-800/80 leading-relaxed mt-1">
+                            Fokuskan pesan pada transformasi dan hasil akhir yang dinikmati pengguna, bukan sekadar daftar teknis aplikasi.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Media Mockup & Status (5 Cols) -->
+        <div class="lg:col-span-5 space-y-5 lg:sticky lg:top-24">
+            
+            <!-- Card 3: Media Mockup -->
+            <div class="card-clean p-5 space-y-4">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <div class="w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-device-mobile-message text-base"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-[#0F172A]">Gambar Mockup Sentral</h3>
+                        <p class="text-[11px] text-gray-400">Mockup aplikasi yang diposisikan di tengah fitur</p>
                     </div>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="relative group bg-white border-2 border-dashed border-gray-200 rounded-xl overflow-hidden hover:border-brand-600 hover:bg-white transition-all cursor-pointer shadow-inner">
-                        <div class="aspect-[16/10] w-full flex flex-col items-center justify-center p-6">
-                            <i class="ti ti-photo-plus text-5xl text-brand-200 mb-3 group-hover:scale-110 transition-transform" id="icon-preview"></i>
-                            <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest text-center" id="text-preview">Unggah Gambar Mockup</p>
-                            <input type="file" name="image_path" class="absolute inset-0 opacity-0 cursor-pointer z-20" onchange="previewImage(this, 'preview-img', 'icon-preview', 'text-preview')">
-                            <img id="preview-img" class="absolute inset-0 w-full h-full object-contain hidden z-10 p-4 transition-all duration-500">
-                            
-                            <div class="absolute inset-0 bg-brand-900/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center z-30 pointer-events-none">
-                                <div class="bg-white text-brand-600 text-[10px] font-bold uppercase tracking-widest px-6 py-3 rounded-full shadow-2xl scale-90 group-hover:scale-100 transition-transform">Pilih File Baru</div>
+                <!-- Image Upload Dropzone -->
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">
+                        File Mockup (PNG Transparan Disarankan)
+                    </label>
+                    <div class="relative group bg-[#F8FAFC] border-2 border-dashed border-gray-200 rounded-2xl overflow-hidden hover:border-[#007A87] transition-all cursor-pointer">
+                        <div class="aspect-[16/10] w-full flex flex-col items-center justify-center p-4 text-center">
+                            <i class="ti ti-photo-plus text-4xl text-gray-300 mb-2 group-hover:scale-110 transition-transform" id="icon-preview"></i>
+                            <p class="text-[11px] font-bold text-gray-600" id="text-preview">Pilih atau Seret Gambar Mockup</p>
+                            <span class="text-[10px] text-gray-400 mt-0.5">PNG, JPG, WEBP maks 2MB</span>
+                            <input type="file" 
+                                   name="image_path" 
+                                   accept="image/*"
+                                   class="absolute inset-0 opacity-0 cursor-pointer z-20" 
+                                   onchange="previewImage(this, 'preview-img', 'icon-preview', 'text-preview')">
+                            <img id="preview-img" class="absolute inset-0 w-full h-full object-contain p-3 hidden z-10" alt="Preview Mockup">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center z-30 pointer-events-none">
+                                <span class="bg-white text-[#007A87] text-[11px] font-bold px-3 py-1.5 rounded-lg shadow-md">Ganti File Visual</span>
                             </div>
                         </div>
                     </div>
-                    <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 space-y-1.5 shadow-sm">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">💡 Rekomendasi Format</p>
-                        <p class="text-[11px] text-gray-500 font-medium leading-relaxed">Gunakan gambar **PNG Transparan** (Phone Mockup) dengan lebar minimal **1000px** untuk hasil yang tajam dan elegan.</p>
-                    </div>
+                </div>
+
+                <div class="p-3 bg-slate-50 rounded-xl border border-gray-100 text-[11px] text-gray-500 leading-relaxed">
+                    💡 <strong>Tips Mockup:</strong> Gunakan gambar smartphone atau laptop berlatar belakang transparan (PNG/WEBP) dengan resolusi minimal 1000px agar terlihat tajam di layar Retina.
                 </div>
             </div>
 
-            {{-- Visibility Card --}}
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 space-y-6">
-                <div class="flex items-center gap-4 justify-between">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl shadow-inner border border-emerald-50">
-                            <i class="ti ti-eye-check"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-bold text-gray-900 leading-none tracking-tight">Visibility</h4>
-                            <p class="text-[10px] text-gray-400 font-semibold mt-1 uppercase tracking-wider">Status Publikasi</p>
-                        </div>
+            <!-- Card 4: Status Publikasi -->
+            <div class="card-clean p-5 space-y-4">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <div class="w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-eye-check text-base"></i>
                     </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-[#0F172A]">Status Publikasi</h3>
+                        <p class="text-[11px] text-gray-400">Tentukan apakah versi ini langsung aktif di web</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3">
                     <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" name="is_active" value="1" class="sr-only peer" checked>
-                        <div class="w-12 h-6.5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brand-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600 shadow-sm"></div>
+                        <input type="checkbox" name="is_active" value="1" checked class="sr-only peer">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#007A87]"></div>
+                        <span class="ml-2.5 text-xs font-bold text-gray-700">Aktifkan Versi Ini di Landing Page</span>
                     </label>
                 </div>
             </div>
+
         </div>
+
     </form>
+
 </div>
 
 <script>
@@ -148,22 +216,13 @@
                 const preview = document.getElementById(previewId);
                 preview.src = e.target.result;
                 preview.classList.remove('hidden');
-                preview.classList.add('animate-fade-in');
-                document.getElementById(iconId).classList.add('hidden');
-                document.getElementById(textId).classList.add('hidden');
+                const icon = document.getElementById(iconId);
+                const text = document.getElementById(textId);
+                if (icon) icon.classList.add('hidden');
+                if (text) text.classList.add('hidden');
             }
             reader.readAsDataURL(input.files[0]);
         }
     }
 </script>
-
-<style>
-    @keyframes fadeIn {
-        from { opacity: 0; transform: scale(0.95); }
-        to { opacity: 1; transform: scale(1); }
-    }
-    .animate-fade-in {
-        animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-</style>
 @endsection

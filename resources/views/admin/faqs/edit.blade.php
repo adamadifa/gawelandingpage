@@ -1,106 +1,186 @@
 @extends('layouts.admin')
 
-@section('title', 'FAQ — Edit Pertanyaan')
+@section('title', 'Edit Pertanyaan FAQ')
 
 @section('breadcrumbs')
-<nav class="flex items-center gap-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2 font-poppins">
-    <a href="{{ route('admin.hero-sections.index') }}" class="hover:text-brand-600 transition-colors">Landing Page</a>
-    <i class="ti ti-chevron-right text-[8px]"></i>
-    <a href="{{ route('admin.faq-sections.index') }}" class="hover:text-brand-600 transition-colors">FAQ Section</a>
-    <i class="ti ti-chevron-right text-[8px]"></i>
-    <a href="{{ route('admin.faqs.index') }}" class="hover:text-brand-600 transition-colors">Daftar Pertanyaan</a>
-    <i class="ti ti-chevron-right text-[8px]"></i>
-    <span class="text-brand-600 font-semibold">Edit Item</span>
+<nav class="flex items-center gap-1.5 text-xs text-gray-400 font-medium">
+    <a href="{{ route('admin.dashboard') }}" class="hover:text-[#007A87] transition-colors flex items-center gap-1">
+        <i class="ti ti-home"></i>
+        <span>Dashboard</span>
+    </a>
+    <i class="ti ti-chevron-right text-[10px]"></i>
+    <a href="{{ route('admin.faqs.index') }}" class="hover:text-[#007A87] transition-colors">FAQ</a>
+    <i class="ti ti-chevron-right text-[10px]"></i>
+    <span class="text-gray-700 font-bold">Edit Pertanyaan</span>
 </nav>
 @endsection
 
 @section('actions')
-<div class="flex items-center gap-3 font-poppins">
-     <a href="{{ route('admin.faqs.index') }}" class="px-5 py-2.5 text-sm font-semibold text-gray-400 hover:text-gray-600 transition-colors">Batal</a>
-     <button type="submit" form="faq-item-edit-form" class="inline-flex items-center gap-2 px-7 py-3.5 bg-brand-600 text-white rounded-xl font-bold text-sm shadow-xl shadow-brand-600/20 hover:bg-brand-700 active:scale-95 transition-all">
-        <i class="ti ti-device-floppy text-lg"></i>
+<div class="flex items-center gap-2.5">
+    <a href="{{ route('admin.faqs.index') }}" 
+       class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white border border-gray-200 hover:border-gray-300 text-gray-600 text-xs font-bold transition-all shadow-2xs">
+        <i class="ti ti-arrow-left text-sm"></i>
+        <span>Kembali</span>
+    </a>
+
+    <button type="submit" 
+            form="faq-item-edit-form" 
+            class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-[#007A87] hover:bg-[#005B60] text-white text-xs font-bold shadow-sm shadow-[#007A87]/20 transition-all">
+        <i class="ti ti-device-floppy text-sm"></i>
         <span>Simpan Perubahan</span>
     </button>
 </div>
 @endsection
 
 @section('content')
-<div class="w-full -mt-6 space-y-6 pb-0 font-poppins text-inter">
+<div class="space-y-6" x-data="{
+    question: '{{ old('question', $faq->question) }}',
+    answer: '{{ old('answer', $faq->answer) }}',
+    sort_order: '{{ old('sort_order', $faq->sort_order) }}',
+    isOpen: true
+}">
 
-    <form id="faq-item-edit-form" action="{{ route('admin.faqs.update', $faq->id) }}" method="POST" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    @if ($errors->any())
+        <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs">
+            <div class="flex items-center gap-2 font-bold mb-1">
+                <i class="ti ti-alert-triangle text-base"></i>
+                <span>Terdapat kesalahan pada formulir:</span>
+            </div>
+            <ul class="list-disc pl-5 space-y-0.5 text-rose-700">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form id="faq-item-edit-form" 
+          action="{{ route('admin.faqs.update', $faq->id) }}" 
+          method="POST" 
+          class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         @csrf
         @method('PUT')
 
-        {{-- Left: Question & Answer Content --}}
-        <div class="lg:col-span-8 space-y-6">
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 lg:p-10 space-y-8">
-                <div class="flex items-center gap-4 border-b border-gray-50 pb-6 mb-8">
-                    <div class="w-12 h-12 bg-gray-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-brand-50">
-                        <i class="ti ti-help"></i>
+        <!-- Left Column: Q&A Content (7 Cols) -->
+        <div class="lg:col-span-7 space-y-5">
+            
+            <div class="card-clean p-5 lg:p-6 space-y-4">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <div class="w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-help text-base"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">Konten Q&A</h3>
-                        <p class="text-[12px] text-gray-400 font-semibold mt-1.5 uppercase tracking-wider">Pertanyaan & Jawaban</p>
+                        <h3 class="text-xs font-bold text-[#0F172A]">Konten Pertanyaan & Jawaban</h3>
+                        <p class="text-[11px] text-gray-400">Tuliskan pertanyaan umum dan jawaban penjelasan yang jelas</p>
                     </div>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 px-1">Pertanyaan</label>
-                        <input type="text" name="question" value="{{ old('question', $faq->question) }}" required placeholder="Contoh: Apakah aplikasi ini gratis?"
-                            class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 px-6 text-gray-900 font-bold focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all placeholder:text-gray-300 shadow-sm">
+                <div class="space-y-4">
+                    <div>
+                        <label for="question" class="block text-xs font-bold text-gray-700 mb-1">
+                            Pertanyaan <span class="text-rose-500">*</span>
+                        </label>
+                        <input type="text" 
+                               name="question" 
+                               id="question" 
+                               x-model="question"
+                               value="{{ old('question', $faq->question) }}"
+                               required 
+                               placeholder="Contoh: Apakah aplikasi mendukung presensi multi-cabang?"
+                               class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2 px-3 text-xs text-gray-900 font-bold focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all">
                     </div>
 
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 px-1">Jawaban Lengkap</label>
-                        <textarea name="answer" rows="8" required placeholder="Berikan penjelasan yang detail dan mudah dipahami..."
-                            class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 px-6 text-gray-900 font-medium focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all placeholder:text-gray-300 leading-relaxed shadow-sm">{{ old('answer', $faq->answer) }}</textarea>
+                    <div>
+                        <label for="answer" class="block text-xs font-bold text-gray-700 mb-1">
+                            Jawaban Lengkap <span class="text-rose-500">*</span>
+                        </label>
+                        <textarea name="answer" 
+                                  id="answer" 
+                                  rows="8" 
+                                  x-model="answer"
+                                  required 
+                                  placeholder="Jelaskan solusi secara rinci, terstruktur, dan mudah dipahami oleh calon pelanggan..."
+                                  class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2.5 px-3 text-xs text-gray-800 font-medium leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all">{{ old('answer', $faq->answer) }}</textarea>
                     </div>
                 </div>
             </div>
+
         </div>
 
-        {{-- Right: Settings & Visibility --}}
-        <div class="lg:col-span-4 space-y-6">
-            {{-- Organization Card --}}
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 lg:p-10 space-y-8">
-                <div class="flex items-center gap-4 border-b border-gray-50 pb-6 mb-8">
-                    <div class="w-12 h-12 bg-gray-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-brand-50">
-                        <i class="ti ti-sort-ascending-numbers"></i>
+        <!-- Right Column: Settings & Live Preview (5 Cols) -->
+        <div class="lg:col-span-5 space-y-5 lg:sticky lg:top-24">
+            
+            <!-- Card 2: Pengaturan & Urutan -->
+            <div class="card-clean p-5 space-y-4">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <div class="w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-adjustments text-base"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">Pengaturan</h3>
-                        <p class="text-[12px] text-gray-400 font-semibold mt-1.5 uppercase tracking-wider">Urutan & Prioritas</p>
+                        <h3 class="text-xs font-bold text-[#0F172A]">Pengaturan Tampilan</h3>
+                        <p class="text-[11px] text-gray-400">Urutan dan status visibilitas pertanyaan</p>
                     </div>
                 </div>
 
-                <div class="space-y-3">
-                    <label class="block text-sm font-semibold text-gray-700 px-1">Urutan Tampilan</label>
-                    <input type="number" name="sort_order" value="{{ old('sort_order', $faq->sort_order) }}" required
-                        class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 px-6 text-gray-900 font-bold focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all shadow-sm">
-                    <p class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mt-2 px-1">Gunakan angka lebih kecil untuk posisi atas.</p>
-                </div>
-            </div>
+                <div class="space-y-4">
+                    <div>
+                        <label for="sort_order" class="block text-xs font-bold text-gray-700 mb-1">
+                            Nomor Urutan Tampilan
+                        </label>
+                        <input type="number" 
+                               name="sort_order" 
+                               id="sort_order" 
+                               x-model="sort_order"
+                               value="{{ old('sort_order', $faq->sort_order) }}"
+                               required
+                               class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2 px-3 text-xs text-gray-800 font-semibold focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all">
+                        <p class="text-[10px] text-gray-400 mt-1">Angka lebih kecil tampil di urutan atas accordion FAQ.</p>
+                    </div>
 
-            {{-- Visibility Status --}}
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl shadow-inner border border-emerald-50">
-                            <i class="ti ti-eye"></i>
-                        </div>
+                    <div class="pt-3 border-t border-gray-100 flex items-center justify-between">
                         <div>
-                            <h4 class="text-sm font-bold text-gray-900 leading-none tracking-tight">Visibility</h4>
-                            <p class="text-[10px] text-gray-400 font-semibold mt-1 uppercase tracking-wider">Status Publikasi</p>
+                            <span class="block text-xs font-bold text-gray-800">Publikasikan Pertanyaan</span>
+                            <span class="text-[10px] text-gray-400">Tampilkan pada landing page</span>
                         </div>
+                        <input type="hidden" name="is_active" value="0">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="is_active" value="1" class="sr-only peer" {{ old('is_active', $faq->is_active) ? 'checked' : '' }}>
+                            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#007A87]"></div>
+                        </label>
                     </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" name="is_active" value="1" class="sr-only peer" {{ $faq->is_active ? 'checked' : '' }}>
-                        <div class="w-12 h-6.5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brand-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600 transition-all shadow-sm"></div>
-                    </label>
                 </div>
             </div>
+
+            <!-- Card 3: Simulasi Pratinjau Accordion -->
+            <div class="card-clean p-5 space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-gray-100">
+                    <div class="w-6 h-6 rounded-md bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-eye text-xs"></i>
+                    </div>
+                    <h3 class="text-xs font-bold text-[#0F172A]">Simulasi Accordion FAQ</h3>
+                </div>
+
+                <div class="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-2xs">
+                    <button type="button" 
+                            @click="isOpen = !isOpen"
+                            class="w-full p-3.5 flex items-center justify-between text-left bg-slate-50/70 hover:bg-slate-100/70 transition-colors">
+                        <span class="text-xs font-bold text-gray-900 leading-snug" x-text="question || 'Judul Pertanyaan Pengguna?'"></span>
+                        <div class="w-5 h-5 rounded-md bg-white border border-gray-200 flex items-center justify-center text-gray-400 shrink-0 ml-2">
+                            <i class="ti transition-transform duration-200 text-xs" :class="isOpen ? 'ti-minus' : 'ti-plus'"></i>
+                        </div>
+                    </button>
+                    
+                    <div x-show="isOpen" 
+                         x-collapse
+                         class="p-3.5 text-xs text-gray-600 bg-white border-t border-gray-100 leading-relaxed font-normal" 
+                         x-text="answer || 'Penjelasan lengkap dan solusi jawaban akan muncul di area accordion ini saat pengguna mengklik pertanyaan...'">
+                    </div>
+                </div>
+            </div>
+
         </div>
+
     </form>
+
 </div>
 @endsection

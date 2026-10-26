@@ -26,9 +26,12 @@ class FaqController extends Controller
             'answer' => 'required',
         ]);
 
-        Faq::create($request->all());
+        $data = $request->all();
+        $data['is_active'] = $request->boolean('is_active');
 
-        return redirect()->route('admin.faqs.index')->with('success', 'FAQ created successfully');
+        Faq::create($data);
+
+        return redirect()->route('admin.faqs.index')->with('success', 'FAQ berhasil ditambahkan');
     }
 
     public function edit(Faq $faq)
@@ -43,9 +46,12 @@ class FaqController extends Controller
             'answer' => 'required',
         ]);
 
-        $faq->update($request->all());
+        $data = $request->all();
+        $data['is_active'] = $request->boolean('is_active');
 
-        return redirect()->route('admin.faqs.index')->with('success', 'FAQ updated successfully');
+        $faq->update($data);
+
+        return redirect()->route('admin.faqs.index')->with('success', 'FAQ berhasil diperbarui');
     }
 
     public function destroy(Faq $faq)

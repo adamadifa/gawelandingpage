@@ -1,149 +1,223 @@
 @extends('layouts.admin')
 
-@section('title', 'Features — Edit Item')
+@section('title', 'Edit Item Fitur')
+@section('subtitle', 'Perbarui judul, uraian solusi, ikon visual, dan nomor urutan kartu fitur.')
 
 @section('breadcrumbs')
-<nav class="flex items-center gap-2 text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2 font-poppins">
-    <a href="{{ route('admin.hero-sections.index') }}" class="hover:text-brand-600 transition-colors">Landing Page</a>
-    <i class="ti ti-chevron-right text-[8px]"></i>
-    <a href="{{ route('admin.feature-sections.index') }}" class="hover:text-brand-600 transition-colors">Feature Section</a>
-    <i class="ti ti-chevron-right text-[8px]"></i>
-    <a href="{{ route('admin.features.index') }}" class="hover:text-brand-600 transition-colors">Daftar Item</a>
-    <i class="ti ti-chevron-right text-[8px]"></i>
-    <span class="text-brand-600 font-semibold">Edit Fitur</span>
-</nav>
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#E2E8F0]/70 text-xs text-[#64748B] shadow-2xs font-medium">
+    <a href="{{ route('admin.dashboard') }}" class="hover:text-[#007A87] flex items-center gap-1">
+        <i class="ti ti-home text-sm"></i>
+        <span>Dashboard</span>
+    </a>
+    <i class="ti ti-chevron-right text-[10px] text-gray-300"></i>
+    <span class="text-gray-400">Landing Page CMS</span>
+    <i class="ti ti-chevron-right text-[10px] text-gray-300"></i>
+    <a href="{{ route('admin.features.index') }}" class="hover:text-[#007A87]">
+        <span>Item Fitur</span>
+    </a>
+    <i class="ti ti-chevron-right text-[10px] text-gray-300"></i>
+    <span class="text-[#0F172A] font-semibold">Edit #{{ $feature->id }}</span>
+</div>
 @endsection
 
 @section('actions')
-<div class="flex items-center gap-3 font-poppins">
-     <a href="{{ route('admin.features.index') }}" class="px-5 py-2.5 text-sm font-semibold text-gray-400 hover:text-gray-600 transition-colors">Batal</a>
-     <button type="submit" form="feature-item-edit-form" class="inline-flex items-center gap-2 px-7 py-3.5 bg-brand-600 text-white rounded-xl font-bold text-sm shadow-xl shadow-brand-600/20 hover:bg-brand-700 active:scale-95 transition-all">
-        <i class="ti ti-device-floppy text-lg"></i>
+<div class="flex items-center gap-2">
+    <a href="{{ route('admin.features.index') }}" 
+       class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs font-bold shadow-2xs transition-all">
+        <i class="ti ti-arrow-left text-sm"></i>
+        <span>Batal</span>
+    </a>
+    <button type="submit" 
+            form="feature-item-edit-form" 
+            class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-[#007A87] hover:bg-[#005B60] text-white text-xs font-bold shadow-sm shadow-[#007A87]/20 transition-all">
+        <i class="ti ti-device-floppy text-sm"></i>
         <span>Simpan Perubahan</span>
     </button>
 </div>
 @endsection
 
 @section('content')
-<div class="w-full -mt-6 space-y-6 pb-0 font-poppins">
+<div class="space-y-6" x-data="{
+    title: '{{ old('title', $feature->title) }}',
+    description: '{{ old('description', $feature->description) }}',
+    icon: '{{ old('icon', $feature->icon) ?: 'star' }}',
+    sort_order: '{{ old('sort_order', $feature->sort_order) }}',
+    getIconClass() {
+        let raw = (this.icon || '').trim();
+        if (!raw) return 'ti ti-star';
+        if (raw.startsWith('ti ti-')) return raw;
+        if (raw.startsWith('ti-')) return 'ti ' + raw;
+        return 'ti ti-' + raw;
+    }
+}">
 
-    <form id="feature-item-edit-form" action="{{ route('admin.features.update', $feature) }}" method="POST" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start font-poppins">
+    @if ($errors->any())
+        <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs">
+            <div class="flex items-center gap-2 font-bold mb-1">
+                <i class="ti ti-alert-triangle text-base"></i>
+                <span>Terdapat kesalahan pada formulir:</span>
+            </div>
+            <ul class="list-disc pl-5 space-y-0.5 text-rose-700">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form id="feature-item-edit-form" 
+          action="{{ route('admin.features.update', $feature) }}" 
+          method="POST" 
+          class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         @csrf
         @method('PUT')
-        
-        <div class="lg:col-span-12">
-            @if ($errors->any())
-                <div class="mb-8 p-4 bg-rose-50 border border-rose-100 rounded-xl flex items-start gap-3 shadow-sm">
-                    <i class="ti ti-alert-triangle text-xl text-rose-500 mt-0.5"></i>
-                    <ul class="text-sm text-rose-600 font-bold space-y-1">
-                        @foreach ($errors->all() as $error)
-                            <li>• {{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-        </div>
 
-        {{-- Left: Content Details --}}
-        <div class="lg:col-span-7 space-y-6">
-            {{-- Primary Info Card --}}
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 lg:p-10 space-y-8">
-                <div class="flex items-center gap-4 border-b border-gray-50 pb-6 mb-8">
-                    <div class="w-12 h-12 bg-gray-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-brand-50">
-                        <i class="ti ti-info-circle"></i>
+        <!-- Left Column: Content Details (7 Cols) -->
+        <div class="lg:col-span-7 space-y-5">
+            
+            <!-- Card 1: Informasi Fitur -->
+            <div class="card-clean p-5 lg:p-6 space-y-4">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <div class="w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-info-circle text-base"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">Informasi Fitur</h3>
-                        <p class="text-[12px] text-gray-400 font-semibold mt-1.5 uppercase tracking-wider">Judul & Deskripsi</p>
+                        <h3 class="text-xs font-bold text-[#0F172A]">Informasi & Konten Fitur</h3>
+                        <p class="text-[11px] text-gray-400">Judul singkat dan penjelasan nilai guna fitur</p>
                     </div>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 px-1">Judul Fitur</label>
-                        <input type="text" name="title" value="{{ old('title', $feature->title) }}" required placeholder="Contoh: Absensi Geofencing Pintar"
-                            class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 px-6 text-gray-900 font-bold focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all placeholder:text-gray-300 shadow-sm">
+                <div class="space-y-4">
+                    <div>
+                        <label for="title" class="block text-xs font-bold text-gray-700 mb-1">
+                            Judul Fitur <span class="text-rose-500">*</span>
+                        </label>
+                        <input type="text" 
+                               name="title" 
+                               id="title" 
+                               x-model="title"
+                               value="{{ old('title', $feature->title) }}" 
+                               required 
+                               placeholder="Contoh: Absensi Geofencing Pintar"
+                               class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2 px-3 text-xs text-gray-900 font-bold focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all">
                     </div>
-                    
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 px-1">Deskripsi Singkat</label>
-                        <textarea name="description" rows="6" required placeholder="Jelaskan secara singkat kegunaan fitur ini bagi pengguna..."
-                            class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 px-6 text-gray-900 font-medium focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all placeholder:text-gray-300 leading-relaxed shadow-sm">{{ old('description', $feature->description) }}</textarea>
+
+                    <div>
+                        <label for="description" class="block text-xs font-bold text-gray-700 mb-1">
+                            Deskripsi Singkat <span class="text-rose-500">*</span>
+                        </label>
+                        <textarea name="description" 
+                                  id="description" 
+                                  rows="5" 
+                                  x-model="description"
+                                  required 
+                                  placeholder="Jelaskan secara ringkas bagaimana fitur ini mempermudah pengguna..."
+                                  class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2.5 px-3 text-xs text-gray-800 font-medium leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all">{{ old('description', $feature->description) }}</textarea>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {{-- Right: Technical & Status --}}
-        <div class="lg:col-span-5 space-y-6 sticky top-8">
-            {{-- Icon & Styling Card --}}
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8 lg:p-10 space-y-8">
-                <div class="flex items-center gap-4 border-b border-gray-50 pb-6 mb-8">
-                    <div class="w-12 h-12 bg-gray-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl shadow-inner border border-brand-50">
-                        <i class="ti ti-icons"></i>
+            <!-- Card 2: Panduan Penulisan -->
+            <div class="card-clean p-4 bg-gradient-to-br from-teal-50/70 to-emerald-50/40 border-teal-200/60">
+                <div class="flex items-start gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-[#007A87] text-white flex items-center justify-center shrink-0 shadow-2xs">
+                        <i class="ti ti-bulb text-sm"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-display font-bold text-gray-900 leading-none tracking-tight">Visual & Urutan</h3>
-                        <p class="text-[12px] text-gray-400 font-semibold mt-1.5 uppercase tracking-wider">Icon & Susunan</p>
+                        <h4 class="text-xs font-bold text-teal-950">Fokus pada Solusi Pengguna</h4>
+                        <p class="text-[11px] text-teal-800/80 leading-relaxed mt-1">
+                            Gunakan kalimat aktif dan soroti masalah yang berhasil dipecahkan fitur ini agar calon pelanggan langsung tertarik mencoba.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Visual, Urutan & Preview (5 Cols) -->
+        <div class="lg:col-span-5 space-y-5 lg:sticky lg:top-24">
+            
+            <!-- Card 3: Ikon & Urutan -->
+            <div class="card-clean p-5 space-y-4">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <div class="w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-icons text-base"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-[#0F172A]">Ikon & Posisi Tampilan</h3>
+                        <p class="text-[11px] text-gray-400">Pilih ikon visual Tabler dan urutan kartu</p>
                     </div>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="space-y-4">
-                        <label class="block text-sm font-semibold text-gray-700 px-1">Tabler Icon Class</label>
-                        <div class="relative group">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-brand-50 text-brand-600 rounded-lg flex items-center justify-center transition-all group-focus-within:bg-brand-600 group-focus-within:text-white border border-brand-100/50" id="icon-preview-box">
-                                <i class="ti {{ old('icon', $feature->icon) ?: 'ti-star' }} text-xl" id="icon-preview-el"></i>
+                <div class="space-y-4">
+                    <div>
+                        <label for="icon-input" class="block text-xs font-bold text-gray-700 mb-1">
+                            Kelas Tabler Icon <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="relative flex items-center">
+                            <span class="absolute left-2.5 w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] border border-teal-100/60 flex items-center justify-center text-base">
+                                <i :class="getIconClass()"></i>
                             </span>
-                            <input type="text" name="icon" id="icon-input" value="{{ old('icon', $feature->icon) }}" required
-                                class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 pl-16 pr-6 text-gray-900 font-bold focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all placeholder:text-gray-300 shadow-sm">
+                            <input type="text" 
+                                   name="icon" 
+                                   id="icon-input" 
+                                   x-model="icon"
+                                   value="{{ old('icon', $feature->icon) }}" 
+                                   required
+                                   placeholder="ti-star atau ti-device-mobile"
+                                   class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2 pl-12 pr-3 text-xs text-gray-800 font-mono focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all">
                         </div>
-                        <div class="p-4 bg-brand-900 rounded-xl text-white/90 shadow-xl shadow-brand-900/10 border border-white/5">
-                             <p class="text-[10px] font-bold uppercase tracking-widest mb-1.5 opacity-60">Instruksi Icon</p>
-                             <p class="text-[11px] leading-relaxed font-medium">Gunakan class dari <a href="https://tabler.io/icons" target="_blank" class="text-brand-300 hover:text-brand-200 underline font-bold transition-colors">Tabler Icons</a>. Contoh: `ti-star`, `ti-device-mobile`.</p>
-                        </div>
+                        <p class="text-[10px] text-gray-400 mt-1">
+                            Lihat referensi nama ikon di <a href="https://tabler.io/icons" target="_blank" class="text-[#007A87] font-semibold underline">Tabler Icons</a> (contoh: <code>ti-shield-check</code>, <code>ti-chart-line</code>).
+                        </p>
                     </div>
 
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-gray-700 px-1">Urutan Tampilan</label>
-                        <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 p-0.5"><i class="ti ti-sort-ascending-numbers"></i></span>
-                            <input type="number" name="sort_order" value="{{ old('sort_order', $feature->sort_order) }}" required
-                                class="w-full bg-gray-50/50 border-gray-200 rounded-xl py-4 pl-12 pr-6 text-gray-900 font-bold focus:bg-white focus:ring-4 focus:ring-brand-100/30 focus:border-brand-600 transition-all shadow-sm">
-                        </div>
+                    <div>
+                        <label for="sort_order" class="block text-xs font-bold text-gray-700 mb-1">
+                            Nomor Urutan Tampilan
+                        </label>
+                        <input type="number" 
+                               name="sort_order" 
+                               id="sort_order" 
+                               x-model="sort_order"
+                               value="{{ old('sort_order', $feature->sort_order) }}" 
+                               required
+                               class="w-full bg-[#F8FAFC] border border-gray-200 rounded-xl py-2 px-3 text-xs text-gray-800 font-semibold focus:outline-none focus:ring-2 focus:ring-[#007A87]/20 focus:border-[#007A87] transition-all">
+                    </div>
+
+                    <div class="pt-2 border-t border-gray-100 flex items-center gap-3">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="is_active" value="1" {{ old('is_active', $feature->is_active) ? 'checked' : '' }} class="sr-only peer">
+                            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#007A87]"></div>
+                            <span class="ml-2.5 text-xs font-bold text-gray-700">Tampilkan Fitur Ini di Web</span>
+                        </label>
                     </div>
                 </div>
             </div>
 
-            {{-- Visibility Status --}}
-            <div class="bg-white rounded-xl border border-gray-100 shadow-xl shadow-black/[0.02] p-8">
-                <div class="flex items-center justify-between font-poppins">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl shadow-inner border border-emerald-50">
-                            <i class="ti ti-eye-check"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-bold text-gray-900 leading-none tracking-tight">Visibility</h4>
-                            <p class="text-[10px] text-gray-400 font-semibold mt-1 uppercase tracking-wider">Status Publikasi</p>
-                        </div>
+            <!-- Card 4: Pratinjau Langsung -->
+            <div class="card-clean p-5 space-y-3">
+                <div class="flex items-center gap-2 pb-2 border-b border-gray-100">
+                    <div class="w-6 h-6 rounded-md bg-teal-50 text-[#007A87] flex items-center justify-center">
+                        <i class="ti ti-eye text-xs"></i>
                     </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" name="is_active" value="1" class="sr-only peer" {{ $feature->is_active ? 'checked' : '' }}>
-                        <div class="w-12 h-6.5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brand-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600 shadow-sm transition-all"></div>
-                    </label>
+                    <h3 class="text-xs font-bold text-[#0F172A]">Simulasi Kartu Fitur</h3>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-50 border border-gray-200/70 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-teal-50 text-[#007A87] border border-teal-100/70 flex items-center justify-center text-lg shadow-2xs">
+                        <i :class="getIconClass()"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-gray-900 leading-tight" x-text="title || 'Judul Fitur Pintar'"></h4>
+                        <p class="text-[11px] text-gray-500 line-clamp-2 mt-1 leading-relaxed" x-text="description || 'Deskripsi singkat mengenai fungsi dan kemudahan yang diberikan fitur ini...'"></p>
+                    </div>
                 </div>
             </div>
-       </div>
+
+        </div>
+
     </form>
-</div>
 
-<script>
-    const iconInput = document.getElementById('icon-input');
-    const iconPreviewEl = document.getElementById('icon-preview-el');
-    
-    iconInput.addEventListener('input', function() {
-        const val = this.value.trim();
-        iconPreviewEl.className = 'ti ' + (val ? val : 'ti-help');
-    });
-</script>
+</div>
 @endsection

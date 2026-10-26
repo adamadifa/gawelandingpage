@@ -10,13 +10,41 @@ use Illuminate\Support\Str;
 
 class MembershipController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = MembershipTransaction::with(['user', 'pricingPlan'])
-            ->latest()
-            ->paginate(10);
+        $query = MembershipTransaction::with(['user', 'pricingPlan', 'subscription']);
 
-        return view('admin.memberships.index', compact('transactions'));
+        if ($request->filled('q')) {
+            $q = $request->q;
+            $query->where(function($sub) use ($q) {
+                $sub->whereHas('user', function($u) use ($q) {
+                    $u->where('name', 'like', "%{$q}%")
+                      ->orWhere('email', 'like', "%{$q}%");
+                })->orWhere('id', 'like', "%{$q}%");
+            });
+        }
+
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('plan_id') && $request->plan_id !== 'all') {
+            $query->where('pricing_plan_id', $request->plan_id);
+        }
+
+        $transactions = $query->latest()->paginate(15)->withQueryString();
+
+        $stats = [
+            'total' => MembershipTransaction::count(),
+            'approved' => MembershipTransaction::where('status', 'approved')->count(),
+            'pending' => MembershipTransaction::where('status', 'pending')->count(),
+            'monthly' => MembershipTransaction::where('plan_type', 'monthly')->count(),
+            'yearly' => MembershipTransaction::where('plan_type', 'yearly')->count(),
+        ];
+
+        $pricing_plans = \App\Models\PricingPlan::all();
+
+        return view('admin.memberships.index', compact('transactions', 'stats', 'pricing_plans'));
     }
 
     public function show(MembershipTransaction $membershipTransaction)
