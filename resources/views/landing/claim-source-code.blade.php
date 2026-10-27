@@ -41,66 +41,67 @@
 }">
 
     <!-- Top Navbar Minimal -->
-    <nav class="h-20 bg-white/90 backdrop-blur-md border-b border-[#E2E8F0] sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-            <a href="{{ route('landing') }}" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#005B60] to-[#007A87] flex items-center justify-center text-white shadow-md shadow-[#007A87]/20 group-hover:scale-105 transition-transform">
-                    <i class="ti ti-bolt text-xl"></i>
+    <nav class="h-16 sm:h-20 bg-white/90 backdrop-blur-md border-b border-[#E2E8F0] sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto h-full px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2">
+            <a href="{{ route('landing') }}" class="flex items-center gap-2 sm:gap-3 group shrink-0 min-w-0">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-tr from-[#005B60] to-[#007A87] flex items-center justify-center text-white shadow-md shadow-[#007A87]/20 group-hover:scale-105 transition-transform shrink-0">
+                    <i class="ti ti-bolt text-lg sm:text-xl"></i>
                 </div>
-                <div>
-                    <span class="font-display font-black text-lg text-[#0F172A] tracking-tight block leading-none">
+                <div class="min-w-0">
+                    <span class="font-display font-black text-base sm:text-lg text-[#0F172A] tracking-tight block leading-none truncate">
                         {{ $settings['brand_name'] ?? 'PresensiGPS' }}
                     </span>
-                    <span class="text-[10px] text-[#007A87] font-extrabold uppercase tracking-widest mt-0.5 block">
+                    <span class="hidden sm:block text-[10px] text-[#007A87] font-extrabold uppercase tracking-widest mt-0.5 truncate">
                         Portal Verifikasi Source Code
                     </span>
                 </div>
             </a>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
                 @auth
                     <a href="{{ route('member.dashboard') }}" 
-                       class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-700 transition-colors">
+                       class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-[11px] sm:text-xs font-bold text-gray-700 transition-colors">
                         <i class="ti ti-layout-dashboard text-sm"></i>
-                        <span>Dashboard Member</span>
+                        <span class="hidden sm:inline">Dashboard Member</span>
+                        <span class="sm:hidden">Dashboard</span>
                     </a>
                 @else
                     <a href="{{ route('login') }}" 
-                       class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:text-[#007A87] transition-colors">
-                        <span>Sudah Punya Akun?</span>
+                       class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold text-gray-600 hover:text-[#007A87] transition-colors">
+                        <span class="hidden sm:inline">Sudah Punya Akun?</span>
                         <span class="text-[#007A87] underline">Login</span>
                     </a>
                 @endauth
 
                 <a href="{{ route('landing') }}" 
-                   class="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl border border-gray-200 text-xs font-bold text-gray-600 hover:bg-gray-50 transition-colors">
+                   class="inline-flex items-center gap-1 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl border border-gray-200 text-[11px] sm:text-xs font-bold text-gray-600 hover:bg-gray-50 transition-colors">
                     <i class="ti ti-arrow-left text-sm"></i>
-                    <span>Kembali ke Beranda</span>
+                    <span class="hidden xs:inline sm:inline">Beranda</span>
                 </a>
             </div>
         </div>
     </nav>
 
     <!-- Main Content Body -->
-    <main class="py-10 lg:py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <main class="py-6 sm:py-10 lg:py-14 px-3.5 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         
         <!-- Header Banner -->
-        <div class="text-center max-w-3xl mx-auto mb-10">
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-[#007A87] text-xs font-bold uppercase tracking-wider mb-3">
-                <i class="ti ti-certificate text-base"></i>
+        <div class="text-center max-w-3xl mx-auto mb-6 sm:mb-10 px-2">
+            <div class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:py-1.5 rounded-full bg-teal-50 border border-teal-200 text-[#007A87] text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-2.5 sm:mb-3">
+                <i class="ti ti-certificate text-sm sm:text-base"></i>
                 <span>Verifikasi Pembelian On-Premise</span>
             </div>
-            <h1 class="font-display text-2xl sm:text-4xl font-black text-[#0F172A] tracking-tight leading-tight">
+            <h1 class="font-display text-xl sm:text-3xl lg:text-4xl font-black text-[#0F172A] tracking-tight leading-snug sm:leading-tight">
                 Klaim Pembaruan & Akses Repository Source Code
             </h1>
-            <p class="text-sm sm:text-base text-gray-500 mt-2.5 leading-relaxed font-medium">
+            <p class="text-xs sm:text-sm md:text-base text-gray-500 mt-2 sm:mt-2.5 leading-relaxed font-medium">
                 Pernah membeli paket Source Code kami baik secara langsung maupun via platform (Mayar, Lynk.id, CodeCanyon, dll.)? Daftarkan akun Anda, lampirkan bukti pembayaran, dan berikan ulasan singkat untuk mendapatkan link update versi terbaru.
             </p>
         </div>
 
         <!-- Alert Error If Any -->
         @if ($errors->any())
-            <div class="max-w-4xl mx-auto mb-8 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs">
+            <div class="max-w-4xl mx-auto mb-6 sm:mb-8 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs">
                 <div class="flex items-center gap-2 font-bold mb-1 text-sm">
                     <i class="ti ti-alert-triangle text-lg text-rose-600"></i>
                     <span>Terdapat kesalahan pada formulir pendaftaran:</span>
@@ -114,7 +115,7 @@
         @endif
 
         @if (session('info'))
-            <div class="max-w-4xl mx-auto mb-8 p-4 rounded-2xl bg-blue-50 border border-blue-200 text-blue-800 flex items-center justify-between text-xs font-bold">
+            <div class="max-w-4xl mx-auto mb-6 sm:mb-8 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-blue-50 border border-blue-200 text-blue-800 flex items-center justify-between text-xs font-bold">
                 <div class="flex items-center gap-2">
                     <i class="ti ti-info-circle text-lg text-blue-600"></i>
                     <span>{{ session('info') }}</span>
@@ -122,36 +123,36 @@
             </div>
         @endif
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start max-w-6xl mx-auto">
             
             <!-- Left Column: The Claim Form (8 Cols) -->
-            <div class="lg:col-span-8 bg-white rounded-3xl border border-[#E2E8F0] shadow-sm p-6 sm:p-8">
+            <div class="lg:col-span-8 bg-white rounded-2xl sm:rounded-3xl border border-[#E2E8F0] shadow-sm p-4 sm:p-6 lg:p-8">
                 <form action="{{ route('source-code-claim.store') }}" 
                       method="POST" 
                       enctype="multipart/form-data" 
-                      class="space-y-8">
+                      class="space-y-6 sm:space-y-8">
                     @csrf
 
                     <!-- Section 1: Informasi Akun / Pembeli -->
                     <div class="space-y-4">
                         <div class="flex items-center gap-2.5 pb-3 border-b border-gray-100">
                             <span class="w-6 h-6 rounded-full bg-teal-50 text-[#007A87] font-bold text-xs flex items-center justify-center">1</span>
-                            <h3 class="text-sm font-bold text-[#0F172A] uppercase tracking-wide">Data Akun & Identitas Member</h3>
+                            <h3 class="text-xs sm:text-sm font-bold text-[#0F172A] uppercase tracking-wide">Data Akun & Identitas Member</h3>
                         </div>
 
                         @auth
                             <input type="hidden" name="name" value="{{ auth()->user()->name }}">
-                            <div class="p-4 rounded-2xl bg-teal-50/60 border border-teal-200/80 flex items-center justify-between">
+                            <div class="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-teal-50/60 border border-teal-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-xl bg-[#007A87] text-white flex items-center justify-center font-bold text-sm">
+                                    <div class="w-10 h-10 rounded-xl bg-[#007A87] text-white flex items-center justify-center font-bold text-sm shrink-0">
                                         {{ substr(auth()->user()->name, 0, 1) }}
                                     </div>
-                                    <div>
-                                        <p class="text-xs font-bold text-gray-900">{{ auth()->user()->name }}</p>
-                                        <p class="text-[11px] text-gray-500">{{ auth()->user()->email }}</p>
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-bold text-gray-900 truncate">{{ auth()->user()->name }}</p>
+                                        <p class="text-[11px] text-gray-500 truncate">{{ auth()->user()->email }}</p>
                                     </div>
                                 </div>
-                                <span class="px-2.5 py-1 rounded-lg bg-white border border-teal-200 text-[#007A87] text-[10.5px] font-bold">
+                                <span class="self-start sm:self-auto px-2.5 py-1 rounded-lg bg-white border border-teal-200 text-[#007A87] text-[10.5px] font-bold shrink-0">
                                     Sedang Login
                                 </span>
                             </div>
@@ -370,7 +371,7 @@
                     <div class="space-y-4">
                         <div class="flex items-center gap-2.5 pb-3 border-b border-gray-100">
                             <span class="w-6 h-6 rounded-full bg-teal-50 text-[#007A87] font-bold text-xs flex items-center justify-center">3</span>
-                            <h3 class="text-sm font-bold text-[#0F172A] uppercase tracking-wide">Testimoni & Ulasan Aplikasi</h3>
+                            <h3 class="text-xs sm:text-sm font-bold text-[#0F172A] uppercase tracking-wide">Testimoni & Ulasan Aplikasi</h3>
                         </div>
 
                         <!-- Rating Bintang Interaktif -->
@@ -380,18 +381,20 @@
                             </label>
                             <input type="hidden" name="rating" :value="rating">
                             
-                            <div class="flex items-center gap-2">
-                                <template x-for="i in 5">
-                                    <button type="button" 
-                                            @click="rating = i" 
-                                            @mouseenter="hoverRating = i" 
-                                            @mouseleave="hoverRating = 0"
-                                            class="p-1 text-2xl transition-transform hover:scale-125 focus:outline-none cursor-pointer"
-                                            :class="(hoverRating || rating) >= i ? 'text-amber-400' : 'text-gray-300'">
-                                        <i class="ti ti-star-filled"></i>
-                                    </button>
-                                </template>
-                                <span class="ml-2 text-xs font-extrabold text-[#0F172A]" 
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                                <div class="flex items-center gap-1 sm:gap-2">
+                                    <template x-for="i in 5">
+                                        <button type="button" 
+                                                @click="rating = i" 
+                                                @mouseenter="hoverRating = i" 
+                                                @mouseleave="hoverRating = 0"
+                                                class="p-1 text-2xl sm:text-3xl transition-transform hover:scale-125 focus:outline-none cursor-pointer"
+                                                :class="(hoverRating || rating) >= i ? 'text-amber-400' : 'text-gray-300'">
+                                            <i class="ti ti-star-filled"></i>
+                                        </button>
+                                    </template>
+                                </div>
+                                <span class="text-xs font-extrabold text-[#0F172A]" 
                                       x-text="rating === 5 ? '5/5 (Sangat Puas & Rekomended)' : (rating === 4 ? '4/5 (Puas)' : (rating === 3 ? '3/5 (Cukup)' : rating + '/5'))">
                                 </span>
                             </div>
@@ -428,8 +431,8 @@
                             <label class="block text-xs font-bold text-gray-700 mb-1">
                                 Foto Profil / Avatar (Opsional untuk Testimoni)
                             </label>
-                            <div class="flex items-center gap-4">
-                                <label for="avatar" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-700 cursor-pointer transition-colors">
+                            <div class="flex flex-wrap items-center gap-3">
+                                <label for="avatar" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-700 cursor-pointer transition-colors shrink-0">
                                     <i class="ti ti-camera text-sm text-[#007A87]"></i>
                                     <span>Pilih Foto</span>
                                     <input type="file" 
@@ -447,7 +450,7 @@
                                 </label>
                                 <template x-if="avatarPreview">
                                     <div class="flex items-center gap-2">
-                                        <img :src="avatarPreview" class="w-9 h-9 rounded-full object-cover border border-teal-200">
+                                        <img :src="avatarPreview" class="w-9 h-9 rounded-full object-cover border border-teal-200 shrink-0">
                                         <span class="text-[11px] text-teal-700 font-semibold">Foto siap digunakan</span>
                                     </div>
                                 </template>
@@ -473,9 +476,9 @@
                     <!-- Tombol Submit -->
                     <div class="pt-2">
                         <button type="submit" 
-                                class="w-full py-3.5 px-6 rounded-2xl bg-[#007A87] hover:bg-[#005B60] text-white text-sm font-bold shadow-lg shadow-[#007A87]/25 hover:shadow-[#007A87]/35 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98">
+                                class="w-full py-3.5 px-4 sm:px-6 rounded-xl sm:rounded-2xl bg-[#007A87] hover:bg-[#005B60] text-white text-xs sm:text-sm font-bold shadow-lg shadow-[#007A87]/25 hover:shadow-[#007A87]/35 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98">
                             <i class="ti ti-send text-base"></i>
-                            <span>Kirim Permohonan Verifikasi & Klaim Akses</span>
+                            <span class="truncate">Kirim Permohonan Verifikasi & Klaim Akses</span>
                         </button>
                     </div>
 
@@ -483,18 +486,18 @@
             </div>
 
             <!-- Right Column: Verification Steps & FAQ (4 Cols) -->
-            <div class="lg:col-span-4 space-y-6 lg:sticky lg:top-28">
+            <div class="lg:col-span-4 space-y-4 sm:space-y-6 lg:sticky lg:top-28">
                 
                 <!-- Card 1: Tahapan Verifikasi -->
-                <div class="bg-white rounded-3xl border border-[#E2E8F0] shadow-sm p-6 space-y-5">
+                <div class="bg-white rounded-2xl sm:rounded-3xl border border-[#E2E8F0] shadow-sm p-4 sm:p-6 space-y-4 sm:space-y-5">
                     <div class="flex items-center gap-2 pb-3 border-b border-gray-100">
-                        <div class="w-8 h-8 rounded-xl bg-teal-50 text-[#007A87] flex items-center justify-center font-bold text-sm">
+                        <div class="w-8 h-8 rounded-xl bg-teal-50 text-[#007A87] flex items-center justify-center font-bold text-sm shrink-0">
                             <i class="ti ti-shield-check text-lg"></i>
                         </div>
                         <h4 class="text-xs font-bold text-[#0F172A] uppercase tracking-wider">Bagaimana Prosesnya?</h4>
                     </div>
 
-                    <div class="space-y-4 text-xs">
+                    <div class="space-y-3.5 sm:space-y-4 text-xs">
                         <div class="flex items-start gap-3">
                             <span class="w-6 h-6 rounded-full bg-teal-100 text-[#007A87] font-black text-[11px] flex items-center justify-center shrink-0 mt-0.5">1</span>
                             <div>
@@ -522,7 +525,7 @@
                 </div>
 
                 <!-- Card 2: Keuntungan Member Terverifikasi -->
-                <div class="bg-gradient-to-br from-[#005B60] via-[#006D75] to-[#007A87] text-white rounded-3xl p-6 shadow-md shadow-teal-900/10 space-y-4">
+                <div class="bg-gradient-to-br from-[#005B60] via-[#006D75] to-[#007A87] text-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-md shadow-teal-900/10 space-y-4">
                     <div class="flex items-center gap-2">
                         <i class="ti ti-sparkles text-xl text-teal-200"></i>
                         <h4 class="text-xs font-black uppercase tracking-wider text-teal-100">Fasilitas Pemilik Lisensi</h4>
@@ -549,7 +552,7 @@
                 </div>
 
                 <!-- Card 3: Bantuan Langsung WhatsApp -->
-                <div class="bg-white rounded-3xl border border-[#E2E8F0] shadow-sm p-6 text-center space-y-3">
+                <div class="bg-white rounded-2xl sm:rounded-3xl border border-[#E2E8F0] shadow-sm p-4 sm:p-6 text-center space-y-3">
                     <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto text-xl">
                         <i class="ti ti-brand-whatsapp"></i>
                     </div>
@@ -574,7 +577,7 @@
     </main>
 
     <!-- Footer Simple -->
-    <footer class="py-8 border-t border-[#E2E8F0] text-center text-xs text-gray-400">
+    <footer class="py-6 sm:py-8 px-4 border-t border-[#E2E8F0] text-center text-xs text-gray-400">
         <p>© {{ date('Y') }} {{ $settings['brand_name'] ?? 'PresensiGPS' }}. Seluruh hak cipta dilindungi.</p>
     </footer>
 

@@ -76,6 +76,8 @@ Route::middleware('auth')->group(function () {
 });
 
 // Source Code Claim (Registration & Verification for Source Code Buyers)
+Route::redirect('/klaimsource', '/klaim-source-code');
+Route::redirect('/klaim-source', '/klaim-source-code');
 Route::get('/klaim-source-code', [\App\Http\Controllers\SourceCodeClaimController::class, 'create'])->name('source-code-claim.create');
 Route::post('/klaim-source-code', [\App\Http\Controllers\SourceCodeClaimController::class, 'store'])->name('source-code-claim.store');
 

@@ -183,11 +183,18 @@
                     </div>
                 </a>
 
-                <!-- Collapse Toggle Button [ | ] -->
+                <!-- Collapse Toggle Button [ | ] for Desktop -->
                 <button @click="sidebarCollapsed = !sidebarCollapsed" 
                         class="hidden lg:flex w-7 h-7 items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer"
                         title="Toggle Sidebar">
                     <i class="ti ti-layout-sidebar-left-collapse text-base" :class="{ 'rotate-180': sidebarCollapsed }"></i>
+                </button>
+
+                <!-- Close Button for Mobile Drawer -->
+                <button @click="mobileOpen = false" 
+                        class="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer"
+                        title="Tutup Menu">
+                    <i class="ti ti-x text-lg"></i>
                 </button>
             </div>
 
@@ -285,11 +292,11 @@
         <div class="flex-1 flex flex-col min-w-0 min-h-screen">
             
             <!-- Top Navbar -->
-            <header class="h-16 bg-white border-b border-[#F1F5F9] px-4 lg:px-6 sticky top-0 z-30 flex items-center justify-between">
+            <header class="h-14 sm:h-16 bg-white border-b border-[#F1F5F9] px-3 sm:px-6 sticky top-0 z-30 flex items-center justify-between">
                 
                 <!-- Left: Mobile Toggle -->
-                <div class="flex items-center gap-3">
-                    <button @click="mobileOpen = true" class="lg:hidden p-2 text-gray-500 hover:text-[#007A87] rounded-lg cursor-pointer">
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <button @click="mobileOpen = true" class="lg:hidden p-1.5 sm:p-2 text-gray-500 hover:text-[#007A87] rounded-lg cursor-pointer">
                         <i class="ti ti-menu-2 text-xl"></i>
                     </button>
                     
@@ -299,7 +306,7 @@
                 </div>
 
                 <!-- Right: Quick Actions & Profile -->
-                <div class="flex items-center gap-3 ml-auto">
+                <div class="flex items-center gap-2 sm:gap-3 ml-auto">
                     
                     <!-- WhatsApp Assistance -->
                     <a href="https://wa.me/{{ $settings['whatsapp_number'] ?? '' }}" target="_blank" 
@@ -310,15 +317,16 @@
 
                     <!-- Prominent Soft Teal Pill: Live Site -->
                     <a href="{{ route('landing') }}" target="_blank" 
-                       class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#007A87] hover:bg-[#005B60] text-white text-xs font-bold shadow-sm shadow-[#007A87]/20 transition-all">
+                       class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-[#007A87] hover:bg-[#005B60] text-white text-xs font-bold shadow-sm shadow-[#007A87]/20 transition-all">
                         <i class="ti ti-sparkles text-sm"></i>
-                        <span>Live Site</span>
+                        <span class="hidden xs:inline">Live Site</span>
+                        <span class="xs:hidden">Live</span>
                     </a>
 
                     <!-- User Profile Dropdown -->
-                    <div class="relative ml-1" x-data="{ userMenu: false }">
-                        <button @click="userMenu = !userMenu" class="flex items-center gap-2 p-1 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
-                            <div class="w-8 h-8 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center text-[#007A87] font-bold text-xs uppercase">
+                    <div class="relative ml-0.5 sm:ml-1" x-data="{ userMenu: false }">
+                        <button @click="userMenu = !userMenu" class="flex items-center gap-1.5 sm:gap-2 p-1 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
+                            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center text-[#007A87] font-bold text-xs uppercase">
                                 {{ substr(Auth::user()->name ?? 'M', 0, 1) }}
                             </div>
                             <span class="text-xs font-semibold text-gray-700 hidden md:block">{{ Auth::user()->name }}</span>
@@ -330,7 +338,7 @@
                              x-cloak 
                              class="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-1.5 z-50">
                             <div class="px-4 py-2 border-b border-gray-100">
-                                <p class="text-xs font-bold text-gray-900">{{ Auth::user()->name }}</p>
+                                <p class="text-xs font-bold text-gray-900 truncate">{{ Auth::user()->name }}</p>
                                 <p class="text-[11px] text-gray-400 truncate">{{ Auth::user()->email }}</p>
                             </div>
                             <a href="{{ route('member.dashboard') }}" class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 hover:text-[#007A87]">
@@ -360,26 +368,26 @@
             </header>
 
             <!-- Page Content Body -->
-            <main class="flex-1 p-4 lg:p-6 custom-scroll">
+            <main class="flex-1 p-3 sm:p-5 lg:p-6 custom-scroll">
                 
                 <!-- Page Top Bar: Title, Subtitle & Breadcrumbs -->
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
                     <div>
-                        <h1 class="text-xl lg:text-2xl font-extrabold text-[#0F172A] tracking-tight">
+                        <h1 class="text-lg sm:text-xl lg:text-2xl font-extrabold text-[#0F172A] tracking-tight">
                             @yield('title', 'Member Dashboard')
                         </h1>
-                        <p class="text-xs text-[#64748B] mt-1 font-medium">
+                        <p class="text-xs text-[#64748B] mt-0.5 sm:mt-1 font-medium">
                             @yield('subtitle', 'Pantau lisensi aktif aplikasi, status sistem operasional, dan histori transaksi pembayaran Anda.')
                         </p>
                     </div>
 
                     <!-- Breadcrumbs & Actions -->
-                    <div class="flex items-center gap-2.5">
+                    <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
                         @hasSection('actions')
                             @yield('actions')
                         @endif
 
-                        <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#E2E8F0]/70 text-xs text-[#64748B] shadow-2xs font-medium">
+                        <div class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#E2E8F0]/70 text-xs text-[#64748B] shadow-2xs font-medium">
                             <a href="{{ route('member.dashboard') }}" class="hover:text-[#007A87] flex items-center gap-1">
                                 <i class="ti ti-home text-sm"></i>
                                 <span>Member</span>
@@ -392,36 +400,36 @@
 
                 <!-- Flash Message Alerts -->
                 @if(session('success'))
-                    <div class="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between" role="alert">
+                    <div class="mb-4 sm:mb-6 p-3.5 sm:p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between" role="alert">
                         <div class="flex items-center gap-2.5">
-                            <i class="ti ti-circle-check text-xl text-emerald-600"></i>
-                            <span class="text-sm font-semibold">{{ session('success') }}</span>
+                            <i class="ti ti-circle-check text-xl text-emerald-600 shrink-0"></i>
+                            <span class="text-xs sm:text-sm font-semibold">{{ session('success') }}</span>
                         </div>
-                        <button onclick="this.parentElement.remove()" class="text-emerald-500 hover:text-emerald-700 cursor-pointer">
+                        <button onclick="this.parentElement.remove()" class="text-emerald-500 hover:text-emerald-700 cursor-pointer p-1">
                             <i class="ti ti-x text-base"></i>
                         </button>
                     </div>
                 @endif
 
                 @if(session('error'))
-                    <div class="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 flex items-center justify-between" role="alert">
+                    <div class="mb-4 sm:mb-6 p-3.5 sm:p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 flex items-center justify-between" role="alert">
                         <div class="flex items-center gap-2.5">
-                            <i class="ti ti-alert-triangle text-xl text-rose-600"></i>
-                            <span class="text-sm font-semibold">{{ session('error') }}</span>
+                            <i class="ti ti-alert-triangle text-xl text-rose-600 shrink-0"></i>
+                            <span class="text-xs sm:text-sm font-semibold">{{ session('error') }}</span>
                         </div>
-                        <button onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-700 cursor-pointer">
+                        <button onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-700 cursor-pointer p-1">
                             <i class="ti ti-x text-base"></i>
                         </button>
                     </div>
                 @endif
 
                 @if(session('info'))
-                    <div class="mb-6 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 flex items-center justify-between" role="alert">
+                    <div class="mb-4 sm:mb-6 p-3.5 sm:p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 flex items-center justify-between" role="alert">
                         <div class="flex items-center gap-2.5">
-                            <i class="ti ti-info-circle text-xl text-blue-600"></i>
-                            <span class="text-sm font-semibold">{{ session('info') }}</span>
+                            <i class="ti ti-info-circle text-xl text-blue-600 shrink-0"></i>
+                            <span class="text-xs sm:text-sm font-semibold">{{ session('info') }}</span>
                         </div>
-                        <button onclick="this.parentElement.remove()" class="text-blue-500 hover:text-blue-700 cursor-pointer">
+                        <button onclick="this.parentElement.remove()" class="text-blue-500 hover:text-blue-700 cursor-pointer p-1">
                             <i class="ti ti-x text-base"></i>
                         </button>
                     </div>
@@ -433,7 +441,7 @@
             </main>
 
             <!-- Footer Minimal -->
-            <footer class="h-12 border-t border-[#F1F5F9] px-6 flex items-center justify-between text-[11px] text-[#64748B] bg-white shrink-0">
+            <footer class="py-3 sm:h-12 border-t border-[#F1F5F9] px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-[#64748B] bg-white shrink-0 text-center sm:text-left">
                 <div>
                     <span>© {{ date('Y') }} <strong>{{ $settings['brand_name'] ?? 'PresensiGPS' }}</strong>. Member Portal.</span>
                 </div>
