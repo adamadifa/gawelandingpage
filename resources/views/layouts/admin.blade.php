@@ -333,11 +333,7 @@
                         </button>
                     </form>
                 </div>
-                            <i class="ti ti-logout text-lg shrink-0 text-rose-500"></i>
-                            <span class="sidebar-text">Sign Out</span>
-                        </button>
-                    </form>
-                </div>
+
             </div>
         </aside>
 
