@@ -79,19 +79,29 @@
         .nav-item {
             display: flex;
             align-items: center;
-            padding: 5.5px 10px;
-            margin: 1px 8px;
+            gap: 9px;
+            padding: 5px 9px;
+            margin: 1px 6px;
             border-radius: 8px;
-            font-size: 12.5px;
+            font-size: 13px;
             font-weight: 500;
-            color: #64748B;
+            color: #475569;
             transition: all 0.15s ease;
             position: relative;
         }
 
+        .nav-item i {
+            color: #64748B;
+            transition: color 0.15s ease;
+        }
+
         .nav-item:hover {
-            background-color: #F0FDFA;
-            color: #007A87;
+            background-color: #F8FAFC;
+            color: #0F172A;
+        }
+
+        .nav-item:hover i {
+            color: #0F172A;
         }
 
         .nav-item.active {
@@ -99,7 +109,25 @@
             font-weight: 600;
             background-color: #F0FDFA;
             border: 1px solid #CCFBF1;
-            box-shadow: 0 1px 2px rgba(0, 122, 135, 0.04);
+            box-shadow: 0 1px 2px rgba(0, 122, 135, 0.05);
+        }
+
+        .nav-item.active i {
+            color: #007A87 !important;
+        }
+
+        .sidebar-section-title {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: #94A3B8;
+            padding: 5px 12px 1px 12px;
+        }
+
+        .sidebar .custom-scroll::-webkit-scrollbar-thumb {
+            background: #E2E8F0;
+        }
+        .sidebar .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #CBD5E1;
         }
 
         .card-clean {
@@ -132,32 +160,31 @@
          class="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-xs lg:hidden"></div>
 
     <div class="flex flex-1 min-h-screen">
-        <!-- Sidebar -->
+        <!-- Sidebar Clean Reference Style -->
         <aside id="sidebar" 
                :class="{ 
                    'collapsed': sidebarCollapsed, 
                    'translate-x-0': mobileOpen, 
                    '-translate-x-full lg:translate-x-0': !mobileOpen 
                }"
-               class="sidebar fixed lg:sticky top-0 left-0 h-screen z-50 lg:z-30 bg-white border-r border-[#F1F5F9] flex flex-col shrink-0 transition-all duration-300 ease-in-out">
+               class="sidebar fixed lg:sticky top-0 left-0 h-screen z-50 lg:z-30 bg-white border-r border-[#E2E8F0] flex flex-col shrink-0 transition-all duration-300 ease-in-out">
             
             <!-- Brand / Logo Area -->
             <div class="h-14 px-4 flex items-center justify-between border-b border-[#F1F5F9] shrink-0">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5 overflow-hidden">
-                    <!-- Clean Soft Green / Teal Logo Icon -->
-                    <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#005B60] to-[#007A87] flex items-center justify-center shrink-0 shadow-sm shadow-[#007A87]/25 text-white">
-                        <i class="ti ti-bolt text-base"></i>
+                    <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#005B60] to-[#007A87] flex items-center justify-center shrink-0 shadow-sm shadow-[#007A87]/20 text-white">
+                        <i class="ti ti-bolt text-lg"></i>
                     </div>
                     <div class="sidebar-text flex items-center whitespace-nowrap">
-                        <span class="text-[16px] font-extrabold tracking-tight text-[#0F172A]">{{ $settings['brand_name'] ?? 'PresensiGPS' }}</span>
+                        <span class="text-[15px] font-bold tracking-tight text-[#0F172A]">{{ $settings['brand_name'] ?? 'PresensiGPS' }}</span>
                     </div>
                 </a>
 
                 <!-- Collapse Toggle Button [ | ] -->
                 <button @click="sidebarCollapsed = !sidebarCollapsed" 
-                        class="hidden lg:flex w-6 h-6 items-center justify-center rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+                        class="hidden lg:flex w-7 h-7 items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer"
                         title="Toggle Sidebar">
-                    <i class="ti ti-layout-sidebar-left-collapse text-sm" :class="{ 'rotate-180': sidebarCollapsed }"></i>
+                    <i class="ti ti-layout-sidebar-left-collapse text-base" :class="{ 'rotate-180': sidebarCollapsed }"></i>
                 </button>
 
                 <!-- Mobile close button -->
@@ -167,118 +194,131 @@
             </div>
 
             <!-- Navigation Links -->
-            <div class="flex-1 overflow-y-auto custom-scroll py-2 space-y-2.5">
+            <div class="flex-1 overflow-y-auto custom-scroll py-1.5 space-y-1.5">
 
                 <!-- Section: MENU UTAMA -->
                 <div>
                     <a href="{{ route('admin.dashboard') }}" 
                        class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                        <i class="ti ti-layout-grid text-base mr-2 {{ request()->routeIs('admin.dashboard') ? 'text-[#007A87]' : 'text-gray-400' }}"></i>
+                        <i class="ti ti-layout-grid text-lg shrink-0"></i>
                         <span class="sidebar-text">Dashboard</span>
                     </a>
                 </div>
 
-                <!-- Section: MASTER DATA -->
+                <!-- Section: Master Data -->
                 <div>
-                    <div class="sidebar-section-title px-4 pt-1.5 pb-1 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                    <div class="sidebar-section-title">
                         Master Data
                     </div>
 
                     <a href="{{ route('admin.memberships.index') }}" 
                        class="nav-item {{ request()->routeIs('admin.memberships.*') ? 'active' : '' }}">
-                        <i class="ti ti-id-badge-2 text-base mr-2 {{ request()->routeIs('admin.memberships.*') ? 'text-[#007A87]' : 'text-gray-400' }}"></i>
+                        <i class="ti ti-id-badge-2 text-lg shrink-0"></i>
                         <span class="sidebar-text">Pelanggan & Member</span>
                     </a>
 
                     <a href="{{ route('admin.licenses.index') }}" 
                        class="nav-item {{ request()->routeIs('admin.licenses.*') ? 'active' : '' }}">
-                        <i class="ti ti-key text-base mr-2 {{ request()->routeIs('admin.licenses.*') ? 'text-[#007A87]' : 'text-gray-400' }}"></i>
+                        <i class="ti ti-key text-lg shrink-0"></i>
                         <span class="sidebar-text">Data Lisensi</span>
+                    </a>
+
+                    <a href="{{ route('admin.source-code-claims.index') }}" 
+                       class="nav-item {{ request()->routeIs('admin.source-code-claims.*') ? 'active' : '' }} flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="ti ti-code text-lg shrink-0"></i>
+                            <span class="sidebar-text">Klaim Source Code</span>
+                        </div>
+                        @if(!empty($pendingClaimsCount) && $pendingClaimsCount > 0)
+                            <span class="sidebar-text px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold text-[10px]">
+                                {{ $pendingClaimsCount }}
+                            </span>
+                        @endif
                     </a>
                 </div>
 
-                <!-- Section: LANDING PAGE CMS (Flat Grouping without Dropdown) -->
+                <!-- Section: Landing Page CMS -->
                 <div>
-                    <div class="sidebar-section-title px-4 pt-1.5 pb-1 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                    <div class="sidebar-section-title">
                         Landing Page CMS
                     </div>
 
                     <a href="{{ route('admin.hero-sections.index') }}" 
                        class="nav-item {{ request()->routeIs('admin.hero-sections.*') ? 'active' : '' }}">
-                        <i class="ti ti-layout-board text-base mr-2 {{ request()->routeIs('admin.hero-sections.*') ? 'text-[#007A87]' : 'text-gray-400' }}"></i>
+                        <i class="ti ti-layout-board text-lg shrink-0"></i>
                         <span class="sidebar-text">Hero Layout</span>
                     </a>
 
                     <a href="{{ route('admin.hero-stats-cards.index') }}" 
                        class="nav-item {{ request()->routeIs('admin.hero-stats-cards.*') ? 'active' : '' }}">
-                        <i class="ti ti-numbers text-base mr-2 {{ request()->routeIs('admin.hero-stats-cards.*') ? 'text-[#007A87]' : 'text-gray-400' }}"></i>
+                        <i class="ti ti-numbers text-lg shrink-0"></i>
                         <span class="sidebar-text">Counter Stats</span>
                     </a>
 
                     <a href="{{ route('admin.about-sections.index') }}" 
                        class="nav-item {{ request()->routeIs('admin.about-sections.*') ? 'active' : '' }}">
-                        <i class="ti ti-info-circle text-base mr-2 {{ request()->routeIs('admin.about-sections.*') ? 'text-[#007A87]' : 'text-gray-400' }}"></i>
+                        <i class="ti ti-info-circle text-lg shrink-0"></i>
                         <span class="sidebar-text">About Section</span>
                     </a>
 
                     <a href="{{ route('admin.feature-sections.index') }}" 
                        class="nav-item {{ request()->routeIs('admin.feature-sections.*') ? 'active' : '' }}">
-                        <i class="ti ti-layout-bottombar text-base mr-2 {{ request()->routeIs('admin.feature-sections.*') ? 'text-[#007A87]' : 'text-gray-400' }}"></i>
+                        <i class="ti ti-layout-bottombar text-lg shrink-0"></i>
                         <span class="sidebar-text">Feature Headers</span>
                     </a>
 
                     <a href="{{ route('admin.features.index') }}" 
                        class="nav-item {{ request()->routeIs('admin.features.*') ? 'active' : '' }}">
-                        <i class="ti ti-list-check text-base mr-2 {{ request()->routeIs('admin.features.*') ? 'text-[#007A87]' : 'text-gray-400' }}"></i>
+                        <i class="ti ti-list-check text-lg shrink-0"></i>
                         <span class="sidebar-text">Feature List</span>
                     </a>
 
                     <a href="{{ route('admin.pricing-plans.index') }}" 
                        class="nav-item {{ request()->routeIs('admin.pricing-plans.*') ? 'active' : '' }}">
-                        <i class="ti ti-tag text-base mr-2 {{ request()->routeIs('admin.pricing-plans.*') ? 'text-[#007A87]' : 'text-gray-400' }}"></i>
+                        <i class="ti ti-tag text-lg shrink-0"></i>
                         <span class="sidebar-text">Pricing Plans</span>
                     </a>
 
                     <a href="{{ route('admin.faq-sections.index') }}" 
                        class="nav-item {{ request()->routeIs('admin.faq-sections.*') ? 'active' : '' }}">
-                        <i class="ti ti-help-hexagon text-base mr-2 {{ request()->routeIs('admin.faq-sections.*') ? 'text-[#007A87]' : 'text-gray-400' }}"></i>
+                        <i class="ti ti-help-hexagon text-lg shrink-0"></i>
                         <span class="sidebar-text">FAQ Settings</span>
                     </a>
 
                     <a href="{{ route('admin.faqs.index') }}" 
                        class="nav-item {{ request()->routeIs('admin.faqs.*') ? 'active' : '' }}">
-                        <i class="ti ti-help-circle text-base mr-2 {{ request()->routeIs('admin.faqs.*') ? 'text-[#007A87]' : 'text-gray-400' }}"></i>
+                        <i class="ti ti-help-circle text-lg shrink-0"></i>
                         <span class="sidebar-text">FAQ Questions</span>
                     </a>
 
                     <a href="{{ route('admin.trusted-companies.index') }}" 
                        class="nav-item {{ request()->routeIs('admin.trusted-companies.*') ? 'active' : '' }}">
-                        <i class="ti ti-building-store text-base mr-2 {{ request()->routeIs('admin.trusted-companies.*') ? 'text-[#007A87]' : 'text-gray-400' }}"></i>
+                        <i class="ti ti-building-store text-lg shrink-0"></i>
                         <span class="sidebar-text">Partner Logos</span>
                     </a>
 
                     <a href="{{ route('admin.testimonials.index') }}" 
                        class="nav-item {{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}">
-                        <i class="ti ti-message-2-star text-base mr-2 {{ request()->routeIs('admin.testimonials.*') ? 'text-[#007A87]' : 'text-gray-400' }}"></i>
+                        <i class="ti ti-message-2-star text-lg shrink-0"></i>
                         <span class="sidebar-text">Testimonials</span>
                     </a>
                 </div>
 
-                <!-- Section: PENGATURAN -->
+                <!-- Section: Pengaturan -->
                 <div>
-                    <div class="sidebar-section-title px-4 pt-1.5 pb-1 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                    <div class="sidebar-section-title">
                         Pengaturan
                     </div>
 
                     <a href="{{ route('admin.site-settings.index') }}" 
                        class="nav-item {{ request()->routeIs('admin.site-settings.*') ? 'active' : '' }}">
-                        <i class="ti ti-settings text-base mr-2 {{ request()->routeIs('admin.site-settings.*') ? 'text-[#007A87]' : 'text-gray-400' }}"></i>
+                        <i class="ti ti-settings text-lg shrink-0"></i>
                         <span class="sidebar-text">Site Settings</span>
                     </a>
 
                     <a href="{{ route('profile.edit') }}" 
                        class="nav-item {{ request()->routeIs('profile.*') ? 'active' : '' }}">
-                        <i class="ti ti-user text-base mr-2 {{ request()->routeIs('profile.*') ? 'text-[#007A87]' : 'text-gray-400' }}"></i>
+                        <i class="ti ti-user text-lg shrink-0"></i>
                         <span class="sidebar-text">Profil Admin</span>
                     </a>
                 </div>
@@ -287,8 +327,13 @@
                 <div class="pt-1 pb-4">
                     <form method="POST" action="{{ route('logout') }}" id="sidebar-logout-form">
                         @csrf
-                        <button type="submit" class="w-[calc(100%-16px)] nav-item text-rose-500 hover:bg-rose-50 hover:text-rose-600 cursor-pointer">
-                            <i class="ti ti-logout text-base mr-2"></i>
+                        <button type="submit" class="w-[calc(100%-12px)] nav-item text-slate-600 hover:bg-rose-50 hover:text-rose-600 cursor-pointer group">
+                            <i class="ti ti-logout text-lg shrink-0 text-slate-400 group-hover:text-rose-500"></i>
+                            <span class="sidebar-text">Keluar (Sign Out)</span>
+                        </button>
+                    </form>
+                </div>
+                            <i class="ti ti-logout text-lg shrink-0 text-rose-500"></i>
                             <span class="sidebar-text">Sign Out</span>
                         </button>
                     </form>

@@ -5,244 +5,448 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }} - Member Area</title>
+    <title>{{ config('app.name', 'Gawe') }} - @yield('title', 'Member Dashboard')</title>
 
-    <!-- Fonts -->
+    <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Tabler Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     
-    <!-- CSS -->
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Vite Assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
+
     <style>
         :root {
-            --primary: #10B981;
-            --sidebar-width: 290px;
+            --primary: #007A87;
+            --primary-hover: #006570;
+            --sidebar-width: 250px;
+            --sidebar-collapsed-width: 76px;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #F0F7F4; /* Soft Emerald Stronger */
-            color: #1F2937;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8FAFC;
+            color: #334155;
         }
 
-        .font-display { font-family: 'Poppins', sans-serif; }
-
-        .sidebar {
-            width: var(--sidebar-width);
-            background: #06221C; /* Soft Dark Green */
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
-            min-height: 100vh;
-        }
-
-        .sidebar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 200px;
-            background: radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            margin: 4px 16px;
-            border-radius: 12px;
-            color: #94A3B8; /* Slate 400 */
-            font-weight: 600;
-            font-size: 13px;
-            white-space: nowrap;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.03);
-            color: white;
-            padding-left: 20px;
-        }
-
-        .nav-link i {
-            font-size: 1.3rem;
-            margin-right: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 20px;
-            transition: transform 0.3s;
-        }
-
-        .nav-link:hover i {
-            transform: scale(1.1);
-            color: #10B981; /* Brand Green */
-        }
-
-        .nav-link.active {
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-            color: white;
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.25);
-        }
-
-        .nav-link.active i {
-            color: white !important;
-        }
-
-        .main-content {
-            flex: 1;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header {
-            height: 64px;
-            background: white;
-            border-bottom: 1px solid #F1F5F9;
-            padding: 0 24px;
-            position: sticky;
-            top: 0;
-            z-index: 40;
-        }
+        .font-display { font-family: 'Outfit', sans-serif; }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-
-        @media (max-width: 1024px) {
-            .sidebar { transform: translateX(-100%); position: fixed; z-index: 50; height: 100vh; }
-            .sidebar.open { transform: translateX(0); }
+        .custom-scroll::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #E2E8F0;
+            border-radius: 9999px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #CBD5E1;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Sidebar Nav Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .animate-fade-in {
-            animation: fadeIn 0.4s ease-out forwards;
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+        }
+
+        .sidebar.collapsed .sidebar-text,
+        .sidebar.collapsed .chevron-icon,
+        .sidebar.collapsed .sidebar-section-title,
+        .sidebar.collapsed .sidebar-footer {
+            display: none !important;
+        }
+
+        .sidebar.collapsed .nav-item {
+            justify-content: center;
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: 6px;
+            margin-right: 6px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 5px 9px;
+            margin: 1px 6px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #475569;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .nav-item i {
+            color: #64748B;
+            transition: color 0.15s ease;
+        }
+
+        .nav-item:hover {
+            background-color: #F8FAFC;
+            color: #0F172A;
+        }
+
+        .nav-item:hover i {
+            color: #0F172A;
+        }
+
+        .nav-item.active {
+            color: #007A87;
+            font-weight: 600;
+            background-color: #F0FDFA;
+            border: 1px solid #CCFBF1;
+            box-shadow: 0 1px 2px rgba(0, 122, 135, 0.05);
+        }
+
+        .nav-item.active i {
+            color: #007A87 !important;
+        }
+
+        .sidebar-section-title {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: #94A3B8;
+            padding: 5px 12px 1px 12px;
+        }
+
+        .sidebar .custom-scroll::-webkit-scrollbar-thumb {
+            background: #E2E8F0;
+        }
+        .sidebar .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #CBD5E1;
+        }
+
+        .card-clean {
+            background: #FFFFFF;
+            border: 1px solid #F1F5F9;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .card-clean:hover {
+            box-shadow: 0 4px 14px -3px rgba(15, 23, 42, 0.06);
         }
 
         [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="flex">
-    <!-- Sidebar -->
-    <aside id="sidebar" class="sidebar shrink-0 sticky top-0 overflow-y-auto hidden lg:flex flex-col">
-        <div class="px-3 pt-12 pb-8">
-            <a href="/" class="flex items-center gap-3 mb-16 px-4 group">
-                <div class="w-12 h-12 flex items-center justify-center overflow-hidden transition-all duration-500 group-hover:scale-110 group-hover:rotate-6">
-                    @if(isset($settings['brand_logo']) && $settings['brand_logo'])
-                        <img src="{{ asset('storage/' . $settings['brand_logo']) }}" alt="Logo" class="w-full h-full object-contain">
-                    @else
-                        <div class="w-full h-full bg-brand-600 rounded-2xl flex items-center justify-center shadow-lg shadow-brand-600/20 border-2 border-white/20">
-                            <span class="text-white font-display font-bold text-xl leading-none uppercase">{{ substr($settings['brand_name'] ?? 'W', 0, 1) }}</span>
-                        </div>
-                    @endif
-                </div>
-                <div class="flex flex-col leading-tight">
-                    <span class="font-display text-lg font-bold text-white group-hover:text-brand-400 transition-colors tracking-tight uppercase">
-                        {{ $settings['brand_name'] ?? 'PresensiGPS V2' }}
-                    </span>
-                </div>
-            </a>
+<body class="min-h-screen bg-[#F8FAFC] text-[#334155] antialiased flex flex-col" x-data="{ sidebarCollapsed: false, mobileOpen: false }">
 
-            <div class="space-y-6">
-                {{-- Main Menu --}}
-                <div class="space-y-1">
-                    <div class="px-7 mb-3 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Pusat Bisnis</div>
-                    <a href="{{ route('member.dashboard') }}" class="nav-link {{ request()->routeIs('member.dashboard') ? 'active' : '' }}">
-                        <i class="ti ti-layout-dashboard text-xl mr-3"></i>
-                        <span>My Dashboard</span>
+    <!-- Mobile Sidebar Backdrop -->
+    <div x-show="mobileOpen" 
+         x-cloak
+         x-transition:enter="transition-opacity ease-linear duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition-opacity ease-linear duration-300"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         @click="mobileOpen = false" 
+         class="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-xs lg:hidden"></div>
+
+    <div class="flex flex-1 min-h-screen">
+        
+        <!-- Sidebar Clean Reference Style -->
+        <aside id="sidebar" 
+               :class="{ 
+                   'collapsed': sidebarCollapsed, 
+                   'translate-x-0': mobileOpen, 
+                   '-translate-x-full lg:translate-x-0': !mobileOpen 
+               }"
+               class="sidebar fixed lg:sticky top-0 left-0 h-screen z-50 lg:z-30 bg-white border-r border-[#E2E8F0] flex flex-col shrink-0 transition-all duration-300 ease-in-out">
+            
+            <!-- Brand / Logo Area -->
+            <div class="h-16 px-4 flex items-center justify-between border-b border-[#F1F5F9] shrink-0">
+                <a href="{{ route('member.dashboard') }}" class="flex items-center gap-2.5 overflow-hidden">
+                    <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#005B60] to-[#007A87] flex items-center justify-center shrink-0 shadow-sm shadow-[#007A87]/20 text-white">
+                        <i class="ti ti-bolt text-lg"></i>
+                    </div>
+                    <div class="sidebar-text flex items-center whitespace-nowrap">
+                        <span class="text-[15px] font-bold tracking-tight text-[#0F172A]">{{ $settings['brand_name'] ?? 'PresensiGPS' }}</span>
+                    </div>
+                </a>
+
+                <!-- Collapse Toggle Button [ | ] -->
+                <button @click="sidebarCollapsed = !sidebarCollapsed" 
+                        class="hidden lg:flex w-7 h-7 items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer"
+                        title="Toggle Sidebar">
+                    <i class="ti ti-layout-sidebar-left-collapse text-base" :class="{ 'rotate-180': sidebarCollapsed }"></i>
+                </button>
+            </div>
+
+            <!-- Sidebar Navigation Links -->
+            <div class="flex-1 overflow-y-auto custom-scroll py-1.5 space-y-1.5">
+
+                <!-- Section: Menu Utama -->
+                <div>
+                    <div class="sidebar-section-title">
+                        Menu Utama
+                    </div>
+
+                    <a href="{{ route('member.dashboard') }}" 
+                       class="nav-item {{ request()->routeIs('member.dashboard') ? 'active' : '' }}">
+                        <i class="ti ti-layout-grid text-lg shrink-0"></i>
+                        <span class="sidebar-text">Dashboard</span>
                     </a>
-                    <a href="{{ route('landing') }}#pricing" class="nav-link">
-                        <i class="ti ti-shopping-cart text-xl mr-3"></i>
-                        <span>Explore Plans</span>
+
+                    <a href="{{ route('member.source-code') }}" 
+                       class="nav-item {{ request()->routeIs('member.source-code') ? 'active' : '' }}">
+                        <i class="ti ti-code text-lg shrink-0"></i>
+                        <span class="sidebar-text">Akses Source Code</span>
+                    </a>
+
+                    <a href="{{ route('landing') }}#pricing" 
+                       class="nav-item">
+                        <i class="ti ti-shopping-cart text-lg shrink-0"></i>
+                        <span class="sidebar-text">Beli Lisensi Baru</span>
                     </a>
                 </div>
 
-                {{-- Support Section --}}
-                <div class="space-y-1 pb-10">
-                    <div class="px-7 mb-3 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Bantuan Cepat</div>
-                    <a href="https://wa.me/{{ $settings['whatsapp_number'] ?? '' }}" target="_blank" class="nav-link">
-                        <i class="ti ti-headset text-xl mr-3"></i>
-                        <span>Technical Support</span>
+                <!-- Section: Bantuan & Layanan -->
+                <div>
+                    <div class="sidebar-section-title">
+                        Bantuan & Layanan
+                    </div>
+
+                    <a href="https://wa.me/{{ $settings['whatsapp_number'] ?? '' }}?text=Halo%20Admin,%20saya%20member%20membutuhkan%20bantuan" 
+                       target="_blank" 
+                       class="nav-item">
+                        <i class="ti ti-brand-whatsapp text-lg shrink-0"></i>
+                        <span class="sidebar-text">Technical Support</span>
                     </a>
-                    
-                    <form method="POST" action="{{ route('logout') }}" id="logout-form">
+
+                    <a href="{{ route('landing') }}" 
+                       target="_blank" 
+                       class="nav-item">
+                        <i class="ti ti-world text-lg shrink-0"></i>
+                        <span class="sidebar-text">Lihat Live Website</span>
+                    </a>
+                </div>
+
+                <!-- Section: Akun Pengguna -->
+                <div>
+                    <div class="sidebar-section-title">
+                        Akun Pengguna
+                    </div>
+
+                    <a href="{{ route('profile.edit') }}" 
+                       class="nav-item {{ request()->routeIs('profile.*') ? 'active' : '' }}">
+                        <i class="ti ti-user text-lg shrink-0"></i>
+                        <span class="sidebar-text">Profil Pengguna</span>
+                    </a>
+                </div>
+
+                <!-- Section: SIGN OUT -->
+                <div class="pt-0.5 pb-2">
+                    <form method="POST" action="{{ route('logout') }}" id="sidebar-logout-form">
                         @csrf
-                        <button type="submit" class="nav-link w-[calc(100%-32px)] text-left text-rose-500 hover:bg-rose-500/10 border-none cursor-pointer mt-4 group/logout transition-all duration-300">
-                            <i class="ti ti-power text-xl mr-3 group-hover/logout:rotate-90 transition-transform"></i>
-                            <span class="group-hover/logout:translate-x-1">Sign Out</span>
+                        <button type="submit" class="w-[calc(100%-12px)] nav-item text-slate-600 hover:bg-rose-50 hover:text-rose-600 cursor-pointer group">
+                            <i class="ti ti-logout text-lg shrink-0 text-slate-400 group-hover:text-rose-500"></i>
+                            <span class="sidebar-text">Keluar (Sign Out)</span>
                         </button>
                     </form>
                 </div>
+
             </div>
+
+            <!-- Sidebar Footer (Profile Summary) -->
+            <div class="sidebar-footer p-3 border-t border-[#F1F5F9] bg-[#F8FAFC] shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center text-[#007A87] font-bold text-xs uppercase shrink-0">
+                        {{ substr(Auth::user()->name ?? 'M', 0, 1) }}
+                    </div>
+                    <div class="overflow-hidden leading-tight flex-1">
+                        <p class="text-xs font-bold text-gray-800 truncate">{{ Auth::user()->name }}</p>
+                        <p class="text-[11px] text-gray-400 truncate">{{ Auth::user()->email }}</p>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- Main Content Area Wrapper -->
+        <div class="flex-1 flex flex-col min-w-0 min-h-screen">
+            
+            <!-- Top Navbar -->
+            <header class="h-16 bg-white border-b border-[#F1F5F9] px-4 lg:px-6 sticky top-0 z-30 flex items-center justify-between">
+                
+                <!-- Left: Mobile Toggle -->
+                <div class="flex items-center gap-3">
+                    <button @click="mobileOpen = true" class="lg:hidden p-2 text-gray-500 hover:text-[#007A87] rounded-lg cursor-pointer">
+                        <i class="ti ti-menu-2 text-xl"></i>
+                    </button>
+                    
+                    <span class="text-xs font-medium text-slate-500 hidden sm:inline-block">
+                        Area Member
+                    </span>
+                </div>
+
+                <!-- Right: Quick Actions & Profile -->
+                <div class="flex items-center gap-3 ml-auto">
+                    
+                    <!-- WhatsApp Assistance -->
+                    <a href="https://wa.me/{{ $settings['whatsapp_number'] ?? '' }}" target="_blank" 
+                       class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-gray-200 text-gray-600 hover:text-emerald-700 hover:bg-emerald-50 text-xs font-bold transition-all">
+                        <i class="ti ti-brand-whatsapp text-emerald-600 text-sm"></i>
+                        <span>Bantuan CS</span>
+                    </a>
+
+                    <!-- Prominent Soft Teal Pill: Live Site -->
+                    <a href="{{ route('landing') }}" target="_blank" 
+                       class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#007A87] hover:bg-[#005B60] text-white text-xs font-bold shadow-sm shadow-[#007A87]/20 transition-all">
+                        <i class="ti ti-sparkles text-sm"></i>
+                        <span>Live Site</span>
+                    </a>
+
+                    <!-- User Profile Dropdown -->
+                    <div class="relative ml-1" x-data="{ userMenu: false }">
+                        <button @click="userMenu = !userMenu" class="flex items-center gap-2 p-1 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
+                            <div class="w-8 h-8 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center text-[#007A87] font-bold text-xs uppercase">
+                                {{ substr(Auth::user()->name ?? 'M', 0, 1) }}
+                            </div>
+                            <span class="text-xs font-semibold text-gray-700 hidden md:block">{{ Auth::user()->name }}</span>
+                            <i class="ti ti-chevron-down text-xs text-gray-400 hidden sm:block"></i>
+                        </button>
+
+                        <div x-show="userMenu" 
+                             @click.outside="userMenu = false" 
+                             x-cloak 
+                             class="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-1.5 z-50">
+                            <div class="px-4 py-2 border-b border-gray-100">
+                                <p class="text-xs font-bold text-gray-900">{{ Auth::user()->name }}</p>
+                                <p class="text-[11px] text-gray-400 truncate">{{ Auth::user()->email }}</p>
+                            </div>
+                            <a href="{{ route('member.dashboard') }}" class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 hover:text-[#007A87]">
+                                <i class="ti ti-layout-grid text-base"></i>
+                                <span>Dashboard Saya</span>
+                            </a>
+                            <a href="{{ route('member.source-code') }}" class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 hover:text-[#007A87]">
+                                <i class="ti ti-code text-base"></i>
+                                <span>Akses Source Code</span>
+                            </a>
+                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 hover:text-[#007A87]">
+                                <i class="ti ti-user text-base"></i>
+                                <span>Profil Akun</span>
+                            </a>
+                            <div class="border-t border-gray-100 my-1"></div>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-xs font-semibold text-rose-500 hover:bg-rose-50 cursor-pointer">
+                                    <i class="ti ti-logout text-base"></i>
+                                    <span>Sign Out</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </header>
+
+            <!-- Page Content Body -->
+            <main class="flex-1 p-4 lg:p-6 custom-scroll">
+                
+                <!-- Page Top Bar: Title, Subtitle & Breadcrumbs -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                    <div>
+                        <h1 class="text-xl lg:text-2xl font-extrabold text-[#0F172A] tracking-tight">
+                            @yield('title', 'Member Dashboard')
+                        </h1>
+                        <p class="text-xs text-[#64748B] mt-1 font-medium">
+                            @yield('subtitle', 'Pantau lisensi aktif aplikasi, status sistem operasional, dan histori transaksi pembayaran Anda.')
+                        </p>
+                    </div>
+
+                    <!-- Breadcrumbs & Actions -->
+                    <div class="flex items-center gap-2.5">
+                        @hasSection('actions')
+                            @yield('actions')
+                        @endif
+
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#E2E8F0]/70 text-xs text-[#64748B] shadow-2xs font-medium">
+                            <a href="{{ route('member.dashboard') }}" class="hover:text-[#007A87] flex items-center gap-1">
+                                <i class="ti ti-home text-sm"></i>
+                                <span>Member</span>
+                            </a>
+                            <i class="ti ti-chevron-right text-[10px] text-gray-300"></i>
+                            <span class="text-[#0F172A] font-semibold">@yield('title', 'Dashboard')</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flash Message Alerts -->
+                @if(session('success'))
+                    <div class="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between" role="alert">
+                        <div class="flex items-center gap-2.5">
+                            <i class="ti ti-circle-check text-xl text-emerald-600"></i>
+                            <span class="text-sm font-semibold">{{ session('success') }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-emerald-500 hover:text-emerald-700 cursor-pointer">
+                            <i class="ti ti-x text-base"></i>
+                        </button>
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 flex items-center justify-between" role="alert">
+                        <div class="flex items-center gap-2.5">
+                            <i class="ti ti-alert-triangle text-xl text-rose-600"></i>
+                            <span class="text-sm font-semibold">{{ session('error') }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-700 cursor-pointer">
+                            <i class="ti ti-x text-base"></i>
+                        </button>
+                    </div>
+                @endif
+
+                @if(session('info'))
+                    <div class="mb-6 p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 flex items-center justify-between" role="alert">
+                        <div class="flex items-center gap-2.5">
+                            <i class="ti ti-info-circle text-xl text-blue-600"></i>
+                            <span class="text-sm font-semibold">{{ session('info') }}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="text-blue-500 hover:text-blue-700 cursor-pointer">
+                            <i class="ti ti-x text-base"></i>
+                        </button>
+                    </div>
+                @endif
+
+                <!-- Yield Content -->
+                @yield('content')
+
+            </main>
+
+            <!-- Footer Minimal -->
+            <footer class="h-12 border-t border-[#F1F5F9] px-6 flex items-center justify-between text-[11px] text-[#64748B] bg-white shrink-0">
+                <div>
+                    <span>© {{ date('Y') }} <strong>{{ $settings['brand_name'] ?? 'PresensiGPS' }}</strong>. Member Portal.</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="{{ route('landing') }}" class="hover:text-[#007A87]">Beranda</a>
+                    <a href="https://wa.me/{{ $settings['whatsapp_number'] ?? '' }}" target="_blank" class="hover:text-[#007A87]">Bantuan WhatsApp</a>
+                </div>
+            </footer>
+
         </div>
-    </aside>
 
-    <!-- Main Content Area -->
-    <main class="main-content">
-        {{-- Header --}}
-        <header class="header flex justify-between items-center bg-white border-b border-gray-100">
-            <div class="flex items-center gap-6">
-                <button id="toggle-sidebar" class="lg:hidden p-2 text-gray-400 hover:text-brand-600 transition-colors">
-                    <i class="ti ti-menu-2 text-2xl"></i>
-                </button>
-                <div class="hidden md:block">
-                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1 leading-none">Member Role</span>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-3 pr-4 group cursor-pointer">
-                <div class="text-right hidden md:block">
-                    <p class="text-sm font-bold text-gray-900 leading-none mb-1 group-hover:text-brand-600 transition-colors">{{ Auth::user()->name }}</p>
-                    <p class="text-[11px] font-medium text-gray-400 uppercase tracking-wider">Premium Member</p>
-                </div>
-                <div class="w-10 h-10 rounded-xl bg-brand-50 border-2 border-white p-0.5 shadow-sm group-hover:shadow-md transition-all">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=6366f1&color=fff&bold=true" class="w-full h-full rounded-lg object-cover" alt="Profile">
-                </div>
-            </div>
-        </header>
-
-        {{-- Main Page Content --}}
-        <div class="p-6 lg:p-8">
-            @yield('content')
-        </div>
-
-        {{-- Footer --}}
-        <footer class="mt-auto px-10 py-6 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-400 text-[13px] font-medium bg-white">
-            <p>&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
-            <div class="flex items-center gap-6">
-                <a href="#" class="hover:text-brand-600">Privacy Policy</a>
-                <a href="#" class="hover:text-brand-600">Terms of Service</a>
-            </div>
-        </footer>
-    </main>
+    </div>
 
     @stack('scripts')
-    <script>
-        const sidebar = document.getElementById('sidebar');
-        const toggle = document.getElementById('toggle-sidebar');
-        if (toggle) {
-            toggle.addEventListener('click', () => {
-                sidebar.classList.toggle('hidden');
-                sidebar.classList.toggle('open');
-            });
-        }
-    </script>
 </body>
 </html>

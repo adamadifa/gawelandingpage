@@ -78,10 +78,8 @@
         }
 
         .nav-text {
-            font-size: 9px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            font-size: 10px;
+            font-weight: 500;
         }
 
         .header-mobile {
@@ -107,10 +105,8 @@
         .status-pill {
             padding: 4px 10px;
             border-radius: 6px;
-            font-size: 9px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            font-size: 10px;
+            font-weight: 500;
         }
 
         [x-cloak] { display: none !important; }
@@ -139,13 +135,13 @@
                     <img src="{{ asset('storage/' . $settings['brand_logo']) }}" alt="Logo" class="w-full h-full object-contain">
                 @else
                     <div class="w-full h-full bg-brand-600 rounded-xl flex items-center justify-center shadow-lg shadow-brand-600/20 border-2 border-white/20">
-                        <span class="text-white font-display font-bold text-lg leading-none uppercase">{{ substr($settings['brand_name'] ?? 'W', 0, 1) }}</span>
+                        <span class="text-white font-display font-bold text-lg leading-none">{{ substr($settings['brand_name'] ?? 'W', 0, 1) }}</span>
                     </div>
                 @endif
             </div>
             <div>
-                <h1 class="text-xs font-black text-gray-900 uppercase tracking-tighter leading-none mb-0.5">{{ $settings['brand_name'] ?? 'PresensiGPS' }}</h1>
-                <p class="text-[9px] font-bold text-emerald-600 uppercase tracking-[0.15em] leading-none">Member Area</p>
+                <h1 class="text-xs font-bold text-gray-900 leading-none mb-0.5">{{ $settings['brand_name'] ?? 'PresensiGPS' }}</h1>
+                <p class="text-[10px] font-medium text-emerald-600 leading-none">Member Area</p>
             </div>
         </div>
 

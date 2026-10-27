@@ -147,7 +147,7 @@
                                 <div class="w-5 h-5 rounded-full border-2 border-brand-200 flex items-center justify-center peer-checked:border-brand-600">
                                     <div class="w-2.5 h-2.5 rounded-full bg-brand-600 scale-0 peer-checked:scale-100 transition-transform"></div>
                                 </div>
-                                <span class="text-sm font-bold text-gray-700">Bayar Tahunan</span>
+                                <span class="text-sm font-bold text-gray-700 leading-tight">Bayar Tahunan<br><span class="text-[10px] font-medium text-gray-500">Untuk tahun pertama</span></span>
                             </div>
                             <span class="text-sm font-black text-gray-900 pt-2">Rp {{ number_format($pricingPlan->yearly_price) }}</span>
                         </div>

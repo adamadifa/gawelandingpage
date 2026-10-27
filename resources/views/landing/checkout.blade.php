@@ -182,7 +182,7 @@
                                                 <h4 class="text-xs font-bold text-gray-800 uppercase tracking-tight mb-1">Tahunan (Best Value)</h4>
                                                 <div class="font-display text-2xl font-bold text-gray-900 leading-none">
                                                     Rp {{ number_format($pricingPlan->yearly_price) }}
-                                                    <span class="text-[10px] font-medium text-gray-400 block mt-1 lowercase">Masa aktif 12 bulan</span>
+                                                    <span class="text-[10px] font-medium text-gray-400 block mt-1 lowercase">Harga untuk tahun pertama</span>
                                                 </div>
                                             </div>
                                         </div>

@@ -168,6 +168,11 @@
                         class="text-[15px] font-medium text-gray-600 hover:text-brand-700 transition-colors duration-300">Harga</a>
                     <a href="#faq"
                         class="text-[15px] font-medium text-gray-600 hover:text-brand-700 transition-colors duration-300">FAQ</a>
+                    <a href="{{ route('source-code-claim.create') }}"
+                        class="text-[15px] font-bold text-[#007A87] hover:text-[#005B60] flex items-center gap-1 transition-colors duration-300">
+                        <i class="ti ti-certificate text-base"></i>
+                        <span>Klaim SC</span>
+                    </a>
                     <a href="#contact"
                         class="text-[15px] font-medium text-gray-600 hover:text-brand-700 transition-colors duration-300">Kontak</a>
                 </div>
@@ -851,6 +856,9 @@
                         <li><a href="#faq"
                                 class="text-gray-500 hover:text-brand-600 font-bold text-sm transition-colors uppercase tracking-tight text-decoration-none">Pusat
                                 FAQ</a></li>
+                        <li><a href="{{ route('source-code-claim.create') }}"
+                                class="text-[#007A87] hover:text-[#005B60] font-bold text-sm transition-colors uppercase tracking-tight text-decoration-none">Klaim
+                                Source Code</a></li>
                         <li><a href="#"
                                 class="text-gray-500 hover:text-brand-600 font-bold text-sm transition-colors uppercase tracking-tight text-decoration-none">Panduan</a>
                         </li>

@@ -54,4 +54,19 @@ class User extends Authenticatable
     {
         return $this->subscription && $this->subscription->status === 'active' && !$this->subscription->isExpired();
     }
+
+    public function sourceCodeClaims()
+    {
+        return $this->hasMany(SourceCodeClaim::class);
+    }
+
+    public function latestSourceCodeClaim()
+    {
+        return $this->hasOne(SourceCodeClaim::class)->latestOfMany();
+    }
+
+    public function hasApprovedSourceCode()
+    {
+        return $this->sourceCodeClaims()->where('status', 'approved')->exists();
+    }
 }

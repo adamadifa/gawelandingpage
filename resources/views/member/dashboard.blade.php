@@ -1,395 +1,557 @@
 @extends('layouts.member')
 
-@section('content')
-<div x-data="{ openDetail: false, selectedTrx: null }">
-    <div class="main-container mt-6">
-        
-        {{-- Welcome Section --}}
-        <div class="mb-12 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-            <div>
-                <h1 class="text-3xl lg:text-4xl font-display font-bold text-gray-900 leading-tight tracking-tight">Halo, <span class="text-brand-600">{{ auth()->user()->name }}</span>!</h1>
-                <p class="text-gray-400 mt-1 text-base font-medium">Kelola semua lisensi dan pantau histori paket bisnis anda.</p>
-            </div>
-            <div class="flex items-center gap-3">
-                <a href="{{ route('landing') }}#pricing" class="px-8 py-4 bg-brand-600 hover:bg-brand-700 text-white rounded-2xl font-display font-bold transition-all shadow-xl shadow-brand-600/20 active:scale-95 flex items-center gap-3 text-[10px] uppercase tracking-widest">
-                    <i class="ti ti-plus text-lg"></i>
-                    Beli Lisensi Baru
-                </a>
-            </div>
-        </div>
+@section('title', 'Dashboard Member')
+@section('subtitle', 'Pantau lisensi aktif aplikasi, status sistem operasional, dan histori transaksi pembayaran Anda.')
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-            <div class="bg-white rounded-2xl p-6 border border-gray-100/50 shadow-sm relative overflow-hidden group">
-                <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-brand-50 rounded-full opacity-40 group-hover:scale-150 transition-transform duration-700"></div>
-                <div class="relative z-10">
-                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-2 leading-none">Total Investasi</p>
-                    <h4 class="text-xl font-display font-bold text-gray-900 leading-none">Rp {{ number_format($totalSpent) }}</h4>
-                </div>
-            </div>
-            <div class="bg-white rounded-2xl p-6 border border-gray-100/50 shadow-sm relative overflow-hidden group">
-                <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-emerald-50 rounded-full opacity-40 group-hover:scale-150 transition-transform duration-700"></div>
-                <div class="relative z-10">
-                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-2 leading-none">Lisensi Aktif</p>
-                    <h4 class="text-xl font-display font-bold text-gray-900 leading-none">{{ $activeCount }} <span class="text-[9px] font-semibold text-gray-400 ml-1 uppercase">Unit</span></h4>
-                </div>
-            </div>
-            <div class="bg-white rounded-2xl p-6 border border-gray-100/50 shadow-sm relative overflow-hidden group">
-                <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-amber-50 rounded-full opacity-40 group-hover:scale-150 transition-transform duration-700"></div>
-                <div class="relative z-10">
-                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-2 leading-none">Total Transaksi</p>
-                    <h4 class="text-xl font-display font-bold text-gray-900 leading-none">{{ $transactions->total() }} <span class="text-[9px] font-semibold text-gray-400 ml-1 uppercase">Record</span></h4>
-                </div>
-            </div>
-            <div class="bg-white rounded-2xl p-6 border border-gray-100/50 shadow-sm relative overflow-hidden group">
-                <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-slate-50 rounded-full opacity-40 group-hover:scale-150 transition-transform duration-700"></div>
-                <div class="relative z-10">
-                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-2 leading-none">Tier Akun</p>
-                    <h4 class="text-xl font-display font-bold text-gray-900 leading-none">
-                        @if(auth()->user()->isAdmin())
-                            SUPER <span class="text-[9px] font-semibold text-brand-500 uppercase">ADM</span>
-                        @else
-                            MEMBER <span class="text-[9px] font-semibold text-gray-400 uppercase tracking-widest">STD</span>
-                        @endif
-                    </h4>
-                </div>
-            </div>
-        </div>
+@section('actions')
+<div class="flex items-center gap-2.5">
+    <a href="{{ route('member.source-code') }}" 
+       class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs font-semibold shadow-2xs transition-all">
+        <i class="ti ti-code text-[#007A87] text-sm"></i>
+        <span>Akses Source Code</span>
+    </a>
 
-            <div class="grid lg:grid-cols-4 gap-10">
-                {{-- Left Side: Profile & Licenses --}}
-                <div class="lg:col-span-1 space-y-10">
-                    
-                    {{-- User Profile Card --}}
-                    <div class="bg-white rounded-2xl p-6 border border-gray-100/50 shadow-sm space-y-6 relative overflow-hidden">
-                        {{-- Decoration --}}
-                        <div class="absolute -top-12 -right-12 w-32 h-32 bg-brand-50 rounded-full blur-3xl opacity-30"></div>
-                        
-                        <div class="relative z-10 flex flex-col items-center text-center">
-                            <div class="w-16 h-16 bg-brand-50 rounded-2xl flex items-center justify-center text-brand-600 border border-brand-100/50 mb-4 shadow-inner overflow-hidden">
-                                <span class="text-2xl font-display font-bold uppercase">{{ substr(auth()->user()->name, 0, 1) }}</span>
-                            </div>
-                            <h3 class="text-base font-bold text-gray-900 uppercase tracking-tight leading-none">{{ auth()->user()->name }}</h3>
-                            <p class="text-[11px] text-gray-400 font-medium mt-1.5">{{ auth()->user()->email }}</p>
-                            
-                            <div class="mt-4 flex items-center gap-2">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest bg-brand-50 text-brand-600 border border-brand-100/30">
-                                    Member Account
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="pt-6 border-t border-gray-50 space-y-3">
-                            <div class="flex items-center justify-between">
-                                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Bergabung</span>
-                                <span class="text-[10px] font-bold text-gray-700 tracking-tight">{{ auth()->user()->created_at->format('M Y') }}</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Status</span>
-                                <span class="text-[10px] font-bold {{ auth()->user()->email_verified_at ? 'text-emerald-600' : 'text-amber-600' }} uppercase tracking-tight">
-                                    {{ auth()->user()->email_verified_at ? 'Terverifikasi' : 'Belum Verifikasi' }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-3xl p-10 border border-gray-100 shadow-xl space-y-8">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center text-brand-600 shadow-sm border border-gray-100/50">
-                                <i class="ti ti-headset text-2xl"></i>
-                            </div>
-                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest">Bantuan</h4>
-                        </div>
-                        <a href="https://wa.me/{{ $settings['whatsapp_number'] ?? '' }}" target="_blank" class="flex items-center justify-between group p-6 bg-gray-50 rounded-2xl hover:bg-brand-50 transition-all border border-transparent hover:border-brand-100 active:scale-95">
-                            <div class="flex items-center gap-4">
-                                <div class="w-9 h-9 bg-white rounded-xl shadow-sm flex items-center justify-center text-brand-600 group-hover:scale-110 group-hover:rotate-6 transition-all border border-gray-100">
-                                    <i class="ti ti-brand-whatsapp text-lg"></i>
-                                </div>
-                                <span class="text-[10px] font-bold text-gray-700 uppercase tracking-widest">WhatsApp</span>
-                            </div>
-                            <i class="ti ti-arrow-right text-gray-300 group-hover:text-brand-500 group-hover:translate-x-1 transition-all"></i>
-                        </a>
-                    </div>
-                </div>
-
-                {{-- Right Column: Active Services & History --}}
-                <div class="lg:col-span-3 space-y-12">
-                    
-                    {{-- Active Licenses Section --}}
-                    <div class="space-y-6">
-                        <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Layanan Aktif ({{ $subscriptions->count() }})</h3>
-                        
-                        <div class="grid sm:grid-cols-2 gap-6">
-                            @forelse($subscriptions as $sub)
-                                <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm relative overflow-hidden group transition-all duration-500 hover:shadow-lg">
-                                    <div class="absolute -top-10 -right-10 w-24 h-24 bg-brand-50 rounded-full blur-2xl group-hover:bg-brand-100 transition-all duration-700"></div>
-                                    
-                                    <div class="relative z-10 space-y-6">
-                                        <div class="flex justify-between items-start">
-                                            <div class="w-12 h-12 bg-brand-600 rounded-xl flex items-center justify-center shadow-md shadow-brand-600/10">
-                                                @if($sub->pricingPlan->icon_type == 'image' && $sub->pricingPlan->icon)
-                                                    <img src="{{ asset('storage/' . $sub->pricingPlan->icon) }}" class="w-full h-full object-contain p-2 filter brightness-0 invert">
-                                                @else
-                                                    <i class="ti ti-crown text-xl text-white"></i>
-                                                @endif
-                                            </div>
-                                            <span class="bg-brand-50 text-brand-600 px-3 py-1 rounded-full text-[8px] font-bold uppercase tracking-widest border border-brand-100/30">Active</span>
-                                        </div>
-
-                                        <div class="space-y-3">
-                                            <div>
-                                                <h4 class="text-base font-display font-bold text-gray-900 uppercase tracking-tight leading-none mb-1">{{ $sub->pricingPlan->name }}</h4>
-                                                <p class="text-[9px] font-semibold text-brand-600 uppercase tracking-widest flex items-center gap-1.5 pl-0.5 mt-2">
-                                                    Expiry: {{ \Carbon\Carbon::parse($sub->ends_at)->format('d M Y') }}
-                                                </p>
-                                            </div>
-
-                                            {{-- App Status Indicator --}}
-                                            <div class="bg-gray-50/80 rounded-xl p-3 border border-gray-100 flex items-center justify-between">
-                                                <div class="flex items-center gap-2">
-                                                    <div class="w-2 h-2 rounded-full {{ $sub->app_status == 'running' ? 'bg-emerald-500 animate-pulse' : ($sub->app_status == 'maintenance' ? 'bg-amber-500' : 'bg-slate-300') }}"></div>
-                                                    <span class="text-[9px] font-bold uppercase tracking-[0.1em] {{ $sub->app_status == 'running' ? 'text-emerald-700' : ($sub->app_status == 'maintenance' ? 'text-amber-700' : 'text-slate-500') }}">
-                                                        Status: {{ $sub->app_status == 'running' ? 'Running' : ($sub->app_status == 'maintenance' ? 'Maintenance' : 'Belum Running') }}
-                                                    </span>
-                                                </div>
-                                                @if($sub->app_status == 'running' && $sub->app_url)
-                                                    <a href="{{ $sub->app_url }}" target="_blank" class="text-[9px] font-bold text-brand-600 hover:text-brand-700 uppercase tracking-widest flex items-center gap-1 transition-colors">
-                                                        Visit <i class="ti ti-external-link"></i>
-                                                    </a>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                        <div class="bg-gray-50/50 rounded-xl p-3 flex items-center justify-between border border-gray-100/30 group/code cursor-pointer active:scale-95 transition-all shadow-sm" onclick="copyToClipboard('{{ $sub->license_code }}')">
-                                            <div class="flex flex-col">
-                                                <span class="text-[7px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-1">License Code</span>
-                                                <span class="text-[10px] font-display font-bold tracking-widest text-gray-800">{{ $sub->license_code }}</span>
-                                            </div>
-                                            <i class="ti ti-copy text-xs text-gray-300 group-hover/code:text-brand-600 transition-all"></i>
-                                        </div>
-
-                                        <div class="grid grid-cols-2 gap-3">
-                                            <a href="{{ route('checkout.index', $sub->pricing_plan_id) }}?subscription_id={{ $sub->id }}" class="flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold py-3 px-2 rounded-xl transition-all active:scale-95 uppercase tracking-widest text-[7px] border border-gray-200/50">
-                                                Perpanjang
-                                            </a>
-                                            @if($sub->app_status == 'running' && $sub->app_url)
-                                                <a href="{{ $sub->app_url }}" target="_blank" class="flex items-center justify-center bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-2 rounded-xl transition-all shadow-lg shadow-brand-600/20 active:scale-95 uppercase tracking-widest text-[7px]">
-                                                    Buka Aplikasi
-                                                </a>
-                                            @else
-                                                <button disabled class="flex items-center justify-center bg-gray-100 text-gray-400 font-bold py-3 px-2 rounded-xl uppercase tracking-widest text-[7px] cursor-not-allowed opacity-60">
-                                                    Belum Running
-                                                </button>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            @empty
-                                <div class="sm:col-span-2 bg-white rounded-3xl p-12 border border-gray-100 shadow-xl text-center space-y-6">
-                                    <div class="w-20 h-20 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto text-gray-200">
-                                        <i class="ti ti-id-badge-off text-4xl"></i>
-                                    </div>
-                                    <p class="text-xs text-gray-400 font-medium leading-relaxed px-4">Anda belum memiliki lisensi aktif. Mulai bisnis anda dengan memilih paket premium.</p>
-                                    <a href="{{ route('landing') }}#pricing" class="inline-flex items-center justify-center bg-brand-600 text-white font-black px-12 py-4 rounded-2xl transition-all shadow-xl shadow-brand-600/20 active:scale-95 uppercase tracking-widest text-[10px]">
-                                        Pilih Paket
-                                    </a>
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
-
-                    {{-- Transaction History Section --}}
-                    <div class="space-y-6">
-                        <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Histori Pembayaran</h3>
-                    
-                    <div class="bg-white rounded-3xl border border-gray-100 shadow-xl overflow-hidden">
-                        @if($transactions->count() > 0)
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-left">
-                                    <thead>
-                                        <tr class="bg-gray-50/50">
-                                            <th class="px-10 py-8 text-[11px] font-bold text-gray-400 uppercase tracking-widest">Paket / Layanan</th>
-                                            <th class="px-10 py-8 text-[11px] font-bold text-gray-400 uppercase tracking-widest">Total</th>
-                                            <th class="px-10 py-8 text-[11px] font-bold text-gray-400 uppercase tracking-widest">Status</th>
-                                            <th class="px-10 py-8 text-[11px] font-bold text-gray-400 uppercase tracking-widest text-right">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="divide-y divide-gray-50">
-                                        @foreach($transactions as $trx)
-                                            <tr class="group hover:bg-gray-50/30 transition-all duration-300">
-                                                <td class="px-8 py-6">
-                                                    <div class="flex items-center gap-5">
-                                                        <div class="w-11 h-11 bg-white border border-gray-100 rounded-xl flex items-center justify-center text-brand-600 transition-all group-hover:bg-brand-600 group-hover:text-white shadow-sm overflow-hidden">
-                                                            @if($trx->pricingPlan->icon_type == 'image' && $trx->pricingPlan->icon)
-                                                                <img src="{{ asset('storage/' . $trx->pricingPlan->icon) }}" class="w-full h-full object-cover p-2 group-hover:brightness-0 group-hover:invert transition-all">
-                                                            @else
-                                                                <i class="ti ti-crown text-lg"></i>
-                                                            @endif
-                                                        </div>
-                                                        <div class="space-y-0.5">
-                                                            <p class="text-[13px] font-bold text-gray-900 leading-none uppercase tracking-tight">{{ $trx->pricingPlan->name }}</p>
-                                                            <p class="text-[9px] font-semibold text-brand-500/80 uppercase tracking-widest flex items-center gap-1.5">
-                                                                {{ $trx->plan_type }} / {{ $trx->pricingPlan->duration_months ?? 1 }} Mo
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="px-8 py-6">
-                                                    <p class="text-[13px] font-bold text-gray-900 leading-none uppercase tracking-tight">Rp {{ number_format($trx->amount) }}</p>
-                                                </td>
-                                                <td class="px-8 py-6">
-                                                    @if($trx->status == 'pending')
-                                                        <span class="inline-flex items-center gap-2 bg-amber-50 text-amber-600 border border-amber-100/30 px-3 py-1 rounded-full text-[8px] font-bold uppercase tracking-widest">
-                                                            Verification
-                                                        </span>
-                                                    @elseif($trx->status == 'approved')
-                                                        <span class="inline-flex items-center gap-2 bg-emerald-50 text-emerald-600 border border-emerald-100/30 px-3 py-1 rounded-full text-[8px] font-bold uppercase tracking-widest">
-                                                            Successful
-                                                        </span>
-                                                    @else
-                                                        <span class="inline-flex items-center gap-2 bg-rose-50 text-rose-600 border border-rose-100/30 px-3 py-1 rounded-full text-[8px] font-bold uppercase tracking-widest">
-                                                            Rejected
-                                                        </span>
-                                                    @endif
-                                                </td>
-                                                <td class="px-8 py-6 text-right">
-                                                    <button 
-                                                        @click="selectedTrx = {{ json_encode([
-                                                            'id' => $trx->id,
-                                                            'plan_name' => $trx->pricingPlan->name,
-                                                            'amount' => number_format($trx->amount),
-                                                            'status' => $trx->status,
-                                                            'payment_proof' => $trx->payment_proof ? asset('storage/' . $trx->payment_proof) : null,
-                                                            'admin_note' => $trx->admin_note,
-                                                            'date' => $trx->created_at->format('d M Y H:i'),
-                                                            'plan_type' => $trx->plan_type,
-                                                        ]) }}; openDetail = true"
-                                                        class="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-brand-600 hover:text-white transition-all shadow-sm active:scale-95">
-                                                        <i class="ti ti-chevron-right text-base"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            @if($transactions->hasPages())
-                                <div class="px-8 py-6 bg-gray-50/50 border-t border-gray-100">
-                                    {{ $transactions->links() }}
-                                </div>
-                            @endif
-                        @else
-                            <div class="px-12 py-32 text-center space-y-8">
-                                <div class="w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mx-auto text-gray-200 shadow-inner border border-gray-100/50">
-                                    <i class="ti ti-receipt-off text-5xl"></i>
-                                </div>
-                                <div class="space-y-2">
-                                    <p class="text-xl font-bold text-gray-900 uppercase tracking-widest">Belum Ada Transaksi</p>
-                                    <p class="text-xs text-gray-400 font-medium tracking-wide">Semua rincian pembelian anda akan terekam otomatis di sini.</p>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Transaction Detail Modal --}}
-        <template x-if="openDetail && selectedTrx">
-            <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-                <div @click="openDetail = false" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
-                
-                <div class="relative bg-white w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden transform transition-all border border-gray-100"
-                     x-show="openDetail"
-                     x-transition:enter="transition ease-out duration-300"
-                     x-transition:enter-start="opacity-0 translate-y-8 scale-95"
-                     x-transition:enter-end="opacity-100 translate-y-0 scale-100">
-                    
-                    <div class="p-8 sm:p-10 space-y-8">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2 leading-none">Detail Transaksi</p>
-                                <h3 class="text-xl font-display font-bold text-gray-900 leading-none">#TRX-<span x-text="selectedTrx.id"></span></h3>
-                            </div>
-                            <button @click="openDetail = false" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-brand-50 hover:text-brand-600 transition-all border border-gray-100">
-                                <i class="ti ti-x text-lg"></i>
-                            </button>
-                        </div>
-
-                        <div class="space-y-4">
-                            <div class="bg-gray-50/50 rounded-2xl p-6 border border-gray-100/50 space-y-4">
-                                <div class="flex justify-between">
-                                    <span class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Plan</span>
-                                    <span class="text-sm font-bold text-gray-900" x-text="selectedTrx.plan_name"></span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Nominal</span>
-                                    <span class="text-sm font-bold text-gray-900">Rp <span x-text="selectedTrx.amount"></span></span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Status</span>
-                                    <span class="px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest"
-                                          :class="{
-                                              'bg-amber-50 text-amber-600 border border-amber-100/50': selectedTrx.status === 'pending',
-                                              'bg-emerald-50 text-emerald-600 border border-emerald-100/50': selectedTrx.status === 'approved',
-                                              'bg-rose-50 text-rose-600 border border-rose-100/50': selectedTrx.status === 'rejected'
-                                          }" x-text="selectedTrx.status"></span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Tanggal</span>
-                                    <span class="text-sm font-bold text-gray-900" x-text="selectedTrx.date"></span>
-                                </div>
-                            </div>
-
-                            <template x-if="selectedTrx.payment_proof">
-                                <div class="space-y-3">
-                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Bukti Transfer</p>
-                                    <div class="rounded-2xl overflow-hidden border border-gray-100 bg-gray-50 aspect-video group relative">
-                                        <img :src="selectedTrx.payment_proof" class="w-full h-full object-contain">
-                                        <a :href="selectedTrx.payment_proof" target="_blank" class="absolute inset-0 bg-brand-900/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center text-white backdrop-blur-sm">
-                                            <i class="ti ti-external-link text-2xl"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </template>
-
-                            <template x-if="selectedTrx.admin_note">
-                                <div class="p-4 bg-amber-50 rounded-xl border border-amber-100/30">
-                                    <p class="text-[10px] font-bold text-amber-600 uppercase tracking-widest mb-1.5">Catatan Admin</p>
-                                    <p class="text-xs text-amber-800 font-medium leading-relaxed" x-text="selectedTrx.admin_note"></p>
-                                </div>
-                            </template>
-                        </div>
-
-                        <button @click="openDetail = false" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold uppercase tracking-widest text-[10px] shadow-xl shadow-slate-900/10 hover:bg-slate-800 active:scale-[0.98] transition-all">
-                            Tutup Detail
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </template>
-    </div>
+    <a href="{{ route('landing') }}#pricing" 
+       class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#007A87] hover:bg-[#005B60] text-white text-xs font-semibold shadow-sm shadow-[#007A87]/20 transition-all">
+        <i class="ti ti-plus text-sm"></i>
+        <span>Beli Lisensi Baru</span>
+    </a>
 </div>
 @endsection
 
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(() => {
-            Swal.fire({
-                title: 'Berhasil!',
-                text: 'License Code telah disalin!',
-                icon: 'success',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                background: '#ffffff',
-                color: '#111827',
-                iconColor: '#16a34a',
-            });
-        });
+@section('content')
+<div class="space-y-6" x-data="{ 
+    openDetail: false, 
+    selectedTrx: null,
+    copiedKey: null,
+    copyCode(code) {
+        navigator.clipboard.writeText(code);
+        this.copiedKey = code;
+        setTimeout(() => this.copiedKey = null, 2500);
     }
-</script>
-@endpush
+}">
+
+    <!-- Welcome Greeting (Tanpa Card) -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-0.5">
+        <div>
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 tracking-tight">
+                Selamat datang kembali, {{ auth()->user()->name }}
+            </h2>
+            <p class="text-xs text-gray-500 mt-0.5 font-normal">
+                Kelola lisensi aktif aplikasi, pantau status server, dan unduh pembaruan source code Anda di sini.
+            </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-teal-50 border border-teal-200/70 text-[#007A87] text-xs font-medium">
+                <i class="ti ti-check text-xs"></i>
+                <span>{{ $activeCount }} lisensi aktif</span>
+            </span>
+
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-gray-200 text-gray-600 text-xs font-medium shadow-2xs">
+                <i class="ti ti-calendar text-xs text-gray-400"></i>
+                <span>Member sejak {{ auth()->user()->created_at->format('M Y') }}</span>
+            </span>
+        </div>
+    </div>
+
+    <!-- Stats Banner (Konsisten dengan Pelanggan & Member) -->
+    <div class="rounded-2xl p-6 bg-gradient-to-r from-[#005B60] via-[#006D75] to-[#007A87] text-white shadow-sm border border-teal-800/30 relative overflow-hidden">
+        <!-- Subtle Pattern Backdrop -->
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.08),transparent_50%)] pointer-events-none"></div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
+            
+            <!-- Col 1: Total Investasi -->
+            <div class="border-b sm:border-b-0 sm:border-r border-white/15 pb-4 sm:pb-0 sm:pr-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-teal-100/90">Total Investasi</span>
+                    <span class="px-2 py-0.5 rounded-md bg-white/15 text-white text-[11px] font-semibold">Tersimpan</span>
+                </div>
+                <div class="mt-2.5">
+                    <h3 class="text-2xl sm:text-3xl font-black tracking-tight leading-none text-white">
+                        Rp {{ number_format($totalSpent) }}
+                    </h3>
+                </div>
+                <div class="flex items-center justify-between text-[11.5px] text-teal-100/70 mt-3 font-medium">
+                    <span>{{ $transactions->where('status', 'approved')->count() }} transaksi berhasil</span>
+                    <span class="text-emerald-300 font-semibold flex items-center gap-1">
+                        <i class="ti ti-circle-check text-xs"></i> Terverifikasi
+                    </span>
+                </div>
+            </div>
+
+            <!-- Col 2: Lisensi Aktif -->
+            <div class="border-b lg:border-b-0 lg:border-r border-white/15 pb-4 lg:pb-0 sm:px-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-teal-100/90">Lisensi Aktif</span>
+                    <span class="px-2 py-0.5 rounded-md bg-white/15 text-white text-[11px] font-semibold">Unit</span>
+                </div>
+                <div class="mt-2.5">
+                    <h3 class="text-2xl sm:text-3xl font-black tracking-tight leading-none text-white">
+                        {{ $activeCount }} <span class="text-xs font-normal text-teal-200/80 ml-0.5">unit</span>
+                    </h3>
+                </div>
+                <div class="flex items-center justify-between text-[11.5px] text-teal-100/70 mt-3 font-medium">
+                    <span>{{ $subscriptions->where('app_status', 'running')->count() }} sistem online</span>
+                    <a href="#active-licenses" class="text-teal-200 hover:text-white font-semibold flex items-center gap-0.5 transition-colors">
+                        <span>Lihat unit</span>
+                        <i class="ti ti-chevron-right text-[10px]"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Col 3: Riwayat Pembayaran -->
+            <div class="border-b sm:border-b-0 sm:border-r border-white/15 pb-4 sm:pb-0 sm:px-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-teal-100/90">Riwayat Pembayaran</span>
+                    <span class="px-2 py-0.5 rounded-md bg-white/15 text-white text-[11px] font-semibold">Pesanan</span>
+                </div>
+                <div class="mt-2.5">
+                    <h3 class="text-2xl sm:text-3xl font-black tracking-tight leading-none text-white">
+                        {{ $transactions->total() }} <span class="text-xs font-normal text-teal-200/80 ml-0.5">pesanan</span>
+                    </h3>
+                </div>
+                <div class="flex items-center justify-between text-[11.5px] text-teal-100/70 mt-3 font-medium">
+                    <span>Semua tagihan</span>
+                    <a href="#transaction-history" class="text-teal-200 hover:text-white font-semibold flex items-center gap-0.5 transition-colors">
+                        <span>Detail</span>
+                        <i class="ti ti-chevron-right text-[10px]"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Col 4: Status Keanggotaan -->
+            <div class="sm:pl-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-teal-100/90">Status Keanggotaan</span>
+                    <span class="px-2 py-0.5 rounded-md bg-emerald-400/25 text-emerald-200 text-[11px] font-semibold">Aktif</span>
+                </div>
+                <div class="mt-2.5">
+                    <h3 class="text-lg sm:text-xl font-bold tracking-tight leading-none text-white truncate">
+                        {{ auth()->user()->isAdmin() ? 'Super Admin' : 'Member Terverifikasi' }}
+                    </h3>
+                </div>
+                <div class="flex items-center justify-between text-[11.5px] text-teal-100/70 mt-3 font-medium">
+                    <span>Akun valid & aktif</span>
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 2-Column Layout (Left 8 Cols, Right 4 Cols) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Left Column: Active Subscriptions & Transaction History (8 Cols) -->
+        <div class="lg:col-span-8 space-y-6">
+            
+            <!-- Section: Layanan & Lisensi Aktif -->
+            <div id="active-licenses" class="space-y-3.5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-900">
+                            Layanan & Lisensi Aktif ({{ $subscriptions->count() }})
+                        </h3>
+                    </div>
+
+                    <a href="{{ route('landing') }}#pricing" class="text-xs font-semibold text-[#007A87] hover:underline flex items-center gap-1">
+                        <span>Beli lisensi baru</span>
+                        <i class="ti ti-chevron-right text-[11px]"></i>
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    @forelse($subscriptions as $sub)
+                        <div class="bg-white border border-[#E2E8F0] rounded-2xl p-5 space-y-4 shadow-2xs hover:border-gray-300 transition-all">
+                            
+                            <!-- Header: Plan Name & Badge -->
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-teal-50 text-[#007A87] border border-teal-100 flex items-center justify-center font-bold text-lg shrink-0">
+                                        @if($sub->pricingPlan->icon_type == 'image' && $sub->pricingPlan->icon)
+                                            <img src="{{ asset('storage/' . $sub->pricingPlan->icon) }}" class="w-6 h-6 object-contain">
+                                        @else
+                                            <i class="ti ti-crown"></i>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-gray-900 leading-tight">{{ $sub->pricingPlan->name }}</h4>
+                                        <span class="text-xs text-gray-500 font-normal block mt-0.5">
+                                            Berlaku s/d {{ \Carbon\Carbon::parse($sub->ends_at)->format('d M Y') }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold border border-emerald-200 shrink-0">
+                                    Aktif
+                                </span>
+                            </div>
+
+                            <!-- System Status Bar -->
+                            <div class="p-2.5 rounded-xl bg-[#F8FAFC] border border-gray-100 flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full {{ $sub->app_status == 'running' ? 'bg-emerald-500 animate-pulse' : ($sub->app_status == 'maintenance' ? 'bg-amber-500' : 'bg-slate-300') }}"></span>
+                                    <span class="text-xs font-medium text-gray-700">
+                                        Status: {{ $sub->app_status == 'running' ? 'Running online' : ($sub->app_status == 'maintenance' ? 'Dalam pemeliharaan' : 'Offline / Setup') }}
+                                    </span>
+                                </div>
+                                
+                                @if($sub->app_status == 'running' && $sub->app_url)
+                                    <a href="{{ $sub->app_url }}" target="_blank" class="text-xs font-semibold text-[#007A87] hover:underline flex items-center gap-1">
+                                        <span>Buka app</span>
+                                        <i class="ti ti-external-link text-[11px]"></i>
+                                    </a>
+                                @endif
+                            </div>
+
+                            <!-- License Code with 1-Click Copy -->
+                            <div class="p-2.5 rounded-xl bg-gray-50 border border-gray-200/80 flex items-center justify-between">
+                                <div class="overflow-hidden min-w-0 pr-2">
+                                    <span class="text-[10.5px] font-medium text-gray-400 block mb-0.5">Kode Lisensi Unit</span>
+                                    <span class="text-xs font-mono font-bold text-gray-800 tracking-wider truncate block">{{ $sub->license_code }}</span>
+                                </div>
+                                <button type="button" 
+                                        @click="copyCode('{{ $sub->license_code }}')" 
+                                        class="px-2.5 py-1 rounded-lg bg-white border border-gray-200 hover:border-[#007A87] hover:text-[#007A87] text-gray-600 text-xs font-semibold transition-all cursor-pointer shrink-0">
+                                    <i :class="copiedKey === '{{ $sub->license_code }}' ? 'ti ti-check text-emerald-600' : 'ti ti-copy'"></i>
+                                    <span x-text="copiedKey === '{{ $sub->license_code }}' ? 'Disalin' : 'Salin'"></span>
+                                </button>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="grid grid-cols-2 gap-2 pt-1 border-t border-gray-100">
+                                <a href="{{ route('checkout.index', $sub->pricing_plan_id) }}?subscription_id={{ $sub->id }}" 
+                                   class="py-2 px-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs text-center transition-colors">
+                                    Perpanjang
+                                </a>
+
+                                @if($sub->app_status == 'running' && $sub->app_url)
+                                    <a href="{{ $sub->app_url }}" 
+                                       target="_blank" 
+                                       class="py-2 px-3 rounded-xl bg-[#007A87] hover:bg-[#005B60] text-white font-semibold text-xs text-center transition-colors shadow-2xs">
+                                        Buka Sistem
+                                    </a>
+                                @else
+                                    <button disabled 
+                                            class="py-2 px-3 rounded-xl bg-gray-100 text-gray-400 font-semibold text-xs text-center cursor-not-allowed">
+                                        Belum Aktif
+                                    </button>
+                                @endif
+                            </div>
+
+                        </div>
+                    @empty
+                        <div class="sm:col-span-2 bg-white border border-[#E2E8F0] rounded-2xl p-8 text-center space-y-4 shadow-2xs">
+                            <div class="w-12 h-12 rounded-2xl bg-gray-100 text-gray-400 flex items-center justify-center mx-auto text-2xl">
+                                <i class="ti ti-id-badge-off"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">Belum Ada Lisensi Berlangganan</h4>
+                                <p class="text-xs text-gray-500 mt-1 max-w-sm mx-auto leading-relaxed font-normal">
+                                    Dapatkan lisensi aplikasi absensi GPS & payroll untuk bisnis Anda dengan memilih paket yang sesuai.
+                                </p>
+                            </div>
+                            <a href="{{ route('landing') }}#pricing" 
+                               class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#007A87] hover:bg-[#005B60] text-white text-xs font-semibold transition-all shadow-xs">
+                                <i class="ti ti-shopping-cart text-sm"></i>
+                                <span>Pilih Paket Langganan</span>
+                            </a>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- Section: Riwayat Transaksi Pembayaran -->
+            <div id="transaction-history" class="space-y-3.5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-bold text-gray-900">
+                            Riwayat Pembayaran
+                        </h3>
+                    </div>
+                    <span class="text-xs text-gray-400 font-normal">Daftar invoice dan mutasi pesanan</span>
+                </div>
+
+                <div class="bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden shadow-2xs">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-[#F8FAFC] border-b border-gray-200 text-xs font-semibold text-gray-600">
+                                    <th class="py-3 px-4">Layanan & Paket</th>
+                                    <th class="py-3 px-4">Tanggal</th>
+                                    <th class="py-3 px-4">Total Tagihan</th>
+                                    <th class="py-3 px-4">Status</th>
+                                    <th class="py-3 px-4 text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                @forelse($transactions as $trx)
+                                    <tr class="hover:bg-gray-50/70 transition-colors">
+                                        <td class="py-3.5 px-4">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-8 h-8 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center font-bold text-sm shrink-0">
+                                                    <i class="ti ti-crown"></i>
+                                                </div>
+                                                <div>
+                                                    <span class="font-bold text-gray-900 block leading-tight">{{ $trx->pricingPlan->name ?? 'Paket Bisnis' }}</span>
+                                                    <span class="text-[11px] text-gray-400 block capitalize">{{ $trx->plan_type }} plan</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-3.5 px-4 text-gray-600 font-normal">
+                                            {{ $trx->created_at->format('d M Y, H:i') }}
+                                        </td>
+                                        <td class="py-3.5 px-4 font-bold text-gray-900 font-mono">
+                                            Rp {{ number_format($trx->amount) }}
+                                        </td>
+                                        <td class="py-3.5 px-4">
+                                            @if($trx->status == 'approved')
+                                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-200">
+                                                    <i class="ti ti-check text-xs"></i> Berhasil
+                                                </span>
+                                            @elseif($trx->status == 'pending')
+                                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 text-xs font-medium border border-amber-200">
+                                                    <i class="ti ti-clock text-xs"></i> Menunggu
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 text-xs font-medium border border-rose-200">
+                                                    <i class="ti ti-x text-xs"></i> Ditolak
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td class="py-3.5 px-4 text-right">
+                                            <button type="button" 
+                                                    @click="selectedTrx = {{ json_encode([
+                                                        'id' => $trx->id,
+                                                        'plan_name' => $trx->pricingPlan->name ?? 'Paket Bisnis',
+                                                        'amount' => number_format($trx->amount),
+                                                        'status' => $trx->status,
+                                                        'plan_type' => $trx->plan_type,
+                                                        'date' => $trx->created_at->format('d M Y, H:i'),
+                                                        'payment_proof' => $trx->payment_proof ? asset('storage/' . $trx->payment_proof) : null,
+                                                        'admin_note' => $trx->admin_note,
+                                                    ]) }}; openDetail = true;"
+                                                    class="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900 text-xs font-semibold transition-colors cursor-pointer"
+                                                    title="Lihat Detail Transaksi">
+                                                <i class="ti ti-eye text-sm"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="py-8 text-center text-gray-400">
+                                            <i class="ti ti-inbox text-2xl mb-1 block"></i>
+                                            <span class="text-xs">Belum ada riwayat transaksi pembayaran.</span>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if($transactions->hasPages())
+                        <div class="p-4 border-t border-gray-100">
+                            {{ $transactions->links() }}
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Profile & Fast Support (4 Cols) -->
+        <div class="lg:col-span-4 space-y-5 lg:sticky lg:top-24">
+            
+            <!-- Card 1: Hub Source Code On-Premise -->
+            <div class="bg-white border border-[#E2E8F0] rounded-2xl p-5 space-y-4 shadow-2xs">
+                <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center font-bold">
+                            <i class="ti ti-code text-base"></i>
+                        </div>
+                        <h4 class="text-xs font-bold text-gray-900">Akses Source Code</h4>
+                    </div>
+                    <span class="px-2 py-0.5 rounded-md bg-teal-50 text-[#007A87] text-[11px] font-medium">On-Premise</span>
+                </div>
+
+                @if(auth()->user()->hasApprovedSourceCode())
+                    <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-1.5">
+                        <div class="flex items-center gap-1.5 font-bold text-xs">
+                            <i class="ti ti-badge-check text-emerald-600 text-base"></i>
+                            <span>Lisensi Terverifikasi</span>
+                        </div>
+                        <p class="text-xs text-emerald-800 leading-relaxed font-normal">
+                            Anda memiliki akses penuh untuk mengunduh versi terbaru dan catatan rilis SC.
+                        </p>
+                    </div>
+
+                    <a href="{{ route('member.source-code') }}" 
+                       class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#007A87] hover:bg-[#005B60] text-white font-semibold text-xs transition-all shadow-xs">
+                        <i class="ti ti-download text-sm"></i>
+                        <span>Buka Download Hub SC</span>
+                    </a>
+                @else
+                    <p class="text-xs text-gray-500 leading-relaxed font-normal">
+                        Beli source code via Lynk.id / Saweria / Transfer? Ajukan verifikasi untuk membuka tautan pembaruan versi terbaru.
+                    </p>
+
+                    <a href="{{ route('source-code-claim.create') }}" 
+                       class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#007A87] hover:bg-[#005B60] text-white font-semibold text-xs transition-all shadow-xs">
+                        <i class="ti ti-certificate text-sm"></i>
+                        <span>Klaim Pembaruan SC</span>
+                    </a>
+                @endif
+            </div>
+
+            <!-- Card 2: Profil & Info Akun Member -->
+            <div class="bg-white border border-[#E2E8F0] rounded-2xl p-5 space-y-4 shadow-2xs">
+                <div class="flex items-center gap-2 pb-3 border-b border-gray-100">
+                    <div class="w-7 h-7 rounded-lg bg-teal-50 text-[#007A87] flex items-center justify-center font-bold">
+                        <i class="ti ti-user text-base"></i>
+                    </div>
+                    <h4 class="text-xs font-bold text-gray-900">Identitas Akun</h4>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-teal-50 text-[#007A87] border border-teal-200 flex items-center justify-center font-bold text-base uppercase shrink-0">
+                        {{ substr(auth()->user()->name, 0, 1) }}
+                    </div>
+                    <div class="overflow-hidden min-w-0">
+                        <h4 class="text-xs font-bold text-gray-900 leading-tight truncate">{{ auth()->user()->name }}</h4>
+                        <p class="text-xs text-gray-500 truncate mt-0.5">{{ auth()->user()->email }}</p>
+                        <span class="inline-block mt-1 text-[11px] text-gray-500 font-medium">
+                            Member terdaftar
+                        </span>
+                    </div>
+                </div>
+
+                <div class="pt-2 border-t border-gray-100 space-y-2 text-xs">
+                    <div class="flex justify-between py-1 border-b border-gray-50 text-gray-500">
+                        <span>Bergabung Sejak</span>
+                        <span class="font-medium text-gray-800">{{ auth()->user()->created_at->format('d M Y') }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 text-gray-500">
+                        <span>Status Email</span>
+                        <span class="font-medium text-emerald-600 flex items-center gap-1">
+                            <i class="ti ti-circle-check text-xs"></i> Terverifikasi
+                        </span>
+                    </div>
+                </div>
+
+                <div class="pt-1">
+                    <a href="{{ route('profile.edit') }}" 
+                       class="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs transition-colors">
+                        <i class="ti ti-settings text-sm"></i>
+                        <span>Kelola Profil Akun</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 3: Bantuan Teknis & CS WhatsApp -->
+            <div class="bg-white border border-[#E2E8F0] rounded-2xl p-5 space-y-3 shadow-2xs">
+                <div class="flex items-center gap-2 pb-2 border-b border-gray-100">
+                    <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+                        <i class="ti ti-headset text-base"></i>
+                    </div>
+                    <h4 class="text-xs font-bold text-gray-900">Bantuan Teknis</h4>
+                </div>
+
+                <p class="text-xs text-gray-500 leading-relaxed font-normal">
+                    Mengalami kendala saat login aplikasi, aktivasi lisensi, atau pertanyaan teknis instalasi? Hubungi tim support kami.
+                </p>
+
+                <a href="https://wa.me/{{ $settings['whatsapp_number'] ?? '' }}?text=Halo%20Admin,%20saya%20member%20membutuhkan%20bantuan%20teknis" 
+                   target="_blank" 
+                   class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-all shadow-xs">
+                    <i class="ti ti-brand-whatsapp text-sm"></i>
+                    <span>Chat WhatsApp Support</span>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MODAL: Detail Transaksi Pembayaran -->
+    <div x-cloak 
+         x-show="openDetail" 
+         class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0">
+        
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-xl border border-gray-100"
+             @click.outside="openDetail = false">
+            
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-teal-50 text-[#007A87] flex items-center justify-center text-base">
+                        <i class="ti ti-receipt-2"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-gray-900">Rincian Transaksi</h3>
+                </div>
+                <button type="button" @click="openDetail = false" class="text-gray-400 hover:text-gray-600 cursor-pointer">
+                    <i class="ti ti-x text-lg"></i>
+                </button>
+            </div>
+
+            <template x-if="selectedTrx">
+                <div class="space-y-4 text-xs">
+                    
+                    <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">ID Transaksi</span>
+                            <span class="font-bold font-mono text-gray-900" x-text="'#TRX-' + selectedTrx.id"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Paket Langganan</span>
+                            <span class="font-bold text-gray-900" x-text="selectedTrx.plan_name + ' (' + selectedTrx.plan_type + ')'"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Waktu Pembayaran</span>
+                            <span class="font-medium text-gray-800" x-text="selectedTrx.date"></span>
+                        </div>
+                        <div class="flex justify-between pt-2 border-t border-gray-200/80">
+                            <span class="text-gray-700 font-semibold">Total Pembayaran</span>
+                            <span class="font-bold text-[#007A87] text-sm" x-text="'Rp ' + selectedTrx.amount"></span>
+                        </div>
+                    </div>
+
+                    <!-- Bukti Transfer -->
+                    <template x-if="selectedTrx.payment_proof">
+                        <div>
+                            <span class="text-xs font-semibold text-gray-700 block mb-1">Bukti Transfer:</span>
+                            <div class="p-2 rounded-xl bg-gray-50 border border-gray-200 text-center">
+                                <a :href="selectedTrx.payment_proof" target="_blank">
+                                    <img :src="selectedTrx.payment_proof" class="max-h-48 mx-auto rounded-lg shadow-2xs hover:scale-102 transition-transform" alt="Bukti Transfer">
+                                </a>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Catatan Admin jika ada -->
+                    <template x-if="selectedTrx.admin_note">
+                        <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900">
+                            <span class="font-bold block text-xs">Catatan Verifikasi:</span>
+                            <p class="text-xs mt-0.5" x-text="selectedTrx.admin_note"></p>
+                        </div>
+                    </template>
+
+                </div>
+            </template>
+
+            <div class="pt-2 flex justify-end">
+                <button type="button" @click="openDetail = false" class="px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-700 cursor-pointer">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+@endsection

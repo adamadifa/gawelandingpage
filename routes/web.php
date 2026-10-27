@@ -44,9 +44,23 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Licenses
     Route::get('/licenses', [LicenseController::class, 'index'])->name('licenses.index');
+
+    // Source Code Claims Management
+    Route::get('/source-code-claims', [\App\Http\Controllers\Admin\SourceCodeClaimController::class, 'index'])->name('source-code-claims.index');
+    Route::get('/source-code-claims/{source_code_claim}', [\App\Http\Controllers\Admin\SourceCodeClaimController::class, 'show'])->name('source-code-claims.show');
+    Route::post('/source-code-claims/{source_code_claim}/approve', [\App\Http\Controllers\Admin\SourceCodeClaimController::class, 'approve'])->name('source-code-claims.approve');
+    Route::post('/source-code-claims/{source_code_claim}/reject', [\App\Http\Controllers\Admin\SourceCodeClaimController::class, 'reject'])->name('source-code-claims.reject');
+    Route::put('/source-code-claims/settings', [\App\Http\Controllers\Admin\SourceCodeClaimController::class, 'updateSettings'])->name('source-code-claims.settings');
 });
 
 Route::middleware('auth')->group(function () {
+    // Generic Dashboard Route
+    Route::get('/dashboard', function () {
+        return auth()->user()?->isAdmin() 
+            ? redirect()->route('admin.dashboard') 
+            : redirect()->route('member.dashboard');
+    })->name('dashboard');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -54,11 +68,16 @@ Route::middleware('auth')->group(function () {
     // Subscription Status
     Route::get('/membership/status', [CheckoutController::class, 'status'])->name('membership.status');
 
-    // Member Dashboard
+    // Member Dashboard & Source Code
     Route::prefix('member')->name('member.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Member\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/source-code', [\App\Http\Controllers\Member\SourceCodeController::class, 'index'])->name('source-code');
     });
 });
+
+// Source Code Claim (Registration & Verification for Source Code Buyers)
+Route::get('/klaim-source-code', [\App\Http\Controllers\SourceCodeClaimController::class, 'create'])->name('source-code-claim.create');
+Route::post('/klaim-source-code', [\App\Http\Controllers\SourceCodeClaimController::class, 'store'])->name('source-code-claim.store');
 
 // Subscription & Checkout (Accessible to Guests for Registration)
 Route::get('/checkout/{pricingPlan}', [CheckoutController::class, 'index'])->name('checkout.index');

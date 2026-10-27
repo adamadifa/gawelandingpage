@@ -32,8 +32,6 @@ class DashboardController extends Controller
             
         $activeCount = $subscriptions->count();
 
-        $view = $agent->isMobile() ? 'member.dashboard_mobile' : 'member.dashboard';
-
-        return view($view, compact('subscriptions', 'transactions', 'totalSpent', 'activeCount'));
+        return view('member.dashboard', compact('subscriptions', 'transactions', 'totalSpent', 'activeCount'));
     }
 }

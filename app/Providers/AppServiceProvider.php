@@ -22,6 +22,9 @@ class AppServiceProvider extends ServiceProvider
         // Share site settings globally
         if (!app()->runningInConsole()) {
             \Illuminate\Support\Facades\View::share('settings', \App\Models\SiteSetting::pluck('value', 'key')->toArray());
+            \Illuminate\Support\Facades\View::composer('layouts.admin', function ($view) {
+                $view->with('pendingClaimsCount', \App\Models\SourceCodeClaim::where('status', 'pending')->count());
+            });
         }
     }
 }

@@ -47,7 +47,7 @@
             <!-- Col 1: Total Transaksi -->
             <div class="border-b md:border-b-0 md:border-r border-white/15 pb-4 md:pb-0 md:pr-4">
                 <div class="flex items-center justify-between">
-                    <span class="text-[10px] font-extrabold uppercase tracking-widest text-teal-100/80">TOTAL TRANSAKSI</span>
+                    <span class="text-xs font-semibold text-teal-100/90">Total Transaksi</span>
                     <span class="px-2 py-0.5 rounded-md bg-white/15 text-white text-[10px] font-bold">Semua</span>
                 </div>
                 <div class="mt-2">
@@ -62,7 +62,7 @@
             <!-- Col 2: Transaksi Disetujui -->
             <div class="border-b md:border-b-0 md:border-r border-white/15 pb-4 md:pb-0 md:px-4">
                 <div class="flex items-center justify-between">
-                    <span class="text-[10px] font-extrabold uppercase tracking-widest text-teal-100/80">DISETUJUI</span>
+                    <span class="text-xs font-semibold text-teal-100/90">Disetujui</span>
                     <span class="px-2 py-0.5 rounded-md bg-white/15 text-white text-[10px] font-bold">Aktif</span>
                 </div>
                 <div class="mt-2">
@@ -77,7 +77,7 @@
             <!-- Col 3: Menunggu Verifikasi -->
             <div class="border-b md:border-b-0 md:border-r border-white/15 pb-4 md:pb-0 md:px-4">
                 <div class="flex items-center justify-between">
-                    <span class="text-[10px] font-extrabold uppercase tracking-widest text-teal-100/80">MENUNGGU VERIFIKASI</span>
+                    <span class="text-xs font-semibold text-teal-100/90">Menunggu Verifikasi</span>
                     <span class="px-2 py-0.5 rounded-md bg-amber-400/25 text-amber-200 text-[10px] font-bold">Pending</span>
                 </div>
                 <div class="mt-2">
@@ -92,7 +92,7 @@
             <!-- Col 4: Paket Bulanan -->
             <div class="border-b md:border-b-0 md:border-r border-white/15 pb-4 md:pb-0 md:px-4">
                 <div class="flex items-center justify-between">
-                    <span class="text-[10px] font-extrabold uppercase tracking-widest text-teal-100/80">PAKET BULANAN</span>
+                    <span class="text-xs font-semibold text-teal-100/90">Paket Bulanan</span>
                     <span class="px-2 py-0.5 rounded-md bg-white/15 text-white text-[10px] font-bold">Bulanan</span>
                 </div>
                 <div class="mt-2">
@@ -107,7 +107,7 @@
             <!-- Col 5: Paket Tahunan -->
             <div class="md:pl-4">
                 <div class="flex items-center justify-between">
-                    <span class="text-[10px] font-extrabold uppercase tracking-widest text-teal-100/80">PAKET TAHUNAN</span>
+                    <span class="text-xs font-semibold text-teal-100/90">Paket Tahunan</span>
                     <span class="px-2 py-0.5 rounded-md bg-white/15 text-white text-[10px] font-bold">Tahunan</span>
                 </div>
                 <div class="mt-2">
